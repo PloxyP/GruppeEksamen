@@ -20,14 +20,14 @@ def display_message(message):
 
 def main():
     # Begrüßungsnachrichten
-    messages = ["Velkommen!", "God Morgen", "Viel Spaß mit Ihrem Raspberry Pi!"]
+    messages = ["Velkommen!", "Please, log in using your ID-Card"]
 
     try:
         # Schleife für die Anzeige der Begrüßungsnachrichten
         while True:
             for message in messages:
                 display_message(message)
-                time.sleep(2)  # Anzeigezeit pro Nachricht in Sekunden
+                time.sleep(4)  # Anzeigezeit pro Nachricht in Sekunden
 
     except KeyboardInterrupt:
         # Beenden, wenn Strg+C gedrückt wird
