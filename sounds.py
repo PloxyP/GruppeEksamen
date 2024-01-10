@@ -27,4 +27,4 @@ if __name__ == "__main__":
 
     except KeyboardInterrupt:
         # Fangen Sie die Tastaturunterbrechung ab (Ctrl+C) und spielen Sie den Abschiedston
-        goodbye_sound()
+        goodbye_sound() 
