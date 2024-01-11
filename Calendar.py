@@ -4,7 +4,7 @@ import json
 from datetime import datetime, timedelta
 import os
 
-def fetchEvents():
+def fetchEvents(calendar_key):
     start_date = datetime.now()
     end_date = start_date + timedelta(days=7)
 
