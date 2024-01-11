@@ -157,9 +157,9 @@ def read_rfid():
         print("Card Text:", text)
 
         # Replace '123456789' with the ID of your specific card
-        if id == 2054232593:
-            print("Opening Calendar.py")
-            subprocess.run(["python", "Calendar.py"])
+        #if id == 2054232593:
+         #   print("Opening Calendar.py")
+        #    subprocess.run(["python", "Calendar.py"])
 
     finally:
         GPIO.cleanup()
