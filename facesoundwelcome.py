@@ -1,6 +1,9 @@
 import cv2
 import pygame
 import time
+import RPi.GPIO as GPIO
+from mfrc522 import SimpleMFRC522
+import subprocess
 
 pygame.init()
 
@@ -64,6 +67,26 @@ def welcome_sound():
 def goodbye_sound():
     print("Goodbye!")
     play_sound("check.mp3")
+
+def read_rfid():
+    reader = SimpleMFRC522()
+
+    try:
+        print("Hold a card near the reader.")
+        id, text = reader.read()
+        print("Card ID:", id)
+        print("Card Text:", text)
+
+        # Replace '123456789' with the ID of your specific card
+        if id == 2054232593:
+            print("Opening Calendar.py")
+            subprocess.run(["python", "Calendar.py"])
+
+    finally:
+        GPIO.cleanup()
+
+if __name__ == "__main__":
+    read_rfid()
 
 # Load the face and eye classifiers outside the loop
 face_cascade = cv2.CascadeClassifier('/home/gruppesjov/opencv/data/haarcascades/haarcascade_frontalface_default.xml')
