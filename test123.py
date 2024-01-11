@@ -118,129 +118,129 @@ def showCalendar(events):
     canvas.bind('<Configure>', lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
     canvas.create_window((0, 0), window=scrollable_frame, anchor='nw')
 
-    # Adding events to the scrollable_frame
-    for event in events:
-        start_time = datetime.fromisoformat(event['start_dt']).strftime("%A, %B %d, %Y %H:%M")
-        end_time = datetime.fromisoformat(event['end_dt']).strftime("%H:%M") if 'end_dt' in event else 'Unknown'
-        event_title = event['title']
-        event_description = event.get('description', 'No description available')
-        event_location = event.get('location', 'No location specified')
+#     # Adding events to the scrollable_frame
+#     for event in events:
+#         start_time = datetime.fromisoformat(event['start_dt']).strftime("%A, %B %d, %Y %H:%M")
+#         end_time = datetime.fromisoformat(event['end_dt']).strftime("%H:%M") if 'end_dt' in event else 'Unknown'
+#         event_title = event['title']
+#         event_description = event.get('description', 'No description available')
+#         event_location = event.get('location', 'No location specified')
 
-        event_frame = Frame(scrollable_frame, bg='lightgrey', borderwidth=2, relief="groove")
-        event_frame.pack(padx=20, pady=10, fill='x')
+#         event_frame = Frame(scrollable_frame, bg='lightgrey', borderwidth=2, relief="groove")
+#         event_frame.pack(padx=20, pady=10, fill='x')
 
-        Label(event_frame, text=f"{start_time} - {end_time} | {event_title}", font="Consolas 15 bold", bg='lightgrey').pack(anchor='w', padx=10, pady=5)
-        Label(event_frame, text=f"Location: {event_location}", font="Consolas 12", bg='lightgrey').pack(anchor='w', padx=10, pady=2)
-        Label(event_frame, text=f"Description: {event_description}", font="Consolas 12", bg='lightgrey', wraplength=500).pack(anchor='w', padx=10, pady=2)
+#         Label(event_frame, text=f"{start_time} - {end_time} | {event_title}", font="Consolas 15 bold", bg='lightgrey').pack(anchor='w', padx=10, pady=5)
+#         Label(event_frame, text=f"Location: {event_location}", font="Consolas 12", bg='lightgrey').pack(anchor='w', padx=10, pady=2)
+#         Label(event_frame, text=f"Description: {event_description}", font="Consolas 12", bg='lightgrey', wraplength=500).pack(anchor='w', padx=10, pady=2)
 
-    gui.mainloop()
+#     gui.mainloop()
 
 
-if __name__=='__main__':
-    # Define your Teamup API URL and API key
-    api_url = "https://api.teamup.com"
-    api_key = "699e02c0555e1804ea722d893851875e8444e8bf17199c8d8e46bc393a60f960"
-    calendar_key = "kskp2dg3mpgu24n3ww"
-    request_url = f"{api_url}/{calendar_key}/events"
-    headers = {"Teamup-Token": api_key}
+# if __name__=='__main__':
+#     # Define your Teamup API URL and API key
+#     api_url = "https://api.teamup.com"
+#     api_key = "699e02c0555e1804ea722d893851875e8444e8bf17199c8d8e46bc393a60f960"
+#     calendar_key = "kskp2dg3mpgu24n3ww"
+#     request_url = f"{api_url}/{calendar_key}/events"
+#     headers = {"Teamup-Token": api_key}
 
-    events = fetchEvents()
-    showCalendar(events)
+#     events = fetchEvents()
+#     showCalendar(events)
 
-def read_rfid():
-    reader = SimpleMFRC522()
+# def read_rfid():
+#     reader = SimpleMFRC522()
 
-    try:
-        print("Hold a card near the reader.")
-        id, text = reader.read()
-        print("Card ID:", id)
-        print("Card Text:", text)
+#     try:
+#         print("Hold a card near the reader.")
+#         id, text = reader.read()
+#         print("Card ID:", id)
+#         print("Card Text:", text)
 
-        # Replace '123456789' with the ID of your specific card
-        if id == 2054232593:
-            print("Opening Calendar.py")
-            subprocess.run(["python", "Calendar.py"])
+#         # Replace '123456789' with the ID of your specific card
+#         if id == 2054232593:
+#             print("Opening Calendar.py")
+#             subprocess.run(["python", "Calendar.py"])
 
-    finally:
-        GPIO.cleanup()
+#     finally:
+#         GPIO.cleanup()
 
-if __name__ == "__main__":
-    read_rfid()
+# if __name__ == "__main__":
+#     read_rfid()
 
 # Load the face and eye classifiers outside the loop
 face_cascade = cv2.CascadeClassifier('/home/gruppesjov/opencv/data/haarcascades/haarcascade_frontalface_default.xml')
 eye_cascade = cv2.CascadeClassifier('/home/gruppesjov/opencv/data/haarcascades/haarcascade_eye.xml')
 #
-# while True:
-#     # Display the welcome screen again
-#     screen.fill(background_color)
-#     welcome_message1 = font.render('Welcome!', True, (255, 255, 255))
-#     welcome_rect1 = welcome_message1.get_rect(center=(400, 240))
-#     screen.blit(welcome_message1, welcome_rect1)
-#     pygame.display.flip()
+while True:
+    # Display the welcome screen again
+    screen.fill(background_color)
+    welcome_message1 = font.render('Welcome!', True, (255, 255, 255))
+    welcome_rect1 = welcome_message1.get_rect(center=(400, 240))
+    screen.blit(welcome_message1, welcome_rect1)
+    pygame.display.flip()
 
-#     # Wait for 5 seconds
-#     time.sleep(3)
+    # Wait for 5 seconds
+    time.sleep(3)
 
-#     # Clear the screen for the second message
-#     screen.fill(background_color)
-#     welcome_message2 = font.render('Please use your ID Card to log in', True, (255, 255, 255))
-#     welcome_rect2 = welcome_message2.get_rect(center=(400, 240))
-#     screen.blit(welcome_message2, welcome_rect2)
-#     pygame.display.flip()
+    # Clear the screen for the second message
+    screen.fill(background_color)
+    welcome_message2 = font.render('Please use your ID Card to log in', True, (255, 255, 255))
+    welcome_rect2 = welcome_message2.get_rect(center=(400, 240))
+    screen.blit(welcome_message2, welcome_rect2)
+    pygame.display.flip()
 
-#     # Wait for 5 seconds
-#     time.sleep(12)
+    # Wait for 5 seconds
+    time.sleep(12)
 
-#     # Clear the screen
-#     screen.fill(background_color)
-#     pygame.display.flip()
+    # Clear the screen
+    screen.fill(background_color)
+    pygame.display.flip()
 
-#     # Reset flags
-#     looking_at_camera = False
-#     played_sound = False
+    # Reset flags
+    looking_at_camera = False
+    played_sound = False
 
-#     # Load the face and eye classifiers outside the loop
-#     face_cascade = cv2.CascadeClassifier('/home/gruppesjov/opencv/data/haarcascades/haarcascade_frontalface_default.xml')
-#     eye_cascade = cv2.CascadeClassifier('/home/gruppesjov/opencv/data/haarcascades/haarcascade_eye.xml')
+    # Load the face and eye classifiers outside the loop
+    face_cascade = cv2.CascadeClassifier('/home/gruppesjov/opencv/data/haarcascades/haarcascade_frontalface_default.xml')
+    eye_cascade = cv2.CascadeClassifier('/home/gruppesjov/opencv/data/haarcascades/haarcascade_eye.xml')
 
-#     while True:
-#         ret, frame = cap.read()
+    while True:
+        ret, frame = cap.read()
 
-#         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-#         faces = face_cascade.detectMultiScale(gray, 1.3, 5)
+        faces = face_cascade.detectMultiScale(gray, 1.3, 5)
 
-#         if len(faces) == 0:
-#             looking_at_camera = False
-#             played_sound = False  # Reset the flag when no faces are detected
+        if len(faces) == 0:
+            looking_at_camera = False
+            played_sound = False  # Reset the flag when no faces are detected
 
-#         for (x, y, w, h) in faces:
-#             cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 5)
-#             roi_gray = gray[y:y+w, x:x+w]
-#             roi_color = frame[y:y+h, x:x+w]
-#             eyes = eye_cascade.detectMultiScale(roi_gray, 1.3, 8)
+        for (x, y, w, h) in faces:
+            cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 5)
+            roi_gray = gray[y:y+w, x:x+w]
+            roi_color = frame[y:y+h, x:x+w]
+            eyes = eye_cascade.detectMultiScale(roi_gray, 1.3, 8)
 
-#             for (ex, ey, ew, eh) in eyes:
-#                 cv2.rectangle(roi_color, (ex, ey), (ex + ew, ey + eh), (0, 255, 0), 5)
-#                 looking_at_camera = True
+            for (ex, ey, ew, eh) in eyes:
+                cv2.rectangle(roi_color, (ex, ey), (ex + ew, ey + eh), (0, 255, 0), 5)
+                looking_at_camera = True
 
-#         cv2.imshow('frame', frame)
+        cv2.imshow('frame', frame)
 
-#         # Play sounds based on the flag and ensure it's played only once
-#         if looking_at_camera and not played_sound:
-#             welcome_sound()
-#             played_sound = True
+        # Play sounds based on the flag and ensure it's played only once
+        if looking_at_camera and not played_sound:
+            welcome_sound()
+            played_sound = True
 
-#         if not looking_at_camera and played_sound:
-#             goodbye_sound()
-#             played_sound = False
+        if not looking_at_camera and played_sound:
+            goodbye_sound()
+            played_sound = False
 
-#         if cv2.waitKey(1) == ord('q'):
-#             break
+        if cv2.waitKey(1) == ord('q'):
+            break
 
-cap.release()
-cv2.destroyAllWindows()
+    cap.release()
+    cv2.destroyAllWindows()
 
     # Wait for a short moment
-time.sleep(0.1)
+    time.sleep(0.1)
