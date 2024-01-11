@@ -37,31 +37,19 @@ def showCalendar(events):
 
     Button(top_frame, text="Log Off", command=logOff, font="Consolas 12 bold", padx=10, pady=5).pack(side='right', padx=20, pady=20)
 
+    # Scrollable Canvas
     canvas = Canvas(gui, bg='grey')
+    scrollbar = Scrollbar(gui, orient="vertical", command=canvas.yview)
     scrollable_frame = Frame(canvas, bg='grey')
 
-    # Scroll function
-    def on_mousewheel(event):
-        canvas.yview_scroll(int(-1*(event.delta/120)), "units")
-
-    # Touch events for scrolling
-    def onTouchScroll(event):
-        canvas.yview_scroll(int(-1*event.delta), "units")
-
-    canvas.bind_all("<MouseWheel>", on_mousewheel)
-    canvas.bind("<Button-1>", lambda event: canvas.scan_mark(event.x, event.y))
-    canvas.bind("<B1-Motion>", lambda event: canvas.scan_dragto(event.x, event.y, gain=1))
-
-    canvas.create_window((0, 0), window=scrollable_frame, anchor='nw')
-    canvas.configure(yscrollcommand=scrollable_frame.set)
-    canvas.bind('<Configure>', lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
-
-    scrollbar = Scrollbar(gui, orient="vertical", command=canvas.yview)
-    canvas.configure(yscrollcommand=scrollbar.set)
     scrollbar.pack(side='right', fill='y')
     canvas.pack(side='left', fill='both', expand=True)
 
-    # Adding events to the scrollable_frame instead of events_frame
+    canvas.configure(yscrollcommand=scrollbar.set)
+    canvas.bind('<Configure>', lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
+    canvas.create_window((0, 0), window=scrollable_frame, anchor='nw')
+
+    # Adding events to the scrollable_frame
     for event in events:
         start_time = datetime.fromisoformat(event['start_dt']).strftime("%A, %B %d, %Y %H:%M")
         end_time = datetime.fromisoformat(event['end_dt']).strftime("%H:%M") if 'end_dt' in event else 'Unknown'
