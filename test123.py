@@ -153,16 +153,16 @@ while True:
         show_welcome_screen = True
         
     # Scrollable Canvas
-    canvas = Canvas(gui, bg='grey')
-    scrollbar = Scrollbar(gui, orient="vertical", command=canvas.yview)
-    scrollable_frame = Frame(canvas, bg='grey')
+canvas = Canvas(gui, bg='grey')
+scrollbar = Scrollbar(gui, orient="vertical", command=canvas.yview)
+scrollable_frame = Frame(canvas, bg='grey')
 
-    scrollbar.pack(side='right', fill='y')
-    canvas.pack(side='left', fill='both', expand=True)
+scrollbar.pack(side='right', fill='y')
+canvas.pack(side='left', fill='both', expand=True)
 
-    canvas.configure(yscrollcommand=scrollbar.set)
-    canvas.bind('<Configure>', lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
-    canvas.create_window((0, 0), window=scrollable_frame, anchor='nw')
+canvas.configure(yscrollcommand=scrollbar.set)
+canvas.bind('<Configure>', lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
+canvas.create_window((0, 0), window=scrollable_frame, anchor='nw')
 
     # Adding events to the scrollable_frame
     for event in events:
