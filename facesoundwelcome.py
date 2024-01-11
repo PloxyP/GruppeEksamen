@@ -64,9 +64,9 @@ def welcome_sound():
     print("Welcome!")
     play_sound("check.mp3")
 
-def goodbye_sound():
-    print("Goodbye!")
-    play_sound("check.mp3")
+#def goodbye_sound():
+   # print("Goodbye!")
+   # play_sound("check.mp3")
 
 def read_rfid():
     reader = SimpleMFRC522()
