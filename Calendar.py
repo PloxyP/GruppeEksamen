@@ -34,7 +34,7 @@ def showCalendar(events):
     # Place the Log Off button in the top frame
     def logOff():
         gui.destroy()
-        os.system("python3 welcome.py")
+        os.system("GreetingBot.py")
 
     Button(top_frame, text="Log Off", command=logOff, font="Consolas 12 bold", padx=10, pady=5).pack(side='right', padx=20, pady=20)
 
