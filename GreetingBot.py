@@ -49,20 +49,20 @@ def showCalendar(events):
     canvas.bind('<Configure>', lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
     canvas.create_window((0, 0), window=scrollable_frame, anchor='nw')
 
+    # Track the drag start point
+    def start_scroll(event):
+        canvas.scan_mark(event.x, event.y)
+
+    # Perform the scrolling
+    def perform_scroll(event):
+        canvas.scan_dragto(event.x, event.y, gain=1)
+
+    canvas.bind("<Button-1>", start_scroll)
+    canvas.bind("<B1-Motion>", perform_scroll)
+
     # Adding events to the scrollable_frame
     for event in events:
-        start_time = datetime.fromisoformat(event['start_dt']).strftime("%A, %B %d, %Y %H:%M")
-        end_time = datetime.fromisoformat(event['end_dt']).strftime("%H:%M") if 'end_dt' in event else 'Unknown'
-        event_title = event['title']
-        event_description = event.get('description', 'No description available')
-        event_location = event.get('location', 'No location specified')
-
-        event_frame = Frame(scrollable_frame, bg='lightgrey', borderwidth=2, relief="groove")
-        event_frame.pack(padx=20, pady=10, fill='x')
-
-        Label(event_frame, text=f"{start_time} - {end_time} | {event_title}", font="Consolas 15 bold", bg='lightgrey').pack(anchor='w', padx=10, pady=5)
-        Label(event_frame, text=f"Location: {event_location}", font="Consolas 12", bg='lightgrey').pack(anchor='w', padx=10, pady=2)
-        Label(event_frame, text=f"Description: {event_description}", font="Consolas 12", bg='lightgrey', wraplength=500).pack(anchor='w', padx=10, pady=2)
+        # ... [Your existing code for adding events]
 
     gui.mainloop()
 
