@@ -1,15 +1,59 @@
 import cv2
 import pygame
+import time
+import RPi.GPIO as GPIO
+from mfrc522 import SimpleMFRC522
+import subprocess
 
+pygame.init()
 
 cap = cv2.VideoCapture(0)
-
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
 cap.set(cv2.CAP_PROP_FPS, 60)
 
 looking_at_camera = False
 played_sound = False  # Flag to track whether the sound has been played
+
+# Screen Config
+screen = pygame.display.set_mode((800, 480), pygame.FULLSCREEN)
+pygame.display.set_caption('Welcome Message')
+background_color = (0, 0, 0)
+screen.fill(background_color)
+font = pygame.font.Font(None, 36)
+
+# First Welcome Message
+welcome_message1 = font.render('Welcome!', True, (255, 255, 255))
+welcome_rect1 = welcome_message1.get_rect(center=(400, 240))
+
+# Display the first welcome message
+screen.blit(welcome_message1, welcome_rect1)
+pygame.display.flip()
+
+# Wait for 5 seconds
+time.sleep(3)
+
+# Clear the screen for the second message
+screen.fill(background_color)
+pygame.display.flip()
+
+# Wait for a short moment
+time.sleep(0.1)
+
+# Second Welcome Message
+welcome_message2 = font.render('Please use your ID Card to log in', True, (255, 255, 255))
+welcome_rect2 = welcome_message2.get_rect(center=(400, 240))
+
+# Display the second welcome message
+screen.blit(welcome_message2, welcome_rect2)
+pygame.display.flip()
+
+# Wait for 5 seconds
+time.sleep(12)
+
+# Clear the screen
+screen.fill(background_color)
+pygame.display.flip()
 
 def play_sound(file_path):
     pygame.mixer.init()
@@ -23,6 +67,26 @@ def welcome_sound():
 def goodbye_sound():
     print("Goodbye!")
     play_sound("check.mp3")
+
+def read_rfid():
+    reader = SimpleMFRC522()
+
+    try:
+        print("Hold a card near the reader.")
+        id, text = reader.read()
+        print("Card ID:", id)
+        print("Card Text:", text)
+
+        # Replace '123456789' with the ID of your specific card
+        if id == 2054232593:
+            print("Opening Calendar.py")
+            subprocess.run(["python", "Calendar.py"])
+
+    finally:
+        GPIO.cleanup()
+
+if __name__ == "__main__":
+    read_rfid()
 
 # Load the face and eye classifiers outside the loop
 face_cascade = cv2.CascadeClassifier('/home/gruppesjov/opencv/data/haarcascades/haarcascade_frontalface_default.xml')
@@ -65,4 +129,10 @@ while True:
 
 cap.release()
 cv2.destroyAllWindows()
+
+# Wait for a short moment
+time.sleep(0.1)
+
+# Quit Pygame
+pygame.quit()
 

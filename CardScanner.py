@@ -1,21 +1,6 @@
-#Setup af RFID-RC522: Tilslut 3.3V til Ardunio 3.3V, GND til GND på Arduino, SDA til PIN 10, SCK til PIN 13, MOSI til PIN 11, MISO til PIN 12, RST til PIN 9
-#Setup af LED lys Grøn: Tilslut 5V til "+" på breadboard, GND til "-" på breadboard, PIN 7 på Række A Linje 12 & Resistor på "-" til Række A Linje 11, korte ben til resistor
-#Setup af LED lys Rød: Tilslut 5V til "+" på breadboard, GND til "-", PIN 6 til Række A Linje 18 & Resistor på "-" til Række A Linje 17, korte ben til resistor
-
-#include <SPI.h>
-#include <MFRC522.h>
-
-#define RST_PIN         9
-#define SS_PIN          10
-
-#define GREEN_LED_PIN   7  // Change to the digital pin for your green LED
-#define RED_LED_PIN     6  // Change to the digital pin for your red LED
 
 import RPi.GPIO as GPIO
 from mfrc522 import MFRC522
-
-RST_PIN = 25  # Change to the GPIO pin for RST
-SS_PIN = 8  # Change to the GPIO pin for SDA (SS)
 
 GREEN_LED_PIN = 7
 RED_LED_PIN = 6

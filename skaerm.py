@@ -1,17 +1,16 @@
 import pygame
 import time
 
-# Initialisierung von Pygame
 pygame.init()
 
-# Konfiguration des Touchscreens und des Bildschirms
+# Screen Config
 pygame.mouse.set_visible(False)
 screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 width, height = pygame.display.get_surface().get_size()
 font = pygame.font.Font(None, 36)
 
 def display_message(message):
-    # Anzeige einer Nachricht auf dem Bildschirm
+    # show message on screen
     screen.fill((0, 0, 0))
     text = font.render(message, True, (255, 255, 255))
     text_rect = text.get_rect(center=(width / 2, height / 2))
@@ -19,18 +18,18 @@ def display_message(message):
     pygame.display.flip()
 
 def main():
-    # Begrüßungsnachrichten
+    # Messages
     messages = ["Velkommen!", "Please, log in using your ID-Card"]
 
     try:
-        # Schleife für die Anzeige der Begrüßungsnachrichten
+        
         while True:
             for message in messages:
                 display_message(message)
-                time.sleep(4)  # Anzeigezeit pro Nachricht in Sekunden
+                time.sleep(4) 
 
     except KeyboardInterrupt:
-        # Beenden, wenn Strg+C gedrückt wird
+        # Stop Code with pressing ctrl+c
         pygame.quit()
 
 if __name__ == "__main__":
