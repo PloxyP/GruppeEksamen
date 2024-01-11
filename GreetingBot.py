@@ -62,7 +62,18 @@ def showCalendar(events):
 
     # Adding events to the scrollable_frame
     for event in events:
-        # ... [Your existing code for adding events]
+        start_time = datetime.fromisoformat(event['start_dt']).strftime("%A, %B %d, %Y %H:%M")
+        end_time = datetime.fromisoformat(event['end_dt']).strftime("%H:%M") if 'end_dt' in event else 'Unknown'
+        event_title = event['title']
+        event_description = event.get('description', 'No description available')
+        event_location = event.get('location', 'No location specified')
+
+        event_frame = Frame(scrollable_frame, bg='lightgrey', borderwidth=2, relief="groove")
+        event_frame.pack(padx=20, pady=10, fill='x')
+
+        Label(event_frame, text=f"{start_time} - {end_time} | {event_title}", font="Consolas 15 bold", bg='lightgrey').pack(anchor='w', padx=10, pady=5)
+        Label(event_frame, text=f"Location: {event_location}", font="Consolas 12", bg='lightgrey').pack(anchor='w', padx=10, pady=2)
+        Label(event_frame, text=f"Description: {event_description}", font="Consolas 12", bg='lightgrey', wraplength=500).pack(anchor='w', padx=10, pady=2)
 
     gui.mainloop()
 
