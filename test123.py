@@ -165,7 +165,7 @@ canvas.bind('<Configure>', lambda e: canvas.configure(scrollregion=canvas.bbox("
 canvas.create_window((0, 0), window=scrollable_frame, anchor='nw')
 
     # Adding events to the scrollable_frame
-    for event in events:
+for event in events:
         start_time = datetime.fromisoformat(event['start_dt']).strftime("%A, %B %d, %Y %H:%M")
         end_time = datetime.fromisoformat(event['end_dt']).strftime("%H:%M") if 'end_dt' in event else 'Unknown'
         event_title = event['title']
