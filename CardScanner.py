@@ -12,13 +12,13 @@
 #define RED_LED_PIN     6  // Change to the digital pin for your red LED
 
 import RPi.GPIO as GPIO
-from mfrc522 import SimpleMFRC522
+from mfrc522 import MFRC522
 
-RST_PIN = 9
-SS_PIN = 10
+RST_PIN = 25  # Change to the GPIO pin for RST
+SS_PIN = 8  # Change to the GPIO pin for SDA (SS)
 
-GREEN_LED_PIN = 7  # Change to the GPIO pin for your green LED
-RED_LED_PIN = 6  # Change to the GPIO pin for your red LED
+GREEN_LED_PIN = 7
+RED_LED_PIN = 6
 
 allowed_card_uids = [
     [0x00, 0x7A, 0x71, 0x1A],
@@ -37,27 +37,37 @@ def setup():
     GPIO.setup(GREEN_LED_PIN, GPIO.OUT)
     GPIO.setup(RED_LED_PIN, GPIO.OUT)
 
-    reader = SimpleMFRC522()
-    
-    print("RFID Reader Initialized")
-    return reader
+    MIFAREReader = MFRC522(SS_PIN, RST_PIN)
 
-def loop(reader):
+    print("RFID Reader Initialized")
+    return MIFAREReader
+
+def loop(MIFAREReader):
     try:
         print("Place a card near the reader...")
         while True:
-            id, card_uid = reader.read()
-            print("Card UID: ", card_uid)
+            (status, TagType) = MIFAREReader.MFRC522_Request(MIFAREReader.PICC_REQIDL)
 
-            if check_card_uid(card_uid):
-                print(" - ", welcome_messages[get_card_index(card_uid)])
-                turn_on_green_led()
-                # Add your custom actions for this card here
-            else:
-                print(" - Access Denied")
-                turn_on_red_led()
+            if status == MIFAREReader.MI_OK:
+                (status, uid) = MIFAREReader.MFRC522_Anticoll()
 
-            GPIO.cleanup()  # Reset GPIO state to avoid interference with other programs
+                if status == MIFAREReader.MI_OK:
+                    card_uid = uid[:4]
+                    print("Card UID: ", card_uid)
+
+                    if check_card_uid(card_uid):
+                        print(" - ", welcome_messages[get_card_index(card_uid)])
+                        turn_on_green_led()
+                        # Add your custom actions for this card here
+                    else:
+                        print(" - Access Denied")
+                        turn_on_red_led()
+
+                    # Avoid reading the same card repeatedly
+                    while MIFAREReader.MFRC522_Request(MIFAREReader.PICC_REQIDL)[0] == MIFAREReader.MI_OK:
+                        pass
+
+                    turn_off_leds()
 
     except KeyboardInterrupt:
         GPIO.cleanup()
@@ -82,6 +92,10 @@ def turn_on_green_led():
 def turn_on_red_led():
     GPIO.output(RED_LED_PIN, GPIO.HIGH)
 
+def turn_off_leds():
+    GPIO.output(GREEN_LED_PIN, GPIO.LOW)
+    GPIO.output(RED_LED_PIN, GPIO.LOW)
+
 if __name__ == "__main__":
-    reader = setup()
-    loop(reader)
+    MIFAREReader = setup()
+    loop(MIFAREReader)
