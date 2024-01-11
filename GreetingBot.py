@@ -4,7 +4,7 @@ import json
 from datetime import datetime, timedelta
 import os
 
-def fetchEvents():
+def fetchEvents(calendar_key):
     start_date = datetime.now()
     end_date = start_date + timedelta(days=7)
 
@@ -13,13 +13,13 @@ def fetchEvents():
         'endDate': end_date.strftime('%Y-%m-%d')
     }
 
+    request_url = f"{api_url}/{calendar_key}/events"
     response = requests.get(request_url, headers=headers, params=params)
     if response.status_code == 200:
         return json.loads(response.text)['events']
     else:
         print("Failed to fetch events")
         return []
-
 
 def showCalendar(events):
     gui = Tk()
@@ -77,14 +77,19 @@ def showCalendar(events):
 
     gui.mainloop()
 
-
-if __name__=='__main__':
-    # Define your Teamup API URL and API key
+if __name__ == '__main__':
     api_url = "https://api.teamup.com"
     api_key = "699e02c0555e1804ea722d893851875e8444e8bf17199c8d8e46bc393a60f960"
-    calendar_key = "kskp2dg3mpgu24n3ww"
-    request_url = f"{api_url}/{calendar_key}/events"
+
+    # Dictionary mapping card IDs to calendar keys
+    card_calendar_map = {
+        'card_id_1': 'kskp2dg3mpgu24n3ww',
+        'card_id_2': 'ks2yz86rfe8sj5nvq1',
+        # Add more card IDs and their corresponding calendar keys
+    }
+
     headers = {"Teamup-Token": api_key}
 
-    events = fetchEvents()
-    showCalendar(events)
+    for card_id, calendar_key in card_calendar_map.items():
+        events = fetchEvents(calendar_key)
+        showCalendar(events)
