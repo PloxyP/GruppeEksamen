@@ -33,35 +33,6 @@ welcome_rect1 = welcome_message1.get_rect(center=(400, 240))
 
 # Display the first welcome message
 screen.blit(welcome_message1, welcome_rect1)
-
-def showCalendar(events):
-    gui = Tk()
-    gui.config(background='grey')
-    gui.title("Teamup Calendar")
-    gui.attributes("-fullscreen", True)
-
-    # Frame for the Log Off button
-    top_frame = Frame(gui, bg='grey')
-    top_frame.pack(side='top', fill='x')
-
-    def logOff():
-        gui.destroy()
-        os.system("GreetingBot.py")
-
-    Button(top_frame, text="Log Off", command=logOff, font="Consolas 12 bold", padx=10, pady=5).pack(side='right', padx=20, pady=20)
-
-# Scrollable Canvas
-canvas = Canvas(gui, bg='grey')
-scrollbar = Scrollbar(gui, orient="vertical", command=canvas.yview)
-scrollable_frame = Frame(canvas, bg='grey')
-
-scrollbar.pack(side='right', fill='y')
-canvas.pack(side='left', fill='both', expand=True)
-
-canvas.configure(yscrollcommand=scrollbar.set)
-canvas.bind('<Configure>', lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
-canvas.create_window((0, 0), window=scrollable_frame, anchor='nw')
-
 pygame.display.flip()
 
 # Wait for 5 seconds
@@ -119,54 +90,33 @@ def fetchEvents():
         return []
 
 
+def showCalendar(events):
+    gui = Tk()
+    gui.config(background='grey')
+    gui.title("Teamup Calendar")
+    gui.attributes("-fullscreen", True)
 
+    # Frame for the Log Off button
+    top_frame = Frame(gui, bg='grey')
+    top_frame.pack(side='top', fill='x')
 
-# State variable to track whether to show the welcome screen or calendar
-show_welcome_screen = True
+    def logOff():
+        gui.destroy()
+        os.system("GreetingBot.py")
 
-# Function to show the welcome screen
-def show_welcome():
-    global show_welcome_screen
-    screen.fill(background_color)
-    welcome_rect1 = welcome_message1.get_rect(center=(400, 240))
-    screen.blit(welcome_message1, welcome_rect1)
-    pygame.display.flip()
-    show_welcome_screen = True
+    Button(top_frame, text="Log Off", command=logOff, font="Consolas 12 bold", padx=10, pady=5).pack(side='right', padx=20, pady=20)
 
-# Function to show the calendar
-def show_calendar():
-    global show_welcome_screen
-    events = fetchEvents()
-    showCalendar(events)
-    show_welcome_screen = False
+    # Scrollable Canvas
+    canvas = Canvas(gui, bg='grey')
+    scrollbar = Scrollbar(gui, orient="vertical", command=canvas.yview)
+    scrollable_frame = Frame(canvas, bg='grey')
 
-# ... (remaining functions remain unchanged)
+    scrollbar.pack(side='right', fill='y')
+    canvas.pack(side='left', fill='both', expand=True)
 
-# Main application loop
-while True:
-    # ... (previous code remains unchanged)
-
-    # Play sounds based on the flag and ensure it's played only once
-    if looking_at_camera and not played_sound:
-        welcome_sound()
-        played_sound = True
-        # Check the state variable to decide whether to show the calendar
-        if show_welcome_screen:
-            show_welcome()
-        else:
-            show_calendar()
-
-    if not looking_at_camera and played_sound:
-        goodbye_sound()
-        played_sound = False
-
-    if cv2.waitKey(1) == ord('q'):
-        break
-
-    # Add a condition to reset the state and loop back to the welcome screen
-    if not looking_at_camera and not show_welcome_screen:
-        show_welcome_screen = True
-        
+    canvas.configure(yscrollcommand=scrollbar.set)
+    canvas.bind('<Configure>', lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
+    canvas.create_window((0, 0), window=scrollable_frame, anchor='nw')
 
     # Adding events to the scrollable_frame
     for event in events:
@@ -222,46 +172,75 @@ face_cascade = cv2.CascadeClassifier('/home/gruppesjov/opencv/data/haarcascades/
 eye_cascade = cv2.CascadeClassifier('/home/gruppesjov/opencv/data/haarcascades/haarcascade_eye.xml')
 
 while True:
-    ret, frame = cap.read()
+    # Display the welcome screen again
+    screen.fill(background_color)
+    welcome_message1 = font.render('Welcome!', True, (255, 255, 255))
+    welcome_rect1 = welcome_message1.get_rect(center=(400, 240))
+    screen.blit(welcome_message1, welcome_rect1)
+    pygame.display.flip()
 
-    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    # Wait for 5 seconds
+    time.sleep(3)
 
-    faces = face_cascade.detectMultiScale(gray, 1.3, 5)
+    # Clear the screen for the second message
+    screen.fill(background_color)
+    welcome_message2 = font.render('Please use your ID Card to log in', True, (255, 255, 255))
+    welcome_rect2 = welcome_message2.get_rect(center=(400, 240))
+    screen.blit(welcome_message2, welcome_rect2)
+    pygame.display.flip()
 
-    if len(faces) == 0:
-        looking_at_camera = False
-        played_sound = False  # Reset the flag when no faces are detected
+    # Wait for 5 seconds
+    time.sleep(12)
 
-    for (x, y, w, h) in faces:
-        cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 5)
-        roi_gray = gray[y:y+w, x:x+w]
-        roi_color = frame[y:y+h, x:x+w]
-        eyes = eye_cascade.detectMultiScale(roi_gray, 1.3, 8)
+    # Clear the screen
+    screen.fill(background_color)
+    pygame.display.flip()
 
-        for (ex, ey, ew, eh) in eyes:
-            cv2.rectangle(roi_color, (ex, ey), (ex + ew, ey + eh), (0, 255, 0), 5)
-            looking_at_camera = True
+    # Reset flags
+    looking_at_camera = False
+    played_sound = False
 
-    cv2.imshow('frame', frame)
+    # Load the face and eye classifiers outside the loop
+    face_cascade = cv2.CascadeClassifier('/home/gruppesjov/opencv/data/haarcascades/haarcascade_frontalface_default.xml')
+    eye_cascade = cv2.CascadeClassifier('/home/gruppesjov/opencv/data/haarcascades/haarcascade_eye.xml')
 
-    # Play sounds based on the flag and ensure it's played only once
-    if looking_at_camera and not played_sound:
-        welcome_sound()
-        played_sound = True
+    while True:
+        ret, frame = cap.read()
 
-    if not looking_at_camera and played_sound:
-        goodbye_sound()
-        played_sound = False
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-    if cv2.waitKey(1) == ord('q'):
-        break
+        faces = face_cascade.detectMultiScale(gray, 1.3, 5)
 
-cap.release()
-cv2.destroyAllWindows()
+        if len(faces) == 0:
+            looking_at_camera = False
+            played_sound = False  # Reset the flag when no faces are detected
 
-# Wait for a short moment
-time.sleep(0.1)
+        for (x, y, w, h) in faces:
+            cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 5)
+            roi_gray = gray[y:y+w, x:x+w]
+            roi_color = frame[y:y+h, x:x+w]
+            eyes = eye_cascade.detectMultiScale(roi_gray, 1.3, 8)
 
-# Quit Pygame
-pygame.quit()
+            for (ex, ey, ew, eh) in eyes:
+                cv2.rectangle(roi_color, (ex, ey), (ex + ew, ey + eh), (0, 255, 0), 5)
+                looking_at_camera = True
 
+        cv2.imshow('frame', frame)
+
+        # Play sounds based on the flag and ensure it's played only once
+        if looking_at_camera and not played_sound:
+            welcome_sound()
+            played_sound = True
+
+        if not looking_at_camera and played_sound:
+            goodbye_sound()
+            played_sound = False
+
+        if cv2.waitKey(1) == ord('q'):
+            break
+
+    cap.release()
+    cv2.destroyAllWindows()
+
+    # Wait for a short moment
+    time.sleep(0.1)

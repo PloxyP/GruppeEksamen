@@ -25,7 +25,7 @@ def showCalendar(events):
     gui = Tk()
     gui.config(background='grey')
     gui.title("Teamup Calendar")
-    gui.attributes("-fullscreen", True)
+    gui.attributes("-fullscreen", True) 
 
     # Frame for the Log Off button
     top_frame = Frame(gui, bg='grey')
