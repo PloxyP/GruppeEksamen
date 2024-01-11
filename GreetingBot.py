@@ -21,7 +21,7 @@ try:
         if uid == target_card_uid:
             print("Target card detected! Running another script...")
             
-            # Replace 'your_script.py' with the path to the script you want to run
+            #Run Other script
             subprocess.run(['python', 'calendar.py'])
 
         # Wait for a moment to avoid rapid card detection
