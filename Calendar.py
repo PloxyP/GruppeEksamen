@@ -25,7 +25,17 @@ def showCalendar(events):
     gui = Tk()
     gui.config(background='grey')
     gui.title("Teamup Calendar")
-    gui.attributes("-fullscreen", True)
+
+    # Set the window size
+    window_width, window_height = 800, 480
+    gui.geometry(f'{window_width}x{window_height}')
+
+    # Center the window (optional)
+    screen_width = gui.winfo_screenwidth()
+    screen_height = gui.winfo_screenheight()
+    x = int((screen_width / 2) - (window_width / 2))
+    y = int((screen_height / 2) - (window_height / 2))
+    gui.geometry(f'+{x}+{y}')
 
     # Frame for the Log Off button
     top_frame = Frame(gui, bg='grey')
