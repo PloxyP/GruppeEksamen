@@ -34,6 +34,22 @@ welcome_rect1 = welcome_message1.get_rect(center=(400, 240))
 # Display the first welcome message
 screen.blit(welcome_message1, welcome_rect1)
 
+def showCalendar(events):
+    gui = Tk()
+    gui.config(background='grey')
+    gui.title("Teamup Calendar")
+    gui.attributes("-fullscreen", True)
+
+    # Frame for the Log Off button
+    top_frame = Frame(gui, bg='grey')
+    top_frame.pack(side='top', fill='x')
+
+    def logOff():
+        gui.destroy()
+        os.system("GreetingBot.py")
+
+    Button(top_frame, text="Log Off", command=logOff, font="Consolas 12 bold", padx=10, pady=5).pack(side='right', padx=20, pady=20)
+
 # Scrollable Canvas
 canvas = Canvas(gui, bg='grey')
 scrollbar = Scrollbar(gui, orient="vertical", command=canvas.yview)
@@ -103,21 +119,7 @@ def fetchEvents():
         return []
 
 
-def showCalendar(events):
-    gui = Tk()
-    gui.config(background='grey')
-    gui.title("Teamup Calendar")
-    gui.attributes("-fullscreen", True)
 
-    # Frame for the Log Off button
-    top_frame = Frame(gui, bg='grey')
-    top_frame.pack(side='top', fill='x')
-
-    def logOff():
-        gui.destroy()
-        os.system("GreetingBot.py")
-
-    Button(top_frame, text="Log Off", command=logOff, font="Consolas 12 bold", padx=10, pady=5).pack(side='right', padx=20, pady=20)
 
 # State variable to track whether to show the welcome screen or calendar
 show_welcome_screen = True
