@@ -239,8 +239,8 @@ eye_cascade = cv2.CascadeClassifier('/home/gruppesjov/opencv/data/haarcascades/h
 #         if cv2.waitKey(1) == ord('q'):
 #             break
 
-    cap.release()
-    cv2.destroyAllWindows()
+cap.release()
+cv2.destroyAllWindows()
 
     # Wait for a short moment
-    time.sleep(0.1)
+time.sleep(0.1)
