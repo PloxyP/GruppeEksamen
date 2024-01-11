@@ -54,7 +54,7 @@ screen.blit(welcome_message2, welcome_rect2)
 pygame.display.flip()
 
 # Wait for 5 seconds
-time.sleep(12)
+time.sleep(5)
 
 # Clear the screen
 screen.fill(background_color)
@@ -170,8 +170,8 @@ if __name__ == "__main__":
 # Load the face and eye classifiers outside the loop
 face_cascade = cv2.CascadeClassifier('/home/gruppesjov/opencv/data/haarcascades/haarcascade_frontalface_default.xml')
 eye_cascade = cv2.CascadeClassifier('/home/gruppesjov/opencv/data/haarcascades/haarcascade_eye.xml')
-
-while True:
+#
+# while True:
     # Display the welcome screen again
     screen.fill(background_color)
     welcome_message1 = font.render('Welcome!', True, (255, 255, 255))
