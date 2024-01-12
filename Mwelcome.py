@@ -10,22 +10,28 @@ def welcome_message(eyes_detected):
     pygame.display.set_caption('Welcome Message')
     background_color = (0, 0, 0)
     font = pygame.font.Font(None, 36)
+    
+    #INDENFOR WHILE
+    screen.fill(background_color)
+    
+    #Indenfor if
+    welcome_message2 = font.render('Scan your card', True, (255, 255, 255))
+    welcome_rect2 = welcome_message2.get_rect(center=(400, 240))
+
+    #Indenfor Else
+    welcome_message1 = font.render('Welcome!', True, (255, 255, 255))
+    welcome_rect1 = welcome_message1.get_rect(center=(400, 240))
 
     while True:
-        screen.fill(background_color)
 
         if eyes_detected.value:
             # Display "Scan your card" message
-            welcome_message2 = font.render('Scan your card', True, (255, 255, 255))
-            welcome_rect2 = welcome_message2.get_rect(center=(400, 240))
             screen.blit(welcome_message2, welcome_rect2)
             pygame.display.flip()
             time.sleep(5)  # Adjust the duration as needed
             eyes_detected.value = False  # Reset the variable after displaying the message
         else:
             # Display the first welcome message
-            welcome_message1 = font.render('Welcome!', True, (255, 255, 255))
-            welcome_rect1 = welcome_message1.get_rect(center=(400, 240))
             screen.blit(welcome_message1, welcome_rect1)
             pygame.display.flip()
 
