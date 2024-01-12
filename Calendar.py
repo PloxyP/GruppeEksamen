@@ -136,7 +136,8 @@ def read_rfid(read_cards, total_reads):
 
 
 if __name__ == "__main__":
-    read_rfid(read_cards)
+    total_reads = 0  # Initialize total reads counter
+    read_rfid(read_cards, total_reads)
 
     
 
