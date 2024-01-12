@@ -8,6 +8,7 @@ import time
 from mfrc522 import SimpleMFRC522
 import RPi.GPIO as GPIO
 import thingspeak
+import multiprocessing
 
 pygame.init()
 
