@@ -27,11 +27,11 @@ def play_sound(file_path):
 
 def welcome_sound():
     print("TEST HEJ")
-    play_sound("check.mp3")
+    play_sound("check.wav")
 
 def declined_sound():
     print("TEST FARVEL")
-    play_sound("declined.mp3")
+    play_sound("declined.wav")
 
 #####################################
     
