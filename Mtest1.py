@@ -4,8 +4,13 @@ from Mtest2 import program2_function
 
 def program1_function(shared_variable):
     while True:
-        time.sleep(1)  # Simulate some work
-        shared_variable.value = not shared_variable.value
+        user_input = input("Enter 'True' or 'False': ").lower()
+        if user_input == 'true':
+            shared_variable.value = True
+        elif user_input == 'false':
+            shared_variable.value = False
+        else:
+            print("Invalid input. Please enter 'True' or 'False'.")
         print(f"Program 1 - Shared Variable: {shared_variable.value}")
 
 if __name__ == "__main__":

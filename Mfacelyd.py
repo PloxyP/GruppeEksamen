@@ -3,7 +3,7 @@ import pygame
 import threading
 from Mwelcome import welcome_message
 
-# Shared variable to signal eyes detection
+# Shared variable to signal eyes detections
 eyes_detected = False
 
 cap = cv2.VideoCapture(0)
