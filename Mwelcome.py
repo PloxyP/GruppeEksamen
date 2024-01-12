@@ -19,7 +19,7 @@ def welcome_message(eyes_detected):
     while True:
         screen.fill(background_color)
 
-        if eyes_detected[0]:  # Access the value from the list
+        if eyes_detected and eyes_detected[0]:  # Check if the list is not empty and its first element is True
             # Display "Scan your card" message
             welcome_message2 = font.render('Scan your card', True, (255, 255, 255))
             welcome_rect2 = welcome_message2.get_rect(center=(400, 240))
