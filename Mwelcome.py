@@ -1,11 +1,6 @@
 import pygame
 import time
-import multiprocessing
-
-def play_sound(file_path):
-    pygame.mixer.init()
-    pygame.mixer.music.load(file_path)
-    pygame.mixer.music.play()
+from multiprocessing import Process, Value
 
 def welcome_message(eyes_detected):
     pygame.init()  # Initialize the pygame library
