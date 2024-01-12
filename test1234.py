@@ -191,6 +191,46 @@ if __name__=='__main__':
 face_cascade = cv2.CascadeClassifier('/home/gruppesjov/opencv/data/haarcascades/haarcascade_frontalface_default.xml')
 eye_cascade = cv2.CascadeClassifier('/home/gruppesjov/opencv/data/haarcascades/haarcascade_eye.xml')
 
+# while True:
+#     ret, frame = cap.read()
+
+#     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+
+#     faces = face_cascade.detectMultiScale(gray, 1.3, 5)
+
+#     if len(faces) == 0:
+#         looking_at_camera = False
+#         played_sound = False  # Reset the flag when no faces are detected
+
+#     for (x, y, w, h) in faces:
+#         cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 5)
+#         roi_gray = gray[y:y+w, x:x+w]
+#         roi_color = frame[y:y+h, x:x+w]
+#         eyes = eye_cascade.detectMultiScale(roi_gray, 1.3, 8)
+
+#         for (ex, ey, ew, eh) in eyes:
+#             cv2.rectangle(roi_color, (ex, ey), (ex + ew, ey + eh), (0, 255, 0), 5)
+#             looking_at_camera = True
+
+#     cv2.imshow('frame', frame)
+
+#     # Play sounds based on the flag and ensure it's played only once
+#     if looking_at_camera and not played_sound:
+#         welcome_sound()
+#         played_sound = True
+        
+#     if not looking_at_camera and played_sound:
+#         goodbye_sound()
+#         played_sound = False
+
+#     if cv2.waitKey(1) == ord('q'):
+#         break
+
+# cap.release()
+# cv2.destroyAllWindows()
+
+# ... (previous code)
+
 while True:
     ret, frame = cap.read()
 
@@ -201,6 +241,9 @@ while True:
     if len(faces) == 0:
         looking_at_camera = False
         played_sound = False  # Reset the flag when no faces are detected
+    else:
+        looking_at_camera = True
+        played_sound = False  # Reset the flag when a face is detected
 
     for (x, y, w, h) in faces:
         cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 5)
@@ -210,24 +253,19 @@ while True:
 
         for (ex, ey, ew, eh) in eyes:
             cv2.rectangle(roi_color, (ex, ey), (ex + ew, ey + eh), (0, 255, 0), 5)
-            looking_at_camera = True
 
     cv2.imshow('frame', frame)
 
     # Play sounds based on the flag and ensure it's played only once
     if looking_at_camera and not played_sound:
         welcome_sound()
+        time.sleep(5)
         played_sound = True
-        
-    if not looking_at_camera and played_sound:
-        goodbye_sound()
-        played_sound = False
 
-    if cv2.waitKey(1) == ord('q'):
-        break
+    if cv2.waitKey(1) == ord('q') or looking_at_camera:
+        break  # Break the loop when 'q' is pressed or when a face is detected
 
-cap.release()
-cv2.destroyAllWindows()
+# ... (remaining code)
 
 # Wait for a short moment
 time.sleep(0.1)
