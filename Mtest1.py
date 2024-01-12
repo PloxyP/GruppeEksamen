@@ -11,6 +11,7 @@ def program1_function(shared_variable):
             shared_variable.value = False
         else:
             print("Invalid input. Please enter 'True' or 'False'.")
+        print(f"Program 1 - Shared Variable: {shared_variable.value}")
 
 if __name__ == "__main__":
     shared_variable = multiprocessing.Value('b', False)

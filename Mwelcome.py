@@ -1,6 +1,6 @@
 import pygame
-import threading
 import time
+import multiprocessing
 
 def play_sound(file_path):
     pygame.mixer.init()
@@ -19,14 +19,14 @@ def welcome_message(eyes_detected):
     while True:
         screen.fill(background_color)
 
-        if eyes_detected:
+        if eyes_detected.value:
             # Display "Scan your card" message
             welcome_message2 = font.render('Scan your card', True, (255, 255, 255))
             welcome_rect2 = welcome_message2.get_rect(center=(400, 240))
             screen.blit(welcome_message2, welcome_rect2)
             pygame.display.flip()
             time.sleep(5)  # Adjust the duration as needed
-            eyes_detected = False  # Reset the variable after displaying the message
+            eyes_detected.value = False  # Reset the variable after displaying the message
         else:
             # Display the first welcome message
             welcome_message1 = font.render('Welcome!', True, (255, 255, 255))
@@ -39,11 +39,11 @@ def welcome_message(eyes_detected):
                 pygame.quit()
 
 if __name__ == "__main__":
-    eyes_detected = False  # Initial value
-    welcome_thread = threading.Thread(target=welcome_message, args=(eyes_detected,))
+    eyes_detected = Value('b', False)  # Initial value
+    welcome_process = Process(target=welcome_message, args=(eyes_detected,))
 
-    # Start the thread
-    welcome_thread.start()
+    # Start the process
+    welcome_process.start()
 
-    # Wait for the thread to finish before exiting
-    welcome_thread.join()
+    # Wait for the process to finish before exiting
+    welcome_process.join()
