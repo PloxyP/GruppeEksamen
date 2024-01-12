@@ -1,27 +1,16 @@
 import multiprocessing
 import time
+from Mtest2 import program2_function
 
-def program1_shared_variable(shared_variable):
+def program1_function(shared_variable):
     while True:
-        print("Program 1 is running")
-        time.sleep(1)
-        # Update the shared variable
+        time.sleep(1)  # Simulate some work
         shared_variable.value = not shared_variable.value
+        print(f"Program 1 - Shared Variable: {shared_variable.value}")
 
 if __name__ == "__main__":
-    # Create a shared variable between processes
     shared_variable = multiprocessing.Value('b', False)
+    program2_process = multiprocessing.Process(target=program2_function, args=(shared_variable,))
+    program2_process.start()
 
-    # Start program2.py as a separate process
-    process2 = multiprocessing.Process(target=multiprocessing.run_path, args=("program2.py",))
-
-    # Start the function in program1.py
-    program1_shared_process = multiprocessing.Process(target=program1_shared_variable, args=(shared_variable,))
-    program1_shared_process.start()
-
-    # Start program2.py
-    process2.start()
-
-    # Wait for both processes to finish
-    program1_shared_process.join()
-    process2.join()
+    program1_function(shared_variable)
