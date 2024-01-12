@@ -52,6 +52,7 @@ def face_detection(eyes_detected):
                 cv2.rectangle(roi_color, (ex, ey), (ex + ew, ey + eh), (0, 255, 0), 5)
                 looking_at_camera = True
                 eyes_detected.value = True
+        cv2.imshow('frame', frame)
 
         # Play sounds based on the flag and ensure it's played only once
         if looking_at_camera:
