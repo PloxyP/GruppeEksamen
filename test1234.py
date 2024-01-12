@@ -217,8 +217,9 @@ while True:
     # Play sounds based on the flag and ensure it's played only once
     if looking_at_camera and not played_sound:
         welcome_sound()
-        played_sound = True
         time.sleep(5)
+        played_sound = True
+        
     if not looking_at_camera and played_sound:
         goodbye_sound()
         played_sound = False
