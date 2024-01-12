@@ -42,7 +42,6 @@ def face_detection(eyes_detected):
 
         if len(faces) == 0:
             looking_at_camera = False
-            led_on = False
 
         for (x, y, w, h) in faces:
             cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 5)
