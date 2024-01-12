@@ -79,17 +79,22 @@ def showCalendar(events):
 
 if __name__ == '__main__':
     api_url = "https://api.teamup.com"
-    api_key = "699e02c0555e1804ea722d893851875e8444e8bf17199c8d8e46bc393a60f960"
+    api_key = "your_api_key_here"
 
-    # Dictionary mapping card IDs to calendar keys
+    headers = {"Teamup-Token": api_key}
     card_calendar_map = {
         '2054232593': 'kskp2dg3mpgu24n3ww',
         '2206210585': 'ks2yz86rfe8sj5nvq1',
         # Add more card IDs and their corresponding calendar keys
     }
 
-    headers = {"Teamup-Token": api_key}
+    # Assuming read_rfid() is your RFID reading function
+    card_id = read_rfid()  # Wait for a card to be read and get its ID
 
-    for card_id, calendar_key in card_calendar_map.items():
+    if card_id in card_calendar_map:
+        calendar_key = card_calendar_map[card_id]
         events = fetchEvents(calendar_key)
         showCalendar(events)
+    else:
+        print("Card not recognized")
+
