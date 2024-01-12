@@ -10,13 +10,14 @@ def play_sound(file_path):
 def welcome_message():
     pygame.init()  # Initialize the pygame library
 
+    # Screen Config
+    screen = pygame.display.set_mode((800, 480), pygame.FULLSCREEN)
+    pygame.display.set_caption('Welcome Message')
+    background_color = (0, 0, 0)
+    font = pygame.font.Font(None, 36)
+
     while True:
-        # Screen Config
-        screen = pygame.display.set_mode((800, 480), pygame.FULLSCREEN)
-        pygame.display.set_caption('Welcome Message')
-        background_color = (0, 0, 0)
         screen.fill(background_color)
-        font = pygame.font.Font(None, 36)
 
         # First Welcome Message
         welcome_message1 = font.render('Welcome!', True, (255, 255, 255))
@@ -28,6 +29,9 @@ def welcome_message():
 
         # Pause for a moment
         time.sleep(5)  # Adjust the duration as needed
+
+    # Clean up resources before exiting
+    pygame.quit()
 
 if __name__ == "__main__":
     welcome_thread = threading.Thread(target=welcome_message)
