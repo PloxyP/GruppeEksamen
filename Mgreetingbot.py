@@ -136,6 +136,8 @@ def read_rfid(read_cards):
         GPIO.cleanup()
 
 def rfid_function():
+    total_reads = 0  # Initialize total reads counter
+    read_rfid(read_cards)
     api_url = "https://api.teamup.com"
     api_key = "699e02c0555e1804ea722d893851875e8444e8bf17199c8d8e46bc393a60f960"
     card_calendar_map = {
@@ -168,6 +170,4 @@ def rfid_function():
             time.sleep(1)
 
 if __name__ == '__main__':
-    total_reads = 0  # Initialize total reads counter
-    read_rfid(read_cards)
     rfid_function()
