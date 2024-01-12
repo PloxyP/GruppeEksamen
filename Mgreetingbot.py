@@ -136,38 +136,36 @@ def read_rfid(read_cards):
         GPIO.cleanup()
 
 def rfid_function():
+    api_url = "https://api.teamup.com"
+    api_key = "699e02c0555e1804ea722d893851875e8444e8bf17199c8d8e46bc393a60f960"
+    card_calendar_map = {
+        '2054232593': 'kskp2dg3mpgu24n3ww',
+        '2206210585': 'ks2yz86rfe8sj5nvq1',
+        # Add more card IDs and their corresponding calendar keys
+    }
+    headers = {"Teamup-Token": api_key}
+    read_cards = set()
 
-    if __name__ == '__main__':
-        api_url = "https://api.teamup.com"
-        api_key = "699e02c0555e1804ea722d893851875e8444e8bf17199c8d8e46bc393a60f960"
-        card_calendar_map = {
-            '2054232593': 'kskp2dg3mpgu24n3ww',
-            '2206210585': 'ks2yz86rfe8sj5nvq1',
-            # Add more card IDs and their corresponding calendar keys
-        }
-        headers = {"Teamup-Token": api_key}
-        read_cards = set()
+    while True:
+        try:
+            card_id = read_rfid(read_cards)
+            print(f"Read card ID: {card_id}")
 
-        while True:
-            try:
-                card_id = read_rfid(read_cards)
-                print(f"Read card ID: {card_id}")
-
-                if card_id in card_calendar_map:
-                    calendar_key = card_calendar_map[card_id]
-                    print(f"Fetching events for calendar key: {calendar_key}")
-                    events = fetchEvents(calendar_key)
-                    if events:
-                        showCalendar(events)
-                    else:
-                        print("No events found or error in fetching events")
+            if card_id in card_calendar_map:
+                calendar_key = card_calendar_map[card_id]
+                print(f"Fetching events for calendar key: {calendar_key}")
+                events = fetchEvents(calendar_key)
+                if events:
+                    showCalendar(events)
                 else:
-                    print("Card not recognized")
+                    print("No events found or error in fetching events")
+            else:
+                print("Card not recognized")
 
-                time.sleep(1)
-            except Exception as e:
-                print(f"An error occurred: {e}")
-                time.sleep(1)
+            time.sleep(1)
+        except Exception as e:
+            print(f"An error occurred: {e}")
+            time.sleep(1)
 
 if __name__ == '__main__':
     total_reads = 0  # Initialize total reads counter
