@@ -3,7 +3,6 @@ import pygame
 import threading
 from Mwelcome import welcome_message
 
-
 cap = cv2.VideoCapture(0)
 
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
