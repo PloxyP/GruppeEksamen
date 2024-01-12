@@ -131,7 +131,7 @@ def read_rfid(reader, channel):
 
         else:
             declined_sound()
-
+            
         return str(id)
     finally:
         GPIO.cleanup()
