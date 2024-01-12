@@ -58,7 +58,7 @@ def face_detection(eyes_detected):
                     eyes_detected.value = True
                     print("test2")
 
-        cv2.imshow('frame', frame)
+        #cv2.imshow('frame', frame)
 
         # Play sounds based on the flag and ensure it's played only once
         if looking_at_camera == True and led_on == False:
