@@ -53,13 +53,14 @@ def face_detection(eyes_detected):
                 cv2.rectangle(roi_color, (ex, ey), (ex + ew, ey + eh), (0, 255, 0), 5)
                 looking_at_camera = True
                 eyes_detected.value = True
-                if not led_on:
-                    welcome_led()
-                    led_on = True
 
         #cv2.imshow('frame', frame)
 
         # Play sounds based on the flag and ensure it's played only once
+        if not led_on:
+            welcome_led()
+            led_on = True
+        
         if not looking_at_camera and led_on:
             goodbye_led()
             led_on = False
