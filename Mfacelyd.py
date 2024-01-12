@@ -14,6 +14,7 @@ cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
 cap.set(cv2.CAP_PROP_FPS, 60)
 
 looking_at_camera = False
+led_on = False
 led_pin = 24  # GPIO pin for the LED, change it to your actual pinn
 
 # Initialize GPIO
@@ -41,6 +42,7 @@ def face_detection(eyes_detected):
 
         if len(faces) == 0:
             looking_at_camera = False
+            led_on = False
 
         for (x, y, w, h) in faces:
             cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 5)
@@ -55,10 +57,13 @@ def face_detection(eyes_detected):
         cv2.imshow('frame', frame)
 
         # Play sounds based on the flag and ensure it's played only once
-        if looking_at_camera:
+        if looking_at_camera and not led_on:
             welcome_led()
-        else:
+            led_on = True
+        
+        if not looking_at_camera and led_on:
             goodbye_led()
+            led_on = False
         
         if cv2.waitKey(1) == ord('q'):
             break
