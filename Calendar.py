@@ -154,7 +154,6 @@ if __name__ == '__main__':
         # Add more card IDs and their corresponding calendar keys
     }
     headers = {"Teamup-Token": api_key}
-    total_reads = 0  # Initialize total reads counter
     read_cards = set()
 
     while True:
