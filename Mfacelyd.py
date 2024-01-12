@@ -2,6 +2,7 @@ import cv2
 import pygame
 from multiprocessing import Process, Value
 from Mwelcome import welcome_message
+from Mgreetingbot import rfid_function
 
 # Shared variable to signal eyes detections
 eyes_detected = Value('b', False)
@@ -78,11 +79,14 @@ if __name__ == "__main__":
     eyes_detected = Value('b', False)  # Initial value
     face_process = Process(target=face_detection, args=(eyes_detected,))
     welcome_process = Process(target=welcome_message, args=(eyes_detected,))
+    program3_process = Process(target=rfid_function)  # Add this line
 
-    # Start both processes
+    # Start all processes
     face_process.start()
     welcome_process.start()
+    program3_process.start()  # Add this line
 
-    # Wait for both processes to finish before exiting
+    # Wait for all processes to finish before exiting
     face_process.join()
     welcome_process.join()
+    program3_process.join()  # Add this line
