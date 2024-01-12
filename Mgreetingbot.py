@@ -9,6 +9,7 @@ from mfrc522 import SimpleMFRC522
 import RPi.GPIO as GPIO
 import thingspeak
 import multiprocessing
+import simpleaudio
 
 pygame.init()
 
@@ -20,9 +21,9 @@ write_key = 'RS1DFZK1ZEULO72E'
 total_reads = 0  # Initialize total reads counter
 
 def play_sound(file_path):
-    pygame.mixer.music.load(file_path)
-    pygame.mixer.music.play()
-    time.sleep(2)  # Adjust the delay as needed
+    wave_obj = simpleaudio.WaveObject.from_file(file_path)
+    play_obj = wave_obj.play()
+    play_obj.wait_done()
 
 def welcome_sound():
     print("TEST HEJ")
