@@ -218,7 +218,7 @@ while True:
     if looking_at_camera and not played_sound:
         welcome_sound()
         played_sound = True
-
+        time.sleep(5)
     if not looking_at_camera and played_sound:
         goodbye_sound()
         played_sound = False
@@ -227,7 +227,7 @@ while True:
         break
 
 cap.release()
-# cv2.destroyAllWindows()
+cv2.destroyAllWindows()
 
 # Wait for a short moment
 time.sleep(0.1)
