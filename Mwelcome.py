@@ -7,7 +7,7 @@ def play_sound(file_path):
     pygame.mixer.music.load(file_path)
     pygame.mixer.music.play()
 
-def welcome_message():
+def welcome_message(eyes_detected):
     pygame.init()  # Initialize the pygame library
 
     # Screen Config
@@ -19,17 +19,17 @@ def welcome_message():
     while True:
         screen.fill(background_color)
 
-        # Update the message based on the presence of eyes
-        if eyes_registered:
-            message_text = "Scan your card"
+        if eyes_detected:
+            # Display "Scan your card" message
+            welcome_message2 = font.render('Scan your card', True, (255, 255, 255))
+            welcome_rect2 = welcome_message2.get_rect(center=(400, 240))
+            screen.blit(welcome_message2, welcome_rect2)
         else:
-            message_text = "Welcome!"
+            # Display the first welcome message
+            welcome_message1 = font.render('Welcome!', True, (255, 255, 255))
+            welcome_rect1 = welcome_message1.get_rect(center=(400, 240))
+            screen.blit(welcome_message1, welcome_rect1)
 
-        welcome_message_text = font.render(message_text, True, (255, 255, 255))
-        welcome_rect = welcome_message_text.get_rect(center=(400, 240))
-
-        # Display the message
-        screen.blit(welcome_message_text, welcome_rect)
         pygame.display.flip()
 
         # Pause for a moment
@@ -39,30 +39,11 @@ def welcome_message():
     pygame.quit()
 
 if __name__ == "__main__":
-    eyes_registered = False  # Initialize the flag
+    eyes_detected = False  # Initial value
+    welcome_thread = threading.Thread(target=welcome_message, args=(eyes_detected,))
 
-    def face_detection():
-        global eyes_registered
-        while True:
-            # ... (existing face detection code)
-
-            # Update the eyes_registered flag based on the presence of eyes
-            eyes_registered = len(eyes) > 0
-
-            if cv2.waitKey(1) == ord('q'):
-                break
-
-        cap.release()
-        cv2.destroyAllWindows()
-
-    # Start the face detection thread
-    face_thread = threading.Thread(target=face_detection)
-    face_thread.start()
-
-    # Start the welcome message thread
-    welcome_thread = threading.Thread(target=welcome_message)
+    # Start the thread
     welcome_thread.start()
 
-    # Wait for both threads to finish before exiting
-    face_thread.join()
+    # Wait for the thread to finish before exiting
     welcome_thread.join()

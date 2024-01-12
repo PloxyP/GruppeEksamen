@@ -3,6 +3,9 @@ import pygame
 import threading
 from Mwelcome import welcome_message
 
+# Shared variable to signal eyes detection
+eyes_detected = False
+
 cap = cv2.VideoCapture(0)
 
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
@@ -17,6 +20,8 @@ face_cascade = cv2.CascadeClassifier('/home/gruppesjov/opencv/data/haarcascades/
 eye_cascade = cv2.CascadeClassifier('/home/gruppesjov/opencv/data/haarcascades/haarcascade_eye.xml')
 
 def face_detection():
+    global eyes_detected
+    
     while True:
         ret, frame = cap.read()
 
@@ -37,12 +42,13 @@ def face_detection():
         cv2.imshow('frame', frame)
         if cv2.waitKey(1) == ord('q'):
             break
+
     cap.release()
     cv2.destroyAllWindows()
 
 if __name__ == "__main__":
     face_thread = threading.Thread(target=face_detection)
-    welcome_thread = threading.Thread(target=welcome_message)
+    welcome_thread = threading.Thread(target=welcome_message, args=(eyes_detected,))
 
     # Start both threads
     face_thread.start()
