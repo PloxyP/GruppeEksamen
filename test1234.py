@@ -54,7 +54,7 @@ screen.blit(welcome_message2, welcome_rect2)
 pygame.display.flip()
 
 # Wait for 5 seconds
-time.sleep(5)
+time.sleep(2)
 
 # Clear the screen
 screen.fill(background_color)
@@ -227,7 +227,7 @@ while True:
         break
 
 cap.release()
-cv2.destroyAllWindows()
+# cv2.destroyAllWindows()
 
 # Wait for a short moment
 time.sleep(0.1)
