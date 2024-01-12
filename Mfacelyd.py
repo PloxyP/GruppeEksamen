@@ -39,8 +39,6 @@ def face_detection(eyes_detected):
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
         faces = face_cascade.detectMultiScale(gray, 1.3, 5)
-        
-        detected_prev = False
 
         if len(faces) == 0:
             looking_at_camera = False
@@ -58,16 +56,14 @@ def face_detection(eyes_detected):
 
         cv2.imshow('frame', frame)
 
-        # Play sounds based on the flag and ensure it's played only oncee
-        if not detected_prev and looking_at_camera:
+        # Play sounds based on the flag and ensure it's played only once
+        if looking_at_camera == True and led_on == False:
             welcome_led()
             led_on = True
 
-        elif detected_prev and not looking_at_camera:
+        if looking_at_camera == False and led_on == True:
             goodbye_led()
             led_on = False
-        
-        detected_prev = looking_at_camera
         
         if cv2.waitKey(1) == ord('q'):
             break
