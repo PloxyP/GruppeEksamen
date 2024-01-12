@@ -26,7 +26,7 @@ def welcome_led():
     GPIO.output(led_pin, GPIO.HIGH)
 
 def goodbye_led():
-    print("Goodbye!")
+    #print("Goodbye!")
     GPIO.output(led_pin, GPIO.LOW)
 
 def face_detection(eyes_detected):

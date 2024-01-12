@@ -18,8 +18,6 @@ channel_id = 2399393
 write_key = 'RS1DFZK1ZEULO72E'
 total_reads = 0  # Initialize total reads counter
 
-
-
 def play_sound(file_path):
     pygame.mixer.init()
     pygame.mixer.music.load(file_path)
@@ -58,23 +56,11 @@ def fetchEvents(api_url, headers, calendar_key):
         print("Failed to fetch events")
         return []
     
-global gui
-gui = None
-
 def showCalendar(events):
-    global gui
-    if gui is not None:
-        gui.destroy()
     gui = Tk()
     gui.config(background='grey')
     gui.title("Teamup Calendar")
-
-    # Define the set_fullscreen function
-    def set_fullscreen():
-        gui.attributes("-fullscreen", True)
-
-    # Add a delay of 100 milliseconds before setting fullscreen
-    gui.after(100, set_fullscreen)
+    gui.attributes("-fullscreen", True) 
 
     # Frame for the Log Off button
     top_frame = Frame(gui, bg='grey')
@@ -182,3 +168,4 @@ def rfid_function():
             
 if __name__ == '__main__':
     rfid_function()
+
