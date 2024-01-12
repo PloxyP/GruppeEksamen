@@ -33,7 +33,7 @@ def showCalendar(events):
 
     def logOff():
         gui.destroy()
-        os.system("GreetingBot.py")
+        
 
     Button(top_frame, text="Log Off", command=logOff, font="Consolas 12 bold", padx=10, pady=5).pack(side='right', padx=20, pady=20)
 
@@ -90,6 +90,10 @@ if __name__ == '__main__':
 
     headers = {"Teamup-Token": api_key}
 
-    for card_id, calendar_key in card_calendar_map.items():
+
+    if card_id in card_calendar_map:
+        calendar_key = card_calendar_map[card_id]
         events = fetchEvents(calendar_key)
         showCalendar(events)
+    else:
+        print("Card not recognized")
