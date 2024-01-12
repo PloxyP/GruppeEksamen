@@ -39,6 +39,7 @@ def welcome_message(eyes_detected):
 
 
 def DisplayText(Message, Rect, screen):
+    global background_color
     screen.fill(background_color)
     screen.blit(Message, Rect)
     pygame.display.flip()
