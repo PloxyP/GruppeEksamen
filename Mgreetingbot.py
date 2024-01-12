@@ -19,9 +19,9 @@ write_key = 'RS1DFZK1ZEULO72E'
 total_reads = 0  # Initialize total reads counter
 
 def play_sound(file_path):
-    pygame.mixer.init()
     pygame.mixer.music.load(file_path)
     pygame.mixer.music.play()
+    time.sleep(2)  # Adjust the delay as needed
 
 def welcome_sound():
     print("TEST HEJ")
