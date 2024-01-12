@@ -57,7 +57,7 @@ def face_detection(eyes_detected):
                     welcome_led()
                     led_on = True
 
-        cv2.imshow('frame', frame)
+        #cv2.imshow('frame', frame)
 
         # Play sounds based on the flag and ensure it's played only once
         if not looking_at_camera and led_on:
