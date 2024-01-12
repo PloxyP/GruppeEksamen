@@ -107,18 +107,11 @@ def showCalendar(events):
 
 def read_rfid():
     reader = SimpleMFRC522()
-
     try:
         print("Hold a card near the reader.")
         id, text = reader.read()
-        print("Card ID:", id)
-        print("Card Text:", text)
-
-        # Replace '123456789' with the ID of your specific card
-        if id == 2054232593:
-            print("Opening Calendar.py")
-            subprocess.run(["python", "Calendar.py"])
-
+        
+        return id
     finally:
         GPIO.cleanup()
 
@@ -141,6 +134,11 @@ if __name__ == '__main__':
     }
 
     headers = {"Teamup-Token": api_key}
+
+    card_id = read_rfid()
+
+    
+    card_id_str = str(card_id)
 
 
     if card_id in card_calendar_map:
