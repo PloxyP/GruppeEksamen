@@ -7,8 +7,13 @@ import pygame
 import time
 from mfrc522 import SimpleMFRC522
 import RPi.GPIO as GPIO
+import thingspeak
 
 pygame.init()
+
+# ThingSpeak channel details
+channel_id = 2399393  
+write_key = '94WQ6JGAID2IXX7F'
 
 def play_sound(file_path):
     pygame.mixer.init()
@@ -104,14 +109,19 @@ def showCalendar(events):
 
     gui.mainloop()
 
-
+#RFID Reader og Thingspeak datacollector
 def read_rfid():
     reader = SimpleMFRC522()
+    channel = thingspeak.Channel(id=channel_id, api_key=write_key)
     try:
         print("Hold a card near the reader.")
-        id, text = reader.read()
-        print(reader.read())
+        id= reader.read()
+        print(id)
         
+        # Send data to ThingSpeak
+        response = channel.update({'field2': 1})
+        print("Data sent to ThingSpeak")
+
         return str(id)  # Convert ID to string
     finally:
         GPIO.cleanup()
