@@ -24,11 +24,11 @@ def play_sound(file_path):
     pygame.mixer.music.play()
 
 def welcome_sound():
-    print("Welcome!")
+    print("TEST HEJ")
     play_sound("check.mp3")
 
 def declined_sound():
-    print("Card declined.")
+    print("TEST FARVEL")
     play_sound("declined.mp3")
 
 #####################################
