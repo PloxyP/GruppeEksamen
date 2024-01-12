@@ -39,6 +39,8 @@ def face_detection(eyes_detected):
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
         faces = face_cascade.detectMultiScale(gray, 1.3, 5)
+        
+        detected_prev = False
 
         if len(faces) == 0:
             looking_at_camera = False
