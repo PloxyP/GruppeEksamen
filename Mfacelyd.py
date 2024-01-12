@@ -53,10 +53,8 @@ def face_detection(eyes_detected):
                 cv2.rectangle(roi_color, (ex, ey), (ex + ew, ey + eh), (0, 255, 0), 5)
                 if looking_at_camera == False:
                     looking_at_camera = True
-                    print("test")
                 if eyes_detected.value == False:
                     eyes_detected.value = True
-                    print("test2")
 
         #cv2.imshow('frame', frame)
 
