@@ -27,9 +27,9 @@ def welcome_sound():
     print("Welcome!")
     play_sound("check.mp3")
 
-#def goodbye_sound():
-   # print("Goodbye!")
-   # play_sound("check.mp3")
+def declined_sound():
+    print("Card declined.")
+    play_sound("declined.mp3")
 
 #####################################
     
@@ -117,14 +117,20 @@ def read_rfid(reader, channel):
         id, text = reader.read()
         print(id)
 
-        # Send data to ThingSpeak for every read
-        response = channel.update({'field1': 1})
-        print("Data sent to ThingSpeak")
+        # Check if the card is accepted
+        if str(id) in card_calendar_map:
+            welcome_sound()
+            # Send data to ThingSpeak for every read
+            response = channel.update({'field1': 1})
+            print("Data sent to ThingSpeak")
 
-        # Increment total reads count
-        total_reads += 1
-        total_users_response = channel.update({'field2': total_reads})
-        print(f"Total reads count updated on ThingSpeak: {total_reads}")
+            # Increment total reads count
+            total_reads += 1
+            total_users_response = channel.update({'field2': total_reads})
+            print(f"Total reads count updated on ThingSpeak: {total_reads}")
+
+        else:
+            declined_sound()
 
         return str(id)
     finally:
