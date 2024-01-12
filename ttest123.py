@@ -152,7 +152,8 @@ def play_sound(file_path):
     pygame.mixer.music.load(file_path)
     pygame.mixer.music.play()
 
-def welcome_message(eyes_detected):
+def welcome_message():#eyes_detected):
+    global eyes_detected
     # pygame.init()  # Initialize the pygame library
 
     # Screen Config
