@@ -129,7 +129,7 @@ if __name__ == '__main__':
 
     # Dictionary mapping card IDs to calendar keys
     card_calendar_map = {
-        '976046002514': 'kskp2dg3mpgu24n3ww',
+        '2054232593': 'kskp2dg3mpgu24n3ww',
         '2206210585': 'ks2yz86rfe8sj5nvq1',
         # Add more card IDs and their corresponding calendar keys
     }
