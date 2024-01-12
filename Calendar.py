@@ -3,6 +3,40 @@ import requests
 import json
 from datetime import datetime, timedelta
 import os
+import pygame
+import time
+from mfrc522 import SimpleMFRC522
+import RPi.GPIO as GPIO
+import thingspeak
+
+pygame.init()
+
+read_cards = set()
+
+# ThingSpeak channel details
+channel_id = 2399393  
+write_key = 'RS1DFZK1ZEULO72E'
+
+def play_sound(file_path):
+    pygame.mixer.init()
+    pygame.mixer.music.load(file_path)
+    pygame.mixer.music.play()
+
+def welcome_sound():
+    print("Welcome!")
+    play_sound("check.mp3")
+
+#def goodbye_sound():
+   # print("Goodbye!")
+   # play_sound("check.mp3")
+    
+
+
+
+#####################################
+    
+
+#Calendar teamup API og Dictionary 
 
 def fetchEvents(calendar_key):
     start_date = datetime.now()
@@ -77,6 +111,37 @@ def showCalendar(events):
 
     gui.mainloop()
 
+#RFID Reader og Thingspeak datacollector
+def read_rfid(read_cards):
+    reader = SimpleMFRC522()
+    channel = thingspeak.Channel(id=channel_id, api_key=write_key)
+    try:
+        print("Hold a card near the reader.")
+        id, text = reader.read()
+        print(id)
+
+        # Send data to ThingSpeak
+        response = channel.update({'field1': 1})
+        print("Data sent to ThingSpeak")
+
+        # Check if the card is new and update total user count
+        if str(id) not in read_cards:
+            read_cards.add(str(id))
+            total_users_response = channel.update({'field2': len(read_cards)})
+            print("Total user count updated on ThingSpeak")
+
+        return str(id)
+    finally:
+        GPIO.cleanup()
+
+
+if __name__ == "__main__":
+    read_rfid()
+
+
+
+
+
 if __name__ == '__main__':
     api_url = "https://api.teamup.com"
     api_key = "699e02c0555e1804ea722d893851875e8444e8bf17199c8d8e46bc393a60f960"
@@ -90,10 +155,18 @@ if __name__ == '__main__':
 
     headers = {"Teamup-Token": api_key}
 
+    while True:  # Infinite loop
+        try:
+            card_id = read_rfid()  # This is now a string
 
-    if card_id in card_calendar_map:
-        calendar_key = card_calendar_map[card_id]
-        events = fetchEvents(calendar_key)
-        showCalendar(events)
-    else:
-        print("Card not recognized")
+            if card_id in card_calendar_map:
+                calendar_key = card_calendar_map[card_id]
+                events = fetchEvents(calendar_key)
+                showCalendar(events)
+            else:
+                print("Card not recognized")
+
+            time.sleep(1)  # Pause for a second before the next iteration
+        except Exception as e:
+            print("An error occurred:", e)
+            time.sleep(1)  # Pause for a second before retrying
