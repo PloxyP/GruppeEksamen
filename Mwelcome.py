@@ -25,7 +25,6 @@ def welcome_message(eyes_detected):
             welcome_rect2 = welcome_message2.get_rect(center=(400, 240))
             screen.blit(welcome_message2, welcome_rect2)
             pygame.display.flip()
-            time.sleep(5)  # Adjust the duration as needed
             eyes_detected.value = False  # Reset the variable after displaying the message
         else:
             # Display the first welcome message
