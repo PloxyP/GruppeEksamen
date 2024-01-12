@@ -26,5 +26,14 @@ def welcome_message():
         screen.blit(welcome_message1, welcome_rect1)
         pygame.display.flip()
 
+        # Pause for a moment
+        time.sleep(5)  # Adjust the duration as needed
+
 if __name__ == "__main__":
-    welcome_message()
+    welcome_thread = threading.Thread(target=welcome_message)
+
+    # Start the thread
+    welcome_thread.start()
+
+    # Wait for the thread to finish before exiting
+    welcome_thread.join()
