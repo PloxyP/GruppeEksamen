@@ -1,6 +1,6 @@
 students_dictionary = {
-    'UID_of_Student_1': 'Student 1',
-    'UID_of_Student_2': 'Student 2',
+    '20 54 23 25 93': 'Student 1',
+    '22 06 21 05 85': 'Student 2',
     # Add more students as needed
 }
 
