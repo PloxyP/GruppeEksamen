@@ -33,7 +33,7 @@ def showCalendar(events):
 
     def logOff():
         gui.destroy()
-        os.system("GreetingBot.py")
+        
 
     Button(top_frame, text="Log Off", command=logOff, font="Consolas 12 bold", padx=10, pady=5).pack(side='right', padx=20, pady=20)
 
