@@ -112,7 +112,7 @@ def read_rfid():
         id, text = reader.read()
         print(reader.read())
         
-        return id
+        return str(id)  # Convert ID to string
     finally:
         GPIO.cleanup()
 
@@ -136,11 +136,7 @@ if __name__ == '__main__':
 
     headers = {"Teamup-Token": api_key}
 
-    card_id = read_rfid()
-
-    
-    card_id_str = str(card_id)
-
+    card_id = read_rfid()  # This is now a string
 
     if card_id in card_calendar_map:
         calendar_key = card_calendar_map[card_id]
