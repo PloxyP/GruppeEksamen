@@ -39,7 +39,7 @@ def face_detection():
                 cv2.rectangle(roi_color, (ex, ey), (ex + ew, ey + eh), (0, 255, 0), 5)
                 looking_at_camera = True
 
-        cv2.imshow('frame', frame)
+        #cv2.imshow('frame', frame)
         if cv2.waitKey(1) == ord('q'):
             break
 
