@@ -110,6 +110,7 @@ def read_rfid():
     try:
         print("Hold a card near the reader.")
         id, text = reader.read()
+        print(reader.read())
         
         return id
     finally:
