@@ -13,7 +13,7 @@ cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
 cap.set(cv2.CAP_PROP_FPS, 60)
 
-looking_at_camera = False
+#looking_at_camera = False
 played_sound = False  # Flag to track whether the sound has been played
 
 def play_sound(file_path):

@@ -113,7 +113,8 @@ def showCalendar(events):
 
 #RFID Reader og Thingspeak datacollector
 
-def read_rfid(read_cards, total_reads):
+def read_rfid(read_cards):
+    global total_reads  # Declare total_reads as global
     reader = SimpleMFRC522()
     channel = thingspeak.Channel(id=channel_id, api_key=write_key)
     try:
@@ -135,9 +136,11 @@ def read_rfid(read_cards, total_reads):
         GPIO.cleanup()
 
 
+
 if __name__ == "__main__":
     total_reads = 0  # Initialize total reads counter
-    read_rfid(read_cards, total_reads)
+    read_rfid(read_cards)
+    
 
     
 
@@ -156,7 +159,7 @@ if __name__ == '__main__':
 
     while True:
         try:
-            card_id = read_rfid(read_cards, total_reads)
+            card_id = read_rfid(read_cards)
             print(f"Read card ID: {card_id}")
 
             if card_id in card_calendar_map:
