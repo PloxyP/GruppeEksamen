@@ -65,7 +65,7 @@ def face_detection(eyes_detected):
             goodbye_led()
             led_on = False
         
-            detected_prev = looking_at_camera
+        detected_prev = looking_at_camera
         
         if cv2.waitKey(1) == ord('q'):
             break
