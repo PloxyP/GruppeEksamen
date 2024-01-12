@@ -1,18 +1,22 @@
 import threading
 import time
+from Mtest2 import thread_function_2
 
 # Shared boolean variable
 shared_bool = False
 
-def thread_function():
+def thread_function_1():
     global shared_bool
     while True:
         time.sleep(1)
         print(f"Thread 1: {shared_bool}")
 
-# Create and start the thread
-thread = threading.Thread(target=thread_function)
-thread.start()
+# Create and start both threads
+thread_1 = threading.Thread(target=thread_function_1)
+thread_2 = threading.Thread(target=thread_function_2)
+
+thread_1.start()
+thread_2.start()
 
 # Main script logic
 while True:
