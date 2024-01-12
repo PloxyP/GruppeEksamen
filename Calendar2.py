@@ -29,7 +29,7 @@ def welcome_sound():
 #####################################
     
 
-
+#Calendar teamup API og Dictionary 
 
 def fetchEvents(calendar_key):
     start_date = datetime.now()
