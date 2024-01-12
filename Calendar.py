@@ -112,7 +112,8 @@ def showCalendar(events):
     gui.mainloop()
 
 #RFID Reader og Thingspeak datacollector
-def read_rfid(read_cards):
+
+def read_rfid(read_cards, total_reads):
     reader = SimpleMFRC522()
     channel = thingspeak.Channel(id=channel_id, api_key=write_key)
     try:
@@ -120,15 +121,14 @@ def read_rfid(read_cards):
         id, text = reader.read()
         print(id)
 
-        # Send data to ThingSpeak
+        # Send data to ThingSpeak for every read
         response = channel.update({'field1': 1})
         print("Data sent to ThingSpeak")
 
-        # Check if the card is new and update total user count
-        if str(id) not in read_cards:
-            read_cards.add(str(id))
-            total_users_response = channel.update({'field2': len(read_cards)})
-            print("Total user count updated on ThingSpeak")
+        # Increment total reads count
+        total_reads += 1
+        total_users_response = channel.update({'field2': total_reads})
+        print(f"Total reads count updated on ThingSpeak: {total_reads}")
 
         return str(id)
     finally:
@@ -138,8 +138,7 @@ def read_rfid(read_cards):
 if __name__ == "__main__":
     read_rfid(read_cards)
 
-
-
+    
 
 
 if __name__ == '__main__':
@@ -151,11 +150,12 @@ if __name__ == '__main__':
         # Add more card IDs and their corresponding calendar keys
     }
     headers = {"Teamup-Token": api_key}
+    total_reads = 0  # Initialize total reads counter
     read_cards = set()
 
     while True:
         try:
-            card_id = read_rfid(read_cards)
+            card_id = read_rfid(read_cards, total_reads)
             print(f"Read card ID: {card_id}")
 
             if card_id in card_calendar_map:
