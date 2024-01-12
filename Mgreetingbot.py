@@ -23,18 +23,18 @@ total_reads = 0  # Initialize total reads counter
 
 def play_sound(file_path):
     try:
-        sound = AudioSegment.from_file(file_path, format="mp3")
+        sound = AudioSegment.from_file(file_path, format="wav")
         play(sound)
     except Exception as e:
         print(f"Error playing sound: {e}")
 
 def welcome_sound():
     print("TEST HEJ")
-    play_sound("check.mp3")
+    play_sound("check.wav")
 
 def declined_sound():
     print("TEST FARVEL")
-    play_sound("declined.mp3")
+    play_sound("declined.wav")
 
 #####################################
     
