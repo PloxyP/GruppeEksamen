@@ -54,7 +54,7 @@ def face_detection(eyes_detected):
                 if looking_at_camera == False:
                     looking_at_camera = True
                     print("test")
-                if eyes_detected.value == False:
+                if eyes_detected == False:
                     eyes_detected.value = True
                     print("test2")
 
