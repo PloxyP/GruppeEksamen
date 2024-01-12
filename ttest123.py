@@ -183,7 +183,7 @@ def welcome_message(eyes_detected):#eyes_detected):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-    Screen Config
+    #Screen Config
     
 
 if __name__ == "__main__":
