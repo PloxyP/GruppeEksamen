@@ -17,7 +17,7 @@ def thread_function_1():
 thread_1 = threading.Thread(target=thread_function_1)
 thread_1.start()
 
-# Main script logic
+# Main script logic for script1
 while True:
     user_input = input("Enter 'True' or 'False' to update the shared variable: ")
     with lock:
