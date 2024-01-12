@@ -229,6 +229,9 @@ while True:
 cap.release()
 cv2.destroyAllWindows()
 
+... (previous code)
+
+
 # Wait for a short moment
 time.sleep(0.1)
 
