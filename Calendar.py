@@ -90,6 +90,10 @@ if __name__ == '__main__':
 
     headers = {"Teamup-Token": api_key}
 
-    for card_id, calendar_key in card_calendar_map.items():
+
+    if card_id in card_calendar_map:
+        calendar_key = card_calendar_map[card_id]
         events = fetchEvents(calendar_key)
         showCalendar(events)
+    else:
+        print("Card not recognized")
