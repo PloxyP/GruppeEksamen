@@ -13,7 +13,7 @@ pygame.init()
 
 # ThingSpeak channel details
 channel_id = 2399393  
-write_key = '94WQ6JGAID2IXX7F'
+write_key = 'RS1DFZK1ZEULO72E'
 
 def play_sound(file_path):
     pygame.mixer.init()
