@@ -54,7 +54,7 @@ screen.blit(welcome_message2, welcome_rect2)
 pygame.display.flip()
 
 # Wait for 5 seconds
-time.sleep(12)
+time.sleep(5)
 
 # Clear the screen
 screen.fill(background_color)
@@ -72,6 +72,26 @@ def welcome_sound():
 #def goodbye_sound():
    # print("Goodbye!")
    # play_sound("check.mp3")
+    
+def read_rfid():
+    reader = SimpleMFRC522()
+
+    try:
+        print("Hold a card near the reader.")
+        id, text = reader.read()
+        print("Card ID:", id)
+        print("Card Text:", text)
+
+        # Replace '123456789' with the ID of your specific card
+        if id == 2054232593:
+            print("Opening Calendar.py")
+            subprocess.run(["python", "Calendar.py"])
+
+    finally:
+        GPIO.cleanup()
+
+if __name__ == "__main__":
+    read_rfid()
     
 def fetchEvents():
     start_date = datetime.now()
