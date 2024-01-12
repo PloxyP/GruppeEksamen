@@ -1,6 +1,8 @@
 import cv2
 import pygame
 import threading
+from Mwelcome import welcome_message
+
 
 cap = cv2.VideoCapture(0)
 
@@ -41,4 +43,12 @@ def face_detection():
 
 if __name__ == "__main__":
     face_thread = threading.Thread(target=face_detection)
+    welcome_thread = threading.Thread(target=welcome_message)
+
+    # Start both threads
     face_thread.start()
+    welcome_thread.start()
+
+    # Wait for both threads to finish before exiting
+    face_thread.join()
+    welcome_thread.join()

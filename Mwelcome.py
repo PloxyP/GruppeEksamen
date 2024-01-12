@@ -25,7 +25,4 @@ def welcome_message():
         pygame.display.flip()
 
 if __name__ == "__main__":
-    welcome_thread = threading.Thread(target=welcome_message)
-    welcome_thread.start()
-
-    welcome_thread.join()  # Wait for the welcome_thread to finish before exiting
+    welcome_message()
