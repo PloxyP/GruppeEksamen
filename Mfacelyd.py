@@ -3,9 +3,11 @@ from multiprocessing import Process, Value
 from Mwelcome import welcome_message
 from Mgreetingbot import rfid_function
 import RPi.GPIO as GPIO
+import time
 
-# Shared variable to signal eyes detections
+# Shared variables
 eyes_detected = Value('b', False)
+led_on = Value('b', False)
 
 cap = cv2.VideoCapture(0)
 
@@ -14,8 +16,7 @@ cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
 cap.set(cv2.CAP_PROP_FPS, 60)
 
 looking_at_camera = False
-led_on = False
-led_pin = 24  # GPIO pin for the LED, change it to your actual pinn
+led_pin = 24  # GPIO pin for the LED, change it to your actual pin
 
 # Initialize GPIO
 GPIO.setmode(GPIO.BCM)
@@ -25,13 +26,15 @@ GPIO.output(led_pin, GPIO.LOW)
 def welcome_led():
     print("Welcome!")
     GPIO.output(led_pin, GPIO.HIGH)
-
-def goodbye_led():
-    #print("Goodbye!")
+    time.sleep(2)  # Adjust sleep time as needed
     GPIO.output(led_pin, GPIO.LOW)
 
-def face_detection(eyes_detected):
-    global looking_at_camera, led_on
+def goodbye_led():
+    print("Goodbye!")
+    GPIO.output(led_pin, GPIO.LOW)
+
+def face_detection(eyes_detected, led_on):
+    global looking_at_camera
     
     while True:
         ret, frame = cap.read()
@@ -42,6 +45,9 @@ def face_detection(eyes_detected):
 
         if len(faces) == 0:
             looking_at_camera = False
+            if led_on.value:
+                goodbye_led()
+                led_on.value = False
 
         for (x, y, w, h) in faces:
             cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 5)
@@ -53,17 +59,12 @@ def face_detection(eyes_detected):
                 cv2.rectangle(roi_color, (ex, ey), (ex + ew, ey + eh), (0, 255, 0), 5)
                 looking_at_camera = True
                 eyes_detected.value = True
-                if not led_on:
+                if not led_on.value:
                     welcome_led()
-                    led_on = True
+                    led_on.value = True
 
-        #cv2.imshow('frame', frame)
+        # cv2.imshow('frame', frame)
 
-        # Play sounds based on the flag and ensure it's played only once
-        if not looking_at_camera and led_on:
-            goodbye_led()
-            led_on = False
-        
         if cv2.waitKey(1) == ord('q'):
             break
 
@@ -72,10 +73,11 @@ def face_detection(eyes_detected):
 
 if __name__ == "__main__":
     eyes_detected = Value('b', False)  # Initial value
+    led_on = Value('b', False)  # Initial value
     face_cascade = cv2.CascadeClassifier('/home/gruppesjov/opencv/data/haarcascades/haarcascade_frontalface_default.xml')
     eye_cascade = cv2.CascadeClassifier('/home/gruppesjov/opencv/data/haarcascades/haarcascade_eye.xml')
     
-    face_process = Process(target=face_detection, args=(eyes_detected,))
+    face_process = Process(target=face_detection, args=(eyes_detected, led_on))
     welcome_process = Process(target=welcome_message, args=(eyes_detected,))
     program3_process = Process(target=rfid_function)  # Add this line
 
