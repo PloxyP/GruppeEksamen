@@ -1,10 +1,10 @@
 import cv2
 import pygame
-import threading
+import multiprocessing
 from Mwelcome import welcome_message
 
 # Shared variable to signal eyes detections
-eyes_detected = False
+eyes_detected = multiprocessing.Value('b', False)
 
 cap = cv2.VideoCapture(0)
 
@@ -33,8 +33,7 @@ face_cascade = cv2.CascadeClassifier('/home/gruppesjov/opencv/data/haarcascades/
 eye_cascade = cv2.CascadeClassifier('/home/gruppesjov/opencv/data/haarcascades/haarcascade_eye.xml')
 
 def face_detection():
-    global eyes_detected
-    
+
     while True:
         ret, frame = cap.read()
 
@@ -55,9 +54,7 @@ def face_detection():
             for (ex, ey, ew, eh) in eyes:
                 cv2.rectangle(roi_color, (ex, ey), (ex + ew, ey + eh), (0, 255, 0), 5)
                 looking_at_camera = True
-                eyes_detected = True
-                event = threading.Event()
-                threading.Thread(target=welcome_message, args=(eyes_detected,))
+                eyes_detected.value = True
 
         #cv2.imshow('frame', frame)
         
@@ -77,13 +74,7 @@ def face_detection():
     cv2.destroyAllWindows()
 
 if __name__ == "__main__":
-    face_thread = threading.Thread(target=face_detection)
-    welcome_thread = threading.Thread(target=welcome_message, args=(eyes_detected,))
+    face_process = multiprocessing.Process(target=face_detection, args=(eyes_detected,))
+    face_process.start()
 
-    # Start both threads
-    face_thread.start()
-    welcome_thread.start()
-
-    # Wait for both threads to finish before exiting
-    face_thread.join()
-    welcome_thread.join()
+    face_process.join()
