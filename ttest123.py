@@ -56,10 +56,10 @@ def face_detection():
             eyes = eye_cascade.detectMultiScale(roi_gray, 1.3, 8)
 
             for (ex, ey, ew, eh) in eyes:
-            cv2.rectangle(roi_color, (ex, ey), (ex + ew, ey + eh), (0, 255, 0), 5)
-            looking_at_camera = True
-            eyes_detected = True
-            threading.Thread(target=welcome_message, args=(eyes_detected,)).start()  # Start the thread
+                cv2.rectangle(roi_color, (ex, ey), (ex + ew, ey + eh), (0, 255, 0), 5)
+                looking_at_camera = True
+                eyes_detected = True
+                threading.Thread(target=welcome_message, args=(eyes_detected,)).start()  # Start the thread
 # def face_detection():
 #     global eyes_detected
     
