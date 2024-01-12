@@ -8,7 +8,6 @@ def welcome_message(eyes_detected):
     # Screen Config
     screen = pygame.display.set_mode((800, 480), pygame.FULLSCREEN)
     pygame.display.set_caption('Welcome Message')
-    background_color = (0, 0, 0)
     font = pygame.font.Font(None, 36)
 
     #Indenfor if
@@ -39,7 +38,7 @@ def welcome_message(eyes_detected):
 
 
 def DisplayText(Message, Rect, screen):
-    global background_color
+    background_color = (0, 0, 0)
     screen.fill(background_color)
     screen.blit(Message, Rect)
     pygame.display.flip()
