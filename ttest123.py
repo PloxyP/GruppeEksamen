@@ -56,11 +56,10 @@ def face_detection():
             eyes = eye_cascade.detectMultiScale(roi_gray, 1.3, 8)
 
             for (ex, ey, ew, eh) in eyes:
-                cv2.rectangle(roi_color, (ex, ey), (ex + ew, ey + eh), (0, 255, 0), 5)
-                looking_at_camera = True
-                eyes_detected = True
-                event = threading.Event()
-                threading.Thread(target=welcome_message, args=(eyes_detected,))
+            cv2.rectangle(roi_color, (ex, ey), (ex + ew, ey + eh), (0, 255, 0), 5)
+            looking_at_camera = True
+            eyes_detected = True
+            threading.Thread(target=welcome_message, args=(eyes_detected,)).start()  # Start the thread
 # def face_detection():
 #     global eyes_detected
     
@@ -111,7 +110,7 @@ def play_sound(file_path):
     pygame.mixer.music.play()
 
 def welcome_message(eyes_detected):
-    pygame.init()  # Initialize the pygame library
+   # pygame.init()  # Initialize the pygame library
 
     # Screen Config
     screen = pygame.display.set_mode((800, 480), pygame.FULLSCREEN)
