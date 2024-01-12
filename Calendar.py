@@ -145,28 +145,31 @@ if __name__ == "__main__":
 if __name__ == '__main__':
     api_url = "https://api.teamup.com"
     api_key = "699e02c0555e1804ea722d893851875e8444e8bf17199c8d8e46bc393a60f960"
-
-    # Dictionary mapping card IDs to calendar keys
     card_calendar_map = {
         '2054232593': 'kskp2dg3mpgu24n3ww',
         '2206210585': 'ks2yz86rfe8sj5nvq1',
         # Add more card IDs and their corresponding calendar keys
     }
-
     headers = {"Teamup-Token": api_key}
+    read_cards = set()
 
-    while True:  # Infinite loop
+    while True:
         try:
-            card_id = read_rfid()  # This is now a string
+            card_id = read_rfid(read_cards)
+            print(f"Read card ID: {card_id}")
 
             if card_id in card_calendar_map:
                 calendar_key = card_calendar_map[card_id]
+                print(f"Fetching events for calendar key: {calendar_key}")
                 events = fetchEvents(calendar_key)
-                showCalendar(events)
+                if events:
+                    showCalendar(events)
+                else:
+                    print("No events found or error in fetching events")
             else:
                 print("Card not recognized")
 
-            time.sleep(1)  # Pause for a second before the next iteration
+            time.sleep(1)
         except Exception as e:
-            print("An error occurred:", e)
-            time.sleep(1)  # Pause for a second before retrying
+            print(f"An error occurred: {e}")
+            time.sleep(1)
