@@ -6,6 +6,7 @@ import os
 import pygame
 import time
 from mfrc522 import SimpleMFRC522
+import RPi.GPIO as GPIO
 
 pygame.init()
 
