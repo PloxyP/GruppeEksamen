@@ -136,7 +136,7 @@ def read_rfid(read_cards):
 
 
 if __name__ == "__main__":
-    read_rfid()
+    read_rfid(read_cards)
 
 
 
