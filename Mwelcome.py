@@ -24,19 +24,19 @@ def welcome_message(eyes_detected):
             welcome_message2 = font.render('Scan your card', True, (255, 255, 255))
             welcome_rect2 = welcome_message2.get_rect(center=(400, 240))
             screen.blit(welcome_message2, welcome_rect2)
+            pygame.display.flip()
+            time.sleep(5)  # Adjust the duration as needed
+            eyes_detected = False  # Reset the variable after displaying the message
         else:
             # Display the first welcome message
             welcome_message1 = font.render('Welcome!', True, (255, 255, 255))
             welcome_rect1 = welcome_message1.get_rect(center=(400, 240))
             screen.blit(welcome_message1, welcome_rect1)
+            pygame.display.flip()
 
-        pygame.display.flip()
-
-        # Pause for a moment
-        time.sleep(5)  # Adjust the duration as needed
-
-    # Clean up resources before exiting
-    pygame.quit()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
 
 if __name__ == "__main__":
     eyes_detected = False  # Initial value
