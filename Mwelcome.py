@@ -39,7 +39,7 @@ def welcome_message(eyes_detected):
                 pygame.quit()
 
 if __name__ == "__main__":
-    eyes_detected = False  # Initial value
+    #eyes_detected = False  # Initial value
     welcome_thread = threading.Thread(target=welcome_message, args=(eyes_detected,))
 
     # Start the thread
