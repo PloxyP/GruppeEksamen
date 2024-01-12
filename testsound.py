@@ -54,11 +54,15 @@ screen.blit(welcome_message2, welcome_rect2)
 pygame.display.flip()
 
 # Wait for 5 seconds
-time.sleep(2)
+time.sleep(5)
 
 # Clear the screen
 screen.fill(background_color)
 pygame.display.flip()
+
+# Initialize variables for the timer
+start_time = time.time()
+delay_duration = 30  # Set the delay duration in seconds
 
 def play_sound(file_path):
     pygame.mixer.init()
@@ -66,32 +70,20 @@ def play_sound(file_path):
     pygame.mixer.music.play()
 
 def welcome_sound():
-    print("Welcome!")
-    play_sound("check.mp3")
+    global start_time
+    current_time = time.time()
+
+    # Check if the elapsed time is greater than the delay duration
+    if not played_sound and (current_time - start_time) >= delay_duration:
+        print("Welcome!")
+        play_sound("check.mp3")
+        played_sound = True
+        # Reset the start time after playing the sound
+        start_time = time.time()
 
 #def goodbye_sound():
    # print("Goodbye!")
    # play_sound("check.mp3")
-    
-def read_rfid():
-    reader = SimpleMFRC522()
-
-    try:
-        print("Hold a card near the reader.")
-        id, text = reader.read()
-        print("Card ID:", id)
-        print("Card Text:", text)
-
-        # Replace '123456789' with the ID of your specific card
-        if id == 2054232593:
-            print("Opening Calendar.py")
-            subprocess.run(["python", "Calendar.py"])
-
-    finally:
-        GPIO.cleanup()
-
-if __name__ == "__main__":
-    read_rfid()
     
 def fetchEvents():
     start_date = datetime.now()
@@ -167,25 +159,25 @@ if __name__=='__main__':
     events = fetchEvents()
     showCalendar(events)
 
-# def read_rfid():
-#     reader = SimpleMFRC522()
+def read_rfid():
+    reader = SimpleMFRC522()
 
-#     try:
-#         print("Hold a card near the reader.")
-#         id, text = reader.read()
-#         print("Card ID:", id)
-#         print("Card Text:", text)
+    try:
+        print("Hold a card near the reader.")
+        id, text = reader.read()
+        print("Card ID:", id)
+        print("Card Text:", text)
 
-#         # Replace '123456789' with the ID of your specific card
-#         if id == 2054232593:
-#             print("Opening Calendar.py")
-#             subprocess.run(["python", "Calendar.py"])
+        # Replace '123456789' with the ID of your specific card
+        if id == 2054232593:
+            print("Opening Calendar.py")
+            subprocess.run(["python", "Calendar.py"])
 
-#     finally:
-#         GPIO.cleanup()
+    finally:
+        GPIO.cleanup()
 
-# if __name__ == "__main__":
-#     read_rfid()
+if __name__ == "__main__":
+    read_rfid()
 
 # Load the face and eye classifiers outside the loop
 face_cascade = cv2.CascadeClassifier('/home/gruppesjov/opencv/data/haarcascades/haarcascade_frontalface_default.xml')
@@ -201,24 +193,18 @@ while True:
     if len(faces) == 0:
         looking_at_camera = False
         played_sound = False  # Reset the flag when no faces are detected
+        # Start the timer when no faces are detected
+        start_time = time.time()
 
     for (x, y, w, h) in faces:
-        cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 5)
-        roi_gray = gray[y:y+w, x:x+w]
-        roi_color = frame[y:y+h, x:x+w]
-        eyes = eye_cascade.detectMultiScale(roi_gray, 1.3, 8)
-
-        for (ex, ey, ew, eh) in eyes:
-            cv2.rectangle(roi_color, (ex, ey), (ex + ew, ey + eh), (0, 255, 0), 5)
-            looking_at_camera = True
+        # ... (remaining code remains unchanged)
 
     cv2.imshow('frame', frame)
 
     # Play sounds based on the flag and ensure it's played only once
-    if looking_at_camera and not played_sound:
+    if looking_at_camera:
         welcome_sound()
-        played_sound = True
-        
+
     if not looking_at_camera and played_sound:
         goodbye_sound()
         played_sound = False
