@@ -167,25 +167,25 @@ if __name__=='__main__':
     events = fetchEvents()
     showCalendar(events)
 
-def read_rfid():
-    reader = SimpleMFRC522()
+# def read_rfid():
+#     reader = SimpleMFRC522()
 
-    try:
-        print("Hold a card near the reader.")
-        id, text = reader.read()
-        print("Card ID:", id)
-        print("Card Text:", text)
+#     try:
+#         print("Hold a card near the reader.")
+#         id, text = reader.read()
+#         print("Card ID:", id)
+#         print("Card Text:", text)
 
-        # Replace '123456789' with the ID of your specific card
-        if id == 2054232593:
-            print("Opening Calendar.py")
-            subprocess.run(["python", "Calendar.py"])
+#         # Replace '123456789' with the ID of your specific card
+#         if id == 2054232593:
+#             print("Opening Calendar.py")
+#             subprocess.run(["python", "Calendar.py"])
 
-    finally:
-        GPIO.cleanup()
+#     finally:
+#         GPIO.cleanup()
 
-if __name__ == "__main__":
-    read_rfid()
+# if __name__ == "__main__":
+#     read_rfid()
 
 # Load the face and eye classifiers outside the loop
 face_cascade = cv2.CascadeClassifier('/home/gruppesjov/opencv/data/haarcascades/haarcascade_frontalface_default.xml')
