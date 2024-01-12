@@ -39,7 +39,7 @@ def welcome_sound():
 
 #Calendar teamup API og Dictionary 
 
-def fetchEvents(calendar_key):
+def fetchEvents(api_url, calendar_key):
     start_date = datetime.now()
     end_date = start_date + timedelta(days=7)
 
