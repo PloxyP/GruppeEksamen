@@ -217,7 +217,6 @@ while True:
     # Play sounds based on the flag and ensure it's played only once
     if looking_at_camera and not played_sound:
         welcome_sound()
-        time.sleep(5)
         played_sound = True
         
     if not looking_at_camera and played_sound:
@@ -229,6 +228,9 @@ while True:
 
 cap.release()
 cv2.destroyAllWindows()
+
+... (previous code)
+
 
 # Wait for a short moment
 time.sleep(0.1)
