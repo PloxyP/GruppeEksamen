@@ -29,7 +29,7 @@ def welcome_sound():
 #####################################
     
 
-
+#Calendar teamup API og Dictionary 
 
 def fetchEvents(calendar_key):
     start_date = datetime.now()
@@ -112,7 +112,7 @@ def read_rfid():
         id, text = reader.read()
         print(reader.read())
         
-        return id
+        return str(id)  # Convert ID to string
     finally:
         GPIO.cleanup()
 
@@ -136,15 +136,18 @@ if __name__ == '__main__':
 
     headers = {"Teamup-Token": api_key}
 
-    card_id = read_rfid()
+    while True:  # Infinite loop
+        try:
+            card_id = read_rfid()  # This is now a string
 
-    
-    card_id_str = str(card_id)
+            if card_id in card_calendar_map:
+                calendar_key = card_calendar_map[card_id]
+                events = fetchEvents(calendar_key)
+                showCalendar(events)
+            else:
+                print("Card not recognized")
 
-
-    if card_id in card_calendar_map:
-        calendar_key = card_calendar_map[card_id]
-        events = fetchEvents(calendar_key)
-        showCalendar(events)
-    else:
-        print("Card not recognized")
+            time.sleep(1)  # Pause for a second before the next iteration
+        except Exception as e:
+            print("An error occurred:", e)
+            time.sleep(1)  # Pause for a second before retrying
