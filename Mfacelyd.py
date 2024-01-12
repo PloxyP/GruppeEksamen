@@ -54,7 +54,9 @@ def face_detection(eyes_detected):
                 if looking_at_camera == False:
                     looking_at_camera = True
                     print("test")
-                eyes_detected.value = True
+                if eyes_detected.value == False:
+                    eyes_detected.value = True
+                    print("test2")
 
         cv2.imshow('frame', frame)
 
