@@ -157,8 +157,8 @@ def rfid_function():
                 print(f"Fetching events for calendar key: {calendar_key}")
                 events = fetchEvents(api_url, headers, calendar_key)
                 if events:
-                    welcome_sound()
                     showCalendar(events)
+                    welcome_sound()
                 else:
                     print("No events found or error in fetching events")
             else:
