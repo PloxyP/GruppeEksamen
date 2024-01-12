@@ -1,6 +1,6 @@
 import threading
 import time
-from Mtest1 import thread_function_2
+from Mtest2 import thread_function_2
 
 # Shared boolean variable
 shared_bool = False
