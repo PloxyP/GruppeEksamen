@@ -16,6 +16,7 @@ read_cards = set()
 # ThingSpeak channel details
 channel_id = 2399393  
 write_key = 'RS1DFZK1ZEULO72E'
+total_reads = 0  # Initialize total reads counter
 
 def play_sound(file_path):
     pygame.mixer.init()
@@ -112,11 +113,8 @@ def showCalendar(events):
     gui.mainloop()
 
 #RFID Reader og Thingspeak datacollector
-
-def read_rfid(read_cards):
+def read_rfid(reader, channel):
     global total_reads  # Declare total_reads as global
-    reader = SimpleMFRC522()
-    channel = thingspeak.Channel(id=channel_id, api_key=write_key)
     try:
         print("Hold a card near the reader.")
         id, text = reader.read()
@@ -144,17 +142,18 @@ def rfid_function():
         # Add more card IDs and their corresponding calendar keys
     }
     headers = {"Teamup-Token": api_key}
-    read_cards = set()
+    reader = SimpleMFRC522()
+    channel = thingspeak.Channel(id=channel_id, api_key=write_key)
 
     while True:
         try:
-            card_id = read_rfid(read_cards)
+            card_id = read_rfid(reader, channel)
             print(f"Read card ID: {card_id}")
 
             if card_id in card_calendar_map:
                 calendar_key = card_calendar_map[card_id]
                 print(f"Fetching events for calendar key: {calendar_key}")
-                events = fetchEvents(calendar_key)
+                events = fetchEvents(api_url, calendar_key)
                 if events:
                     showCalendar(events)
                 else:
@@ -169,5 +168,3 @@ def rfid_function():
 
 if __name__ == '__main__':
     rfid_function()
-    total_reads = 0  # Initialize total reads counterr
-    read_rfid(read_cards)
