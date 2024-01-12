@@ -23,7 +23,7 @@ def welcome_message(eyes_detected):
     welcome_rect1 = welcome_message1.get_rect(center=(400, 240))
 
     while True:
-
+        screen.fill(background_color)
         if eyes_detected.value:
             # Display "Scan your card" message
             screen.blit(welcome_message2, welcome_rect2)
