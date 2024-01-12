@@ -168,34 +168,39 @@ def read_rfid():
     reader = SimpleMFRC522()
 =======
 
-# if __name__=='__main__':
-#     # Define your Teamup API URL and API key
-#     api_url = "https://api.teamup.com"
-#     api_key = "699e02c0555e1804ea722d893851875e8444e8bf17199c8d8e46bc393a60f960"
-#     calendar_key = "kskp2dg3mpgu24n3ww"
-#     request_url = f"{api_url}/{calendar_key}/events"
-#     headers = {"Teamup-Token": api_key}
+if __name__=='__main__':
+    # Define your Teamup API URL and API key
+    api_url = "https://api.teamup.com"
+    api_key = "699e02c0555e1804ea722d893851875e8444e8bf17199c8d8e46bc393a60f960"
+    calendar_key = "kskp2dg3mpgu24n3ww"
+    request_url = f"{api_url}/{calendar_key}/events"
+    headers = {"Teamup-Token": api_key}
 
-#     events = fetchEvents()
-#     showCalendar(events)
+    events = fetchEvents()
+    showCalendar(events)
 
+<<<<<<< HEAD
 # def read_rfid():
 #     reader = SimpleMFRC522()
 >>>>>>> f2c1cde96d9c07df9136818b359ccaebe1260108
+=======
+def read_rfid():
+    reader = SimpleMFRC522()
+>>>>>>> b49397148cf4f119aa8012fd67382acb0bd4e9b4
 
-#     try:
-#         print("Hold a card near the reader.")
-#         id, text = reader.read()
-#         print("Card ID:", id)
-#         print("Card Text:", text)
+    try:
+        print("Hold a card near the reader.")
+        id, text = reader.read()
+        print("Card ID:", id)
+        print("Card Text:", text)
 
-#         # Replace '123456789' with the ID of your specific card
-#         #if id == 2054232593:
-#          #   print("Opening Calendar.py")
-#         #    subprocess.run(["python", "Calendar.py"])
+        # Replace '123456789' with the ID of your specific card
+        #if id == 2054232593:
+         #   print("Opening Calendar.py")
+        #    subprocess.run(["python", "Calendar.py"])
 
-#     finally:
-#         GPIO.cleanup()
+    finally:
+        GPIO.cleanup()
 
 if __name__ == "__main__":
     read_rfid()
