@@ -31,7 +31,7 @@ def goodbye_led():
     GPIO.output(led_pin, GPIO.LOW)
 
 def face_detection(eyes_detected):
-    global looking_at_camera
+    global looking_at_camera, led_on
     
     while True:
         ret, frame = cap.read()
