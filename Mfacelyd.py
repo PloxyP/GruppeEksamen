@@ -1,10 +1,10 @@
 import cv2
 import pygame
-import multiprocessing
+from multiprocessing import Process, Value
 from Mwelcome import welcome_message
 
 # Shared variable to signal eyes detections
-eyes_detected = multiprocessing.Value('b', False)
+eyes_detected = Value('b', False)
 
 cap = cv2.VideoCapture(0)
 
@@ -32,8 +32,10 @@ def goodbye_sound():
 face_cascade = cv2.CascadeClassifier('/home/gruppesjov/opencv/data/haarcascades/haarcascade_frontalface_default.xml')
 eye_cascade = cv2.CascadeClassifier('/home/gruppesjov/opencv/data/haarcascades/haarcascade_eye.xml')
 
-def face_detection():
-
+def face_detection(eyes_detected):
+    global looking_at_camera
+    global played_sound
+    
     while True:
         ret, frame = cap.read()
 
@@ -55,6 +57,8 @@ def face_detection():
                 cv2.rectangle(roi_color, (ex, ey), (ex + ew, ey + eh), (0, 255, 0), 5)
                 looking_at_camera = True
                 eyes_detected.value = True
+                event = threading.Event()
+                threading.Thread(target=welcome_message, args=(eyes_detected,))
 
         #cv2.imshow('frame', frame)
         
@@ -74,7 +78,14 @@ def face_detection():
     cv2.destroyAllWindows()
 
 if __name__ == "__main__":
-    face_process = multiprocessing.Process(target=face_detection, args=(eyes_detected,))
-    face_process.start()
+    eyes_detected = Value('b', False)  # Initial value
+    face_process = Process(target=face_detection, args=(eyes_detected,))
+    welcome_process = Process(target=welcome_message, args=(eyes_detected,))
 
+    # Start both processes
+    face_process.start()
+    welcome_process.start()
+
+    # Wait for both processes to finish before exiting
     face_process.join()
+    welcome_process.join()

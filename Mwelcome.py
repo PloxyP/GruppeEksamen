@@ -1,6 +1,11 @@
 import pygame
 import time
-from multiprocessing import Value
+import multiprocessing
+
+def play_sound(file_path):
+    pygame.mixer.init()
+    pygame.mixer.music.load(file_path)
+    pygame.mixer.music.play()
 
 def welcome_message(eyes_detected):
     pygame.init()  # Initialize the pygame library
@@ -35,7 +40,10 @@ def welcome_message(eyes_detected):
 
 if __name__ == "__main__":
     eyes_detected = Value('b', False)  # Initial value
-    welcome_process = multiprocessing.Process(target=welcome_message, args=(eyes_detected,))
+    welcome_process = Process(target=welcome_message, args=(eyes_detected,))
+
+    # Start the process
     welcome_process.start()
 
+    # Wait for the process to finish before exiting
     welcome_process.join()
