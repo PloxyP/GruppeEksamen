@@ -1,24 +1,16 @@
-import threading
+import multiprocessing
 import time
-from Mtest2 import thread_function_2
+from Mtest2 import program2_function
 
-# Shared boolean variable
-shared_bool = False
-lock = threading.Lock()
-
-def thread_function_1():
-    global shared_bool
+def program1_function(shared_variable):
     while True:
-        with lock:
-            time.sleep(1)
-            print(f"Thread 1: {shared_bool}")
+        time.sleep(1)  # Simulate some work
+        shared_variable.value = not shared_variable.value
+        print(f"Program 1 - Shared Variable: {shared_variable.value}")
 
-# Create and start thread for script1
-thread_1 = threading.Thread(target=thread_function_1)
-thread_1.start()
+if __name__ == "__main__":
+    shared_variable = multiprocessing.Value('b', False)
+    program2_process = multiprocessing.Process(target=program2_function, args=(shared_variable,))
+    program2_process.start()
 
-# Main script logic for script1
-while True:
-    user_input = input("Enter 'True' or 'False' to update the shared variable: ")
-    with lock:
-        shared_bool = (user_input.lower() == 'true')
+    program1_function(shared_variable)
