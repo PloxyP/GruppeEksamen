@@ -39,7 +39,7 @@ def welcome_sound():
 
 #Calendar teamup API og Dictionary 
 
-def fetchEvents(api_url, calendar_key):
+def fetchEvents(api_url, headers, calendar_key):
     start_date = datetime.now()
     end_date = start_date + timedelta(days=7)
 
@@ -55,7 +55,7 @@ def fetchEvents(api_url, calendar_key):
     else:
         print("Failed to fetch events")
         return []
-
+    
 def showCalendar(events):
     gui = Tk()
     gui.config(background='grey')
@@ -153,7 +153,7 @@ def rfid_function():
             if card_id in card_calendar_map:
                 calendar_key = card_calendar_map[card_id]
                 print(f"Fetching events for calendar key: {calendar_key}")
-                events = fetchEvents(api_url, calendar_key)
+                events = fetchEvents(api_url, headers, calendar_key)
                 if events:
                     showCalendar(events)
                 else:
@@ -165,6 +165,6 @@ def rfid_function():
         except Exception as e:
             print(f"An error occurred: {e}")
             time.sleep(1)
-
+            
 if __name__ == '__main__':
     rfid_function()
