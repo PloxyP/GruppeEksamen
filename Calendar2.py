@@ -136,11 +136,18 @@ if __name__ == '__main__':
 
     headers = {"Teamup-Token": api_key}
 
-    card_id = read_rfid()  # This is now a string
+    while True:  # Infinite loop
+        try:
+            card_id = read_rfid()  # This is now a string
 
-    if card_id in card_calendar_map:
-        calendar_key = card_calendar_map[card_id]
-        events = fetchEvents(calendar_key)
-        showCalendar(events)
-    else:
-        print("Card not recognized")
+            if card_id in card_calendar_map:
+                calendar_key = card_calendar_map[card_id]
+                events = fetchEvents(calendar_key)
+                showCalendar(events)
+            else:
+                print("Card not recognized")
+
+            time.sleep(1)  # Pause for a second before the next iteration
+        except Exception as e:
+            print("An error occurred:", e)
+            time.sleep(1)  # Pause for a second before retrying
