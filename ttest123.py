@@ -6,7 +6,7 @@ import time
 
 # Shared variable to signal eyes detection
 eyes_detected = False
-
+pygame.init()  # Initialize the pygame library
 cap = cv2.VideoCapture(0)
 
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
@@ -110,7 +110,7 @@ def play_sound(file_path):
     pygame.mixer.music.play()
 
 def welcome_message(eyes_detected):
-   # pygame.init()  # Initialize the pygame library
+    # pygame.init()  # Initialize the pygame library
 
     # Screen Config
     screen = pygame.display.set_mode((800, 480), pygame.FULLSCREEN)
