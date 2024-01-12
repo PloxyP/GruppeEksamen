@@ -8,6 +8,8 @@ def play_sound(file_path):
     pygame.mixer.music.play()
 
 def welcome_message():
+    pygame.init()  # Initialize the pygame library
+
     while True:
         # Screen Config
         screen = pygame.display.set_mode((800, 480), pygame.FULLSCREEN)
