@@ -119,7 +119,7 @@ def read_rfid():
         print(id)
         
         # Send data to ThingSpeak
-        response = channel.update({'field2': 1})
+        response = channel.update({'field1': 1})
         print("Data sent to ThingSpeak")
 
         return str(id)  # Convert ID to string
