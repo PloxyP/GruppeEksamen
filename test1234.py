@@ -54,7 +54,7 @@ screen.blit(welcome_message2, welcome_rect2)
 pygame.display.flip()
 
 # Wait for 5 seconds
-time.sleep(5)
+time.sleep(2)
 
 # Clear the screen
 screen.fill(background_color)
@@ -69,11 +69,31 @@ def welcome_sound():
     print("Welcome!")
     play_sound("check.mp3")
 
-def goodbye_sound():
-   print("Goodbye!")
-   play_sound("check.mp3")
+#def goodbye_sound():
+   # print("Goodbye!")
+   # play_sound("check.mp3")
     
-def fetchEvents(calendar_key):
+def read_rfid():
+    reader = SimpleMFRC522()
+
+    try:
+        print("Hold a card near the reader.")
+        id, text = reader.read()
+        print("Card ID:", id)
+        print("Card Text:", text)
+
+        # Replace '123456789' with the ID of your specific card
+        if id == 2054232593:
+            print("Opening Calendar.py")
+            subprocess.run(["python", "Calendar.py"])
+
+    finally:
+        GPIO.cleanup()
+
+if __name__ == "__main__":
+    read_rfid()
+    
+def fetchEvents():
     start_date = datetime.now()
     end_date = start_date + timedelta(days=7)
 
@@ -82,7 +102,6 @@ def fetchEvents(calendar_key):
         'endDate': end_date.strftime('%Y-%m-%d')
     }
 
-    request_url = f"{api_url}/{calendar_key}/events"
     response = requests.get(request_url, headers=headers, params=params)
     if response.status_code == 200:
         return json.loads(response.text)['events']
@@ -90,11 +109,12 @@ def fetchEvents(calendar_key):
         print("Failed to fetch events")
         return []
 
+
 def showCalendar(events):
     gui = Tk()
     gui.config(background='grey')
     gui.title("Teamup Calendar")
-    gui.attributes("-fullscreen", True) 
+    gui.attributes("-fullscreen", True)
 
     # Frame for the Log Off button
     top_frame = Frame(gui, bg='grey')
@@ -118,17 +138,6 @@ def showCalendar(events):
     canvas.bind('<Configure>', lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
     canvas.create_window((0, 0), window=scrollable_frame, anchor='nw')
 
-    # Track the drag start point
-    def start_scroll(event):
-        canvas.scan_mark(event.x, event.y)
-
-    # Perform the scrolling
-    def perform_scroll(event):
-        canvas.scan_dragto(event.x, event.y, gain=1)
-
-    canvas.bind("<Button-1>", start_scroll)
-    canvas.bind("<B1-Motion>", perform_scroll)
-
     # Adding events to the scrollable_frame
     for event in events:
         start_time = datetime.fromisoformat(event['start_dt']).strftime("%A, %B %d, %Y %H:%M")
@@ -146,27 +155,6 @@ def showCalendar(events):
 
     gui.mainloop()
 
-<<<<<<< HEAD
-if __name__ == '__main__':
-    api_url = "https://api.teamup.com"
-    api_key = "699e02c0555e1804ea722d893851875e8444e8bf17199c8d8e46bc393a60f960"
-
-    # Dictionary mapping card IDs to calendar keys
-    card_calendar_map = {
-        '2054232593': 'kskp2dg3mpgu24n3ww',
-        '2206210585': 'ks2yz86rfe8sj5nvq1',
-        # Add more card IDs and their corresponding calendar keys
-    }
-
-    headers = {"Teamup-Token": api_key}
-
-    for card_id, calendar_key in card_calendar_map.items():
-        events = fetchEvents(calendar_key)
-        showCalendar(events)
-        
-def read_rfid():
-    reader = SimpleMFRC522()
-=======
 
 if __name__=='__main__':
     # Define your Teamup API URL and API key
@@ -179,106 +167,71 @@ if __name__=='__main__':
     events = fetchEvents()
     showCalendar(events)
 
-<<<<<<< HEAD
 # def read_rfid():
 #     reader = SimpleMFRC522()
->>>>>>> f2c1cde96d9c07df9136818b359ccaebe1260108
-=======
-def read_rfid():
-    reader = SimpleMFRC522()
->>>>>>> b49397148cf4f119aa8012fd67382acb0bd4e9b4
 
-    try:
-        print("Hold a card near the reader.")
-        id, text = reader.read()
-        print("Card ID:", id)
-        print("Card Text:", text)
+#     try:
+#         print("Hold a card near the reader.")
+#         id, text = reader.read()
+#         print("Card ID:", id)
+#         print("Card Text:", text)
 
-        # Replace '123456789' with the ID of your specific card
-        #if id == 2054232593:
-         #   print("Opening Calendar.py")
-        #    subprocess.run(["python", "Calendar.py"])
+#         # Replace '123456789' with the ID of your specific card
+#         if id == 2054232593:
+#             print("Opening Calendar.py")
+#             subprocess.run(["python", "Calendar.py"])
 
-    finally:
-        GPIO.cleanup()
+#     finally:
+#         GPIO.cleanup()
 
-if __name__ == "__main__":
-    read_rfid()
+# if __name__ == "__main__":
+#     read_rfid()
 
 # Load the face and eye classifiers outside the loop
 face_cascade = cv2.CascadeClassifier('/home/gruppesjov/opencv/data/haarcascades/haarcascade_frontalface_default.xml')
 eye_cascade = cv2.CascadeClassifier('/home/gruppesjov/opencv/data/haarcascades/haarcascade_eye.xml')
-#
+
 while True:
-    # Display the welcome screen again
-    screen.fill(background_color)
-    welcome_message1 = font.render('Welcome!', True, (255, 255, 255))
-    welcome_rect1 = welcome_message1.get_rect(center=(400, 240))
-    screen.blit(welcome_message1, welcome_rect1)
-    pygame.display.flip()
+    ret, frame = cap.read()
 
-    # Wait for 5 seconds
-    time.sleep(3)
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-    # Clear the screen for the second message
-    screen.fill(background_color)
-    welcome_message2 = font.render('Please use your ID Card to log in', True, (255, 255, 255))
-    welcome_rect2 = welcome_message2.get_rect(center=(400, 240))
-    screen.blit(welcome_message2, welcome_rect2)
-    pygame.display.flip()
+    faces = face_cascade.detectMultiScale(gray, 1.3, 5)
 
-    # Wait for 5 seconds
-    time.sleep(12)
+    if len(faces) == 0:
+        looking_at_camera = False
+        played_sound = False  # Reset the flag when no faces are detected
 
-    # Clear the screen
-    screen.fill(background_color)
-    pygame.display.flip()
+    for (x, y, w, h) in faces:
+        cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 5)
+        roi_gray = gray[y:y+w, x:x+w]
+        roi_color = frame[y:y+h, x:x+w]
+        eyes = eye_cascade.detectMultiScale(roi_gray, 1.3, 8)
 
-    # Reset flags
-    looking_at_camera = False
-    played_sound = False
+        for (ex, ey, ew, eh) in eyes:
+            cv2.rectangle(roi_color, (ex, ey), (ex + ew, ey + eh), (0, 255, 0), 5)
+            looking_at_camera = True
 
-    # Load the face and eye classifiers outside the loop
-    face_cascade = cv2.CascadeClassifier('/home/gruppesjov/opencv/data/haarcascades/haarcascade_frontalface_default.xml')
-    eye_cascade = cv2.CascadeClassifier('/home/gruppesjov/opencv/data/haarcascades/haarcascade_eye.xml')
+    cv2.imshow('frame', frame)
 
-    while True:
-        ret, frame = cap.read()
+    # Play sounds based on the flag and ensure it's played only once
+    if looking_at_camera and not played_sound:
+        welcome_sound()
+        played_sound = True
 
-        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    if not looking_at_camera and played_sound:
+        goodbye_sound()
+        played_sound = False
 
-        faces = face_cascade.detectMultiScale(gray, 1.3, 5)
+    if cv2.waitKey(1) == ord('q'):
+        break
 
-        if len(faces) == 0:
-            looking_at_camera = False
-            played_sound = False  # Reset the flag when no faces are detected
+cap.release()
+# cv2.destroyAllWindows()
 
-        for (x, y, w, h) in faces:
-            cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 5)
-            roi_gray = gray[y:y+w, x:x+w]
-            roi_color = frame[y:y+h, x:x+w]
-            eyes = eye_cascade.detectMultiScale(roi_gray, 1.3, 8)
+# Wait for a short moment
+time.sleep(0.1)
 
-            for (ex, ey, ew, eh) in eyes:
-                cv2.rectangle(roi_color, (ex, ey), (ex + ew, ey + eh), (0, 255, 0), 5)
-                looking_at_camera = True
+# Quit Pygame
+pygame.quit()
 
-        cv2.imshow('frame', frame)
-
-        # Play sounds based on the flag and ensure it's played only once
-        if looking_at_camera and not played_sound:
-            welcome_sound()
-            played_sound = True
-
-        if not looking_at_camera and played_sound:
-            goodbye_sound()
-            played_sound = False
-
-        if cv2.waitKey(1) == ord('q'):
-            break
-
-    cap.release()
-    cv2.destroyAllWindows()
-
-    # Wait for a short moment
-    time.sleep(0.1)
