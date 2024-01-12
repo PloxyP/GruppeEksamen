@@ -54,7 +54,7 @@ screen.blit(welcome_message2, welcome_rect2)
 pygame.display.flip()
 
 # Wait for 5 seconds
-time.sleep(5)
+time.sleep(12)
 
 # Clear the screen
 screen.fill(background_color)
@@ -69,9 +69,9 @@ def welcome_sound():
     print("Welcome!")
     play_sound("check.mp3")
 
-def goodbye_sound():
-   print("Goodbye!")
-   play_sound("check.mp3")
+#def goodbye_sound():
+   # print("Goodbye!")
+   # play_sound("check.mp3")
     
 def fetchEvents():
     start_date = datetime.now()
@@ -157,9 +157,9 @@ def read_rfid():
         print("Card Text:", text)
 
         # Replace '123456789' with the ID of your specific card
-        #if id == 2054232593:
-         #   print("Opening Calendar.py")
-        #    subprocess.run(["python", "Calendar.py"])
+        if id == 2054232593:
+            print("Opening Calendar.py")
+            subprocess.run(["python", "Calendar.py"])
 
     finally:
         GPIO.cleanup()
@@ -170,77 +170,48 @@ if __name__ == "__main__":
 # Load the face and eye classifiers outside the loop
 face_cascade = cv2.CascadeClassifier('/home/gruppesjov/opencv/data/haarcascades/haarcascade_frontalface_default.xml')
 eye_cascade = cv2.CascadeClassifier('/home/gruppesjov/opencv/data/haarcascades/haarcascade_eye.xml')
-#
+
 while True:
-    # Display the welcome screen again
-    screen.fill(background_color)
-    welcome_message1 = font.render('Welcome!', True, (255, 255, 255))
-    welcome_rect1 = welcome_message1.get_rect(center=(400, 240))
-    screen.blit(welcome_message1, welcome_rect1)
-    pygame.display.flip()
+    ret, frame = cap.read()
 
-    # Wait for 5 seconds
-    time.sleep(3)
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-    # Clear the screen for the second message
-    screen.fill(background_color)
-    welcome_message2 = font.render('Please use your ID Card to log in', True, (255, 255, 255))
-    welcome_rect2 = welcome_message2.get_rect(center=(400, 240))
-    screen.blit(welcome_message2, welcome_rect2)
-    pygame.display.flip()
+    faces = face_cascade.detectMultiScale(gray, 1.3, 5)
 
-    # Wait for 5 seconds
-    time.sleep(12)
+    if len(faces) == 0:
+        looking_at_camera = False
+        played_sound = False  # Reset the flag when no faces are detected
 
-    # Clear the screen
-    screen.fill(background_color)
-    pygame.display.flip()
+    for (x, y, w, h) in faces:
+        cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 5)
+        roi_gray = gray[y:y+w, x:x+w]
+        roi_color = frame[y:y+h, x:x+w]
+        eyes = eye_cascade.detectMultiScale(roi_gray, 1.3, 8)
 
-    # Reset flags
-    looking_at_camera = False
-    played_sound = False
+        for (ex, ey, ew, eh) in eyes:
+            cv2.rectangle(roi_color, (ex, ey), (ex + ew, ey + eh), (0, 255, 0), 5)
+            looking_at_camera = True
 
-    # Load the face and eye classifiers outside the loop
-    face_cascade = cv2.CascadeClassifier('/home/gruppesjov/opencv/data/haarcascades/haarcascade_frontalface_default.xml')
-    eye_cascade = cv2.CascadeClassifier('/home/gruppesjov/opencv/data/haarcascades/haarcascade_eye.xml')
+    cv2.imshow('frame', frame)
 
-    while True:
-        ret, frame = cap.read()
+    # Play sounds based on the flag and ensure it's played only once
+    if looking_at_camera and not played_sound:
+        welcome_sound()
+        played_sound = True
 
-        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    if not looking_at_camera and played_sound:
+        goodbye_sound()
+        played_sound = False
 
-        faces = face_cascade.detectMultiScale(gray, 1.3, 5)
+    if cv2.waitKey(1) == ord('q'):
+        break
 
-        if len(faces) == 0:
-            looking_at_camera = False
-            played_sound = False  # Reset the flag when no faces are detected
+cap.release()
+cv2.destroyAllWindows()
 
-        for (x, y, w, h) in faces:
-            cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 5)
-            roi_gray = gray[y:y+w, x:x+w]
-            roi_color = frame[y:y+h, x:x+w]
-            eyes = eye_cascade.detectMultiScale(roi_gray, 1.3, 8)
+# Wait for a short moment
+time.sleep(0.1)
 
-            for (ex, ey, ew, eh) in eyes:
-                cv2.rectangle(roi_color, (ex, ey), (ex + ew, ey + eh), (0, 255, 0), 5)
-                looking_at_camera = True
+# Quit Pygame
+pygame.quit()
 
-        cv2.imshow('frame', frame)
-
-        # Play sounds based on the flag and ensure it's played only once
-        if looking_at_camera and not played_sound:
-            welcome_sound()
-            played_sound = True
-
-        if not looking_at_camera and played_sound:
-            goodbye_sound()
-            played_sound = False
-
-        if cv2.waitKey(1) == ord('q'):
-            break
-
-    cap.release()
-    cv2.destroyAllWindows()
-
-    # Wait for a short moment
-    time.sleep(0.1)
