@@ -58,7 +58,13 @@ def fetchEvents(api_url, headers, calendar_key):
         print("Failed to fetch events")
         return []
     
+global gui
+gui = None
+
 def showCalendar(events):
+    global gui
+    if gui is not None:
+        gui.destroy()
     gui = Tk()
     gui.config(background='grey')
     gui.title("Teamup Calendar")
