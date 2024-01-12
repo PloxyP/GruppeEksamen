@@ -9,6 +9,7 @@ import requests
 import json
 from datetime import datetime, timedelta
 import os
+import threading
 
 pygame.init()
 
@@ -54,32 +55,27 @@ screen.blit(welcome_message2, welcome_rect2)
 pygame.display.flip()
 
 # Wait for 5 seconds
-time.sleep(5)
+time.sleep(12)
 
 # Clear the screen
 screen.fill(background_color)
 pygame.display.flip()
-
-# Initialize variables for the timer
-start_time = time.time()
-delay_duration = 30  # Set the delay duration in seconds
 
 def play_sound(file_path):
     pygame.mixer.init()
     pygame.mixer.music.load(file_path)
     pygame.mixer.music.play()
 
-def welcome_sound():
-    global start_time
-    current_time = time.time()
+# Add a timer function for a 30-second delay
+def set_timer():
+    global played_sound
+    time.sleep(30)
+    played_sound = True
 
-    # Check if the elapsed time is greater than the delay duration
-    if not played_sound and (current_time - start_time) >= delay_duration:
-        print("Welcome!")
+def welcome_sound():
+    print("Welcome!")
+    if not played_sound:  # Check if the sound should be played
         play_sound("check.mp3")
-        played_sound = True
-        # Reset the start time after playing the sound
-        start_time = time.time()
 
 #def goodbye_sound():
    # print("Goodbye!")
@@ -194,16 +190,24 @@ while True:
         looking_at_camera = False
         played_sound = False  # Reset the flag when no faces are detected
         # Start the timer when no faces are detected
-        start_time = time.time()
+        threading.Thread(target=set_timer).start()
 
     for (x, y, w, h) in faces:
-        # ... (remaining code remains unchanged)
+        cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 5)
+        roi_gray = gray[y:y+w, x:x+w]
+        roi_color = frame[y:y+h, x:x+w]
+        eyes = eye_cascade.detectMultiScale(roi_gray, 1.3, 8)
+
+        for (ex, ey, ew, eh) in eyes:
+            cv2.rectangle(roi_color, (ex, ey), (ex + ew, ey + eh), (0, 255, 0), 5)
+            looking_at_camera = True
 
     cv2.imshow('frame', frame)
 
     # Play sounds based on the flag and ensure it's played only once
-    if looking_at_camera:
+    if looking_at_camera and not played_sound:
         welcome_sound()
+        played_sound = True
 
     if not looking_at_camera and played_sound:
         goodbye_sound()
