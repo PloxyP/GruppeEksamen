@@ -149,10 +149,10 @@ def rfid_function():
 
             if card_id in card_calendar_map:
                 calendar_key = card_calendar_map[card_id]
-                welcome_sound()
                 print(f"Fetching events for calendar key: {calendar_key}")
                 events = fetchEvents(api_url, headers, calendar_key)
                 if events:
+                    welcome_sound()
                     showCalendar(events)
                 else:
                     print("No events found or error in fetching events")
