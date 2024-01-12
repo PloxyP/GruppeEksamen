@@ -1,8 +1,8 @@
 import cv2
-import pygame
 from multiprocessing import Process, Value
 from Mwelcome import welcome_message
 from Mgreetingbot import rfid_function
+import RPi.GPIO as GPIO
 
 # Shared variable to signal eyes detections
 eyes_detected = Value('b', False)
@@ -14,28 +14,23 @@ cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
 cap.set(cv2.CAP_PROP_FPS, 60)
 
 looking_at_camera = False
-played_sound = False  # Flag to track whether the sound has been played
+led_pin = 18  # GPIO pin for the LED, change it to your actual pin
 
-def play_sound(file_path):
-    pygame.mixer.init()
-    pygame.mixer.music.load(file_path)
-    pygame.mixer.music.play()
+# Initialize GPIO
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(led_pin, GPIO.OUT)
+GPIO.output(led_pin, GPIO.LOW)
 
-def welcome_sound():
+def welcome_led():
     print("Welcome!")
-    play_sound("check.mp3")
+    GPIO.output(led_pin, GPIO.HIGH)
 
-def goodbye_sound():
+def goodbye_led():
     print("Goodbye!")
-    play_sound("check.mp3")
-
-# Load the face and eye classifiers outside the loop
-face_cascade = cv2.CascadeClassifier('/home/gruppesjov/opencv/data/haarcascades/haarcascade_frontalface_default.xml')
-eye_cascade = cv2.CascadeClassifier('/home/gruppesjov/opencv/data/haarcascades/haarcascade_eye.xml')
+    GPIO.output(led_pin, GPIO.LOW)
 
 def face_detection(eyes_detected):
     global looking_at_camera
-    global played_sound
     
     while True:
         ret, frame = cap.read()
@@ -46,7 +41,6 @@ def face_detection(eyes_detected):
 
         if len(faces) == 0:
             looking_at_camera = False
-            played_sound = False  # Reset the flag when no faces are detected
 
         for (x, y, w, h) in faces:
             cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 5)
@@ -58,16 +52,12 @@ def face_detection(eyes_detected):
                 cv2.rectangle(roi_color, (ex, ey), (ex + ew, ey + eh), (0, 255, 0), 5)
                 looking_at_camera = True
                 eyes_detected.value = True
-        #cv2.imshow('frame', frame)
-        
-        # Play sounds based on the flag and ensure it's played only once
-        if looking_at_camera and not played_sound:
-            welcome_sound()
-            played_sound = True
 
-        if not looking_at_camera and played_sound:
-            goodbye_sound()
-            played_sound = False
+        # Play sounds based on the flag and ensure it's played only once
+        if looking_at_camera:
+            welcome_led()
+        else:
+            goodbye_led()
         
         if cv2.waitKey(1) == ord('q'):
             break
@@ -77,6 +67,9 @@ def face_detection(eyes_detected):
 
 if __name__ == "__main__":
     eyes_detected = Value('b', False)  # Initial value
+    face_cascade = cv2.CascadeClassifier('/home/gruppesjov/opencv/data/haarcascades/haarcascade_frontalface_default.xml')
+    eye_cascade = cv2.CascadeClassifier('/home/gruppesjov/opencv/data/haarcascades/haarcascade_eye.xml')
+    
     face_process = Process(target=face_detection, args=(eyes_detected,))
     welcome_process = Process(target=welcome_message, args=(eyes_detected,))
     program3_process = Process(target=rfid_function)  # Add this line
@@ -90,3 +83,6 @@ if __name__ == "__main__":
     face_process.join()
     welcome_process.join()
     program3_process.join()  # Add this line
+
+    # Cleanup GPIO
+    GPIO.cleanup()
