@@ -20,9 +20,10 @@ write_key = 'RS1DFZK1ZEULO72E'
 total_reads = 0  # Initialize total reads counter
 
 def play_sound(file_path):
-    pygame.mixer.music.load(file_path)
-    pygame.mixer.music.play()
-    time.sleep(2)  # Adjust the delay as needed
+    sound = pygame.mixer.Sound(file_path)
+    sound.play()
+    pygame.time.wait(int(sound.get_length() * 1000))  # Wait for the sound to finish
+
 
 def welcome_sound():
     print("TEST HEJ")
@@ -167,22 +168,4 @@ def rfid_function():
             time.sleep(1)
             
 if __name__ == '__main__':
-    # Initialize Pygame outside of rfid_function
-    pygame.mixer.init()
-
-    # Start the RFID function in a separate process
-    rfid_process = multiprocessing.Process(target=rfid_function)
-
-    # Start the Pygame sound playing processes
-    welcome_sound_process = multiprocessing.Process(target=welcome_sound)
-    declined_sound_process = multiprocessing.Process(target=declined_sound)
-
-    # Start all processes
-    rfid_process.start()
-    welcome_sound_process.start()
-    declined_sound_process.start()
-
-    # Wait for all processes to finish before exiting
-    rfid_process.join()
-    welcome_sound_process.join()
-    declined_sound_process.join()
+    rfid_function()
