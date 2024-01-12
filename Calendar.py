@@ -12,7 +12,8 @@ import multiprocessing
 
 pygame.init()
 
-read_cards = set()
+#thingspeak data use
+read_cards = set() 
 
 # ThingSpeak channel details
 channel_id = 2399393  
@@ -27,9 +28,7 @@ def welcome_sound():
     print("Welcome!")
     play_sound("check.mp3")
 
-#def goodbye_sound():
-   # print("Goodbye!")
-   # play_sound("check.mp3")
+
     
 
 
