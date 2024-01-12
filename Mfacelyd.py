@@ -56,7 +56,7 @@ def face_detection():
                 cv2.rectangle(roi_color, (ex, ey), (ex + ew, ey + eh), (0, 255, 0), 5)
                 looking_at_camera = True
                 eyes_detected = True
-                threading.Thread(target=welcome_message, args=(eyes_detected,))
+                threading.Thread(target=welcome_message, args=(eyes_detected,)).start()
 
         #cv2.imshow('frame', frame)
         
