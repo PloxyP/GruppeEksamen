@@ -117,21 +117,15 @@ def read_rfid(reader, channel):
         id, text = reader.read()
         print(id)
 
-        # Check if the card is accepted
-        if str(id) in card_calendar_map:
-            welcome_sound()
-            # Send data to ThingSpeak for every read
-            response = channel.update({'field1': 1})
-            print("Data sent to ThingSpeak")
+        # Send data to ThingSpeak for every read
+        response = channel.update({'field1': 1})
+        print("Data sent to ThingSpeak")
 
-            # Increment total reads count
-            total_reads += 1
-            total_users_response = channel.update({'field2': total_reads})
-            print(f"Total reads count updated on ThingSpeak: {total_reads}")
+        # Increment total reads count
+        total_reads += 1
+        total_users_response = channel.update({'field2': total_reads})
+        print(f"Total reads count updated on ThingSpeak: {total_reads}")
 
-        else:
-            declined_sound()
-            
         return str(id)
     finally:
         GPIO.cleanup()
@@ -155,6 +149,7 @@ def rfid_function():
 
             if card_id in card_calendar_map:
                 calendar_key = card_calendar_map[card_id]
+                welcome_sound()
                 print(f"Fetching events for calendar key: {calendar_key}")
                 events = fetchEvents(api_url, headers, calendar_key)
                 if events:
@@ -163,6 +158,7 @@ def rfid_function():
                     print("No events found or error in fetching events")
             else:
                 print("Card not recognized")
+                declined_sound()
 
             time.sleep(1)
         except Exception as e:
