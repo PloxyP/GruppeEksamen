@@ -9,7 +9,8 @@ from mfrc522 import SimpleMFRC522
 import RPi.GPIO as GPIO
 import thingspeak
 import multiprocessing
-import simpleaudio
+from pydub import AudioSegment
+from pydub.playback import play
 
 pygame.init()
 
@@ -21,17 +22,19 @@ write_key = 'RS1DFZK1ZEULO72E'
 total_reads = 0  # Initialize total reads counter
 
 def play_sound(file_path):
-    wave_obj = simpleaudio.WaveObject.from_file(file_path)
-    play_obj = wave_obj.play()
-    play_obj.wait_done()
+    try:
+        sound = AudioSegment.from_file(file_path, format="mp3")
+        play(sound)
+    except Exception as e:
+        print(f"Error playing sound: {e}")
 
 def welcome_sound():
     print("TEST HEJ")
-    play_sound("check")
+    play_sound("check.mp3")
 
 def declined_sound():
     print("TEST FARVEL")
-    play_sound("declined")
+    play_sound("declined.mp3")
 
 #####################################
     
