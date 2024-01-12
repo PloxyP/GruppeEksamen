@@ -23,11 +23,11 @@ GPIO.setup(led_pin, GPIO.OUT)
 GPIO.output(led_pin, GPIO.LOW)
 
 def welcome_led():
-    print("Welcome!")
+    print("Welcome! - LED on")
     GPIO.output(led_pin, GPIO.HIGH)
 
 def goodbye_led():
-    #print("Goodbye!")
+    print("Goodbye! - LED off")
     GPIO.output(led_pin, GPIO.LOW)
 
 def face_detection(eyes_detected):
@@ -58,7 +58,7 @@ def face_detection(eyes_detected):
 
         #cv2.imshow('frame', frame)
 
-        # Play sounds based on the flag and ensure it's played only once
+        #Turns on LED
         if looking_at_camera == True and led_on == False:
             welcome_led()
             led_on = True
