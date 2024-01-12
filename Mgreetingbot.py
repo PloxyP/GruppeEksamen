@@ -30,9 +30,6 @@ def welcome_sound():
 #def goodbye_sound():
    # print("Goodbye!")
    # play_sound("check.mp3")
-    
-
-
 
 #####################################
     
