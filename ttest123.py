@@ -6,7 +6,7 @@ import time
 
 # Shared variable to signal eyes detection
 eyes_detected = False
-
+pygame.init()  # Initialize the pygame library
 cap = cv2.VideoCapture(0)
 
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
@@ -59,8 +59,7 @@ def face_detection():
                 cv2.rectangle(roi_color, (ex, ey), (ex + ew, ey + eh), (0, 255, 0), 5)
                 looking_at_camera = True
                 eyes_detected = True
-                event = threading.Event()
-                threading.Thread(target=welcome_message, args=(eyes_detected,))
+                threading.Thread(target=welcome_message, args=(eyes_detected,)).start()  # Start the thread
 # def face_detection():
 #     global eyes_detected
     
@@ -111,7 +110,7 @@ def play_sound(file_path):
     pygame.mixer.music.play()
 
 def welcome_message(eyes_detected):
-    pygame.init()  # Initialize the pygame library
+    # pygame.init()  # Initialize the pygame library
 
     # Screen Config
     screen = pygame.display.set_mode((800, 480), pygame.FULLSCREEN)
