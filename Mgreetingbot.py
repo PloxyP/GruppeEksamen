@@ -18,6 +18,8 @@ channel_id = 2399393
 write_key = 'RS1DFZK1ZEULO72E'
 total_reads = 0  # Initialize total reads counter
 
+
+
 def play_sound(file_path):
     pygame.mixer.init()
     pygame.mixer.music.load(file_path)
@@ -60,7 +62,13 @@ def showCalendar(events):
     gui = Tk()
     gui.config(background='grey')
     gui.title("Teamup Calendar")
-    gui.wm_attributes('-fullscreen','true')  
+
+    # Define the set_fullscreen function
+    def set_fullscreen():
+        gui.attributes("-fullscreen", True)
+
+    # Add a delay of 100 milliseconds before setting fullscreen
+    gui.after(100, set_fullscreen)
 
     # Frame for the Log Off button
     top_frame = Frame(gui, bg='grey')
