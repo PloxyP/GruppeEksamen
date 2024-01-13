@@ -11,7 +11,7 @@ cap = cv2.VideoCapture(0)
 
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
-cap.set(cv2.CAP_PROP_FPS, 60)
+cap.set(cv2.CAP_PROP_FPS, 30)
 
 looking_at_camera = False
 led_on = False
