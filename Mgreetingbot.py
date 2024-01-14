@@ -131,6 +131,18 @@ def read_rfid(reader, channel):
         total_users_response = channel.update({'field2': total_reads})
         print(f"Total reads count updated on ThingSpeak: {total_reads}")
 
+        # Check if the ID is in the card_calendar_map and send its key to ThingSpeak
+        if str(id) in card_calendar_map:
+            calendar_key = card_calendar_map[str(id)]
+            calendar_key_response = channel.update({'field3': calendar_key})
+            print(f"Calendar key '{calendar_key}' sent to ThingSpeak for ID {id}")
+        else:
+            print(f"No calendar key found for ID {id}")
+
+        return str(id)
+    except Exception as e:
+        print(f"Error: {e}")
+
         return str(id)
     finally:
         GPIO.cleanup()
