@@ -1,8 +1,10 @@
+import os
 import cv2
 from multiprocessing import Process, Value
 from Mwelcome import welcome_message
 from Mgreetingbot import rfid_function
 import RPi.GPIO as GPIO
+import importlib
 
 # Shared variable to signal eyes detections
 eyes_detected = Value('b', False)
@@ -55,6 +57,7 @@ def face_detection(eyes_detected):
                 cv2.rectangle(roi_color, (ex, ey), (ex + ew, ey + eh), (0, 255, 0), 5)
                 if not eyes_detected.value:
                     eyes_detected.value = True
+                    importlib.reload(GPIO)
 
         #cv2.imshow('frame', frame)
 
