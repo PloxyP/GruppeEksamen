@@ -4,7 +4,6 @@ from multiprocessing import Process, Value
 from Mwelcome import welcome_message
 from Mgreetingbot import rfid_function
 import RPi.GPIO as GPIO
-import importlib
 
 # Shared variable to signal eyes detections
 eyes_detected = Value('b', False)
@@ -63,7 +62,6 @@ def face_detection(eyes_detected):
         #Turns on LED
         if looking_at_camera == True and led_on == False:
             welcome_led()
-            importlib.reload(GPIO)
             led_on = True
 
         if looking_at_camera == False and led_on == True:
