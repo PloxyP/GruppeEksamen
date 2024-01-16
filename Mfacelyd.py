@@ -56,7 +56,7 @@ def face_detection(eyes_detected):
                 if not eyes_detected.value:
                     eyes_detected.value = True
 
-        cv2.imshow('frame', frame)
+        #cv2.imshow('frame', frame)
 
         #Turns on LED
         if looking_at_camera == True and led_on == False:
