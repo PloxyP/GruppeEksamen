@@ -7,7 +7,8 @@ def welcome_message(eyes_detected):
     pygame.init()  # Initialize the pygame library
 
     # Screen Config
-    screen = pygame.display.set_mode((800, 480), pygame.FULLSCREEN)
+    #screen = pygame.display.set_mode((800, 480), pygame.FULLSCREEN)
+    screen = pygame.display.set_mode((1920, 1080), pygame.FULLSCREEN)
     pygame.display.set_caption('Welcome Message')
     font = pygame.font.Font(None, 36)
 
