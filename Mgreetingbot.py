@@ -177,8 +177,8 @@ def rfid_function(KortGodkendt, KortScannet):
                 events = fetchEvents(api_url, headers, calendar_key)
                 KortScannet.value = True
                 if events:
-                    welcome_sound()
                     KortGodkendt.value = True
+                    welcome_sound()
                     showCalendar(events)
                 else:
                     print("No events found or error in fetching events")
