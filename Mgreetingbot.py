@@ -78,6 +78,7 @@ def showCalendar(events):
         GPIO.setup(24, GPIO.OUT)
         GPIO.output(24, GPIO.LOW)
         
+        
 
     Button(top_frame, text="Log Off", command=logOff, font="Consolas 12 bold", padx=10, pady=5).pack(side='right', padx=20, pady=20)
 
