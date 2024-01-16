@@ -31,23 +31,23 @@ def welcome_message(eyes_detected,KortGodkendt,KortScannet):
                 time.sleep(5)  # Adjust the duration as needed
                 eyes_detected.value = False  # Reset the variable after displaying the message
 
-        elif KortScannet.value == True and KortGodkendt.value == True:
-            if current_message != godkendt_message:
-                current_message = godkendt_message
-                DisplayText(godkendt_message, welcome_rect, screen)
-                time.sleep(5)  # Adjust the duration as needed
-                eyes_detected.value = False  # Reset the variable after displaying the message
-                KortScannet.value = False
-                KortGodkendt.value = False
-
-        elif KortGodkendt.value == False and KortScannet.value == True:
-            if current_message != declined_message:
-                current_message = declined_message
-                DisplayText(declined_message, welcome_rect, screen)
-                time.sleep(5)  # Adjust the duration as needed
-                eyes_detected.value = False  # Reset the variable after displaying the message
-                KortScannet.value = False
-                KortGodkendt.value = False
+        elif KortScannet.value == True:
+            if KortGodkendt.value == True:
+                if current_message != godkendt_message:
+                    current_message = godkendt_message
+                    DisplayText(godkendt_message, welcome_rect, screen)
+                    time.sleep(5)  # Adjust the duration as needed
+                    eyes_detected.value = False  # Reset the variable after displaying the message
+                    KortScannet.value = False
+                    KortGodkendt.value = False
+            else:
+                if current_message != declined_message:
+                    current_message = declined_message
+                    DisplayText(declined_message, welcome_rect, screen)
+                    time.sleep(5)  # Adjust the duration as needed
+                    eyes_detected.value = False  # Reset the variable after displaying the message
+                    KortScannet.value = False
+                    KortGodkendt.value = False
         else:
             # Display the first welcome message
             if current_message != welcome_message1:
