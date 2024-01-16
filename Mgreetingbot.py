@@ -11,7 +11,6 @@ import thingspeak
 import multiprocessing
 from pydub import AudioSegment
 from pydub.playback import play
-GPIO.setmode(GPIO.BCM)
 
 pygame.init()
 
@@ -146,7 +145,6 @@ def read_rfid(reader, channel):
 
         return str(id)
     finally:
-        GPIO.cleanup()
 
 def rfid_function():
     api_url = "https://api.teamup.com"
