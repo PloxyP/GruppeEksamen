@@ -70,6 +70,9 @@ def showCalendar(events):
 
     def logOff():
         gui.destroy()
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(led_pin, GPIO.OUT)
+        GPIO.output(led_pin, GPIO.LOW)
         
 
     Button(top_frame, text="Log Off", command=logOff, font="Consolas 12 bold", padx=10, pady=5).pack(side='right', padx=20, pady=20)
