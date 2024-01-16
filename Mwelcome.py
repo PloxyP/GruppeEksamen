@@ -40,7 +40,7 @@ def welcome_message(eyes_detected,KortGodkendt,KortScannet):
                 KortScannet.value = False
                 KortGodkendt.value = False
 
-        elif KortScannet.value == True and KortGodkendt.value == False:
+        elif KortGodkendt.value == False and KortScannet == True:
             if current_message != declined_message:
                 current_message = declined_message
                 DisplayText(declined_message, welcome_rect, screen)
