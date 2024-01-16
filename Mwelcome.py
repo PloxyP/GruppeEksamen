@@ -23,7 +23,6 @@ def welcome_message(eyes_detected,KortGodkendt,KortScannet):
     current_message = None  # Track the current displayed message
 
     while True:
-        screen = pygame.display.set_mode((1920, 1080), pygame.FULLSCREEN)
         if eyes_detected.value and KortScannet.value == False:
             # Display "Scan your card" message
             if current_message != welcome_message2:
