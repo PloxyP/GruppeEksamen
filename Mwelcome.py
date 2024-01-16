@@ -32,7 +32,7 @@ def welcome_message(eyes_detected,KortGodkendt,KortScannet):
                 eyes_detected.value = False  # Reset the variable after displaying the message
 
         elif KortScannet.value == True:
-            if KortGodkendt.value == True:
+            if KortGodkendt.value == False:
                 if current_message != godkendt_message:
                     current_message = godkendt_message
                     DisplayText(godkendt_message, welcome_rect, screen)
