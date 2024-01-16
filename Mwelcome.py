@@ -30,8 +30,8 @@ def welcome_message(eyes_detected,KortGodkendt,KortScannet):
                 DisplayText(welcome_message2, welcome_rect, screen)
                 time.sleep(5)  # Adjust the duration as needed
                 eyes_detected.value = False  # Reset the variable after displaying the message
-                
-        elif KortScannet == True and KortGodkendt == True:
+
+        elif KortScannet.value == True and KortGodkendt.value == True:
             if current_message != godkendt_message:
                 current_message = godkendt_message
                 DisplayText(declined_message, welcome_rect, screen)
@@ -40,7 +40,7 @@ def welcome_message(eyes_detected,KortGodkendt,KortScannet):
                 KortScannet.value = False
                 KortGodkendt.value = False
 
-        elif KortScannet == True and KortGodkendt == False:
+        elif KortScannet.value == True and KortGodkendt.value == False:
             if current_message != declined_message:
                 current_message = declined_message
                 DisplayText(declined_message, welcome_rect, screen)
