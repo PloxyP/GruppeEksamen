@@ -144,6 +144,8 @@ def read_rfid(reader, channel):
         print(f"Error: {e}")
 
         return str(id)
+    finally:
+        GPIO.cleanup() 
 
 def rfid_function():
     api_url = "https://api.teamup.com"
