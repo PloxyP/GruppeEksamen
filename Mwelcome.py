@@ -3,7 +3,7 @@ import pygame
 import time
 from multiprocessing import Process, Value
 
-def welcome_message(eyes_detected):
+def welcome_message(eyes_detected,KortGodkendt,KortScannet):
     pygame.init()  # Initialize the pygame library
 
     # Screen Config
@@ -15,19 +15,39 @@ def welcome_message(eyes_detected):
     #Indenfor if
     welcome_message2 = font.render('Scan your card', True, (255, 255, 255))
     welcome_message1 = font.render('Welcome!', True, (255, 255, 255))
+    godkendt_message = font.render('Card Accepted!', True, (255, 255, 255))
+    declined_message = font.render('Card Declined!', True, (255, 255, 255))
     welcome_rect = welcome_message2.get_rect(center=(400, 240))
     
     current_message = None  # Track the current displayed message
 
     while True:
 
-        if eyes_detected.value:
+        if eyes_detected.value and KortScannet.value == False:
             # Display "Scan your card" message
             if current_message != welcome_message2:
                 current_message = welcome_message2
                 DisplayText(welcome_message2, welcome_rect, screen)
                 time.sleep(5)  # Adjust the duration as needed
                 eyes_detected.value = False  # Reset the variable after displaying the message
+                
+        elif KortScannet == True and KortGodkendt == True:
+            if current_message != godkendt_message:
+                current_message = godkendt_message
+                DisplayText(declined_message, welcome_rect, screen)
+                time.sleep(5)  # Adjust the duration as needed
+                eyes_detected.value = False  # Reset the variable after displaying the message
+                KortScannet.value = False
+                KortGodkendt.value = False
+
+        elif KortScannet == True and KortGodkendt == False:
+            if current_message != declined_message:
+                current_message = declined_message
+                DisplayText(declined_message, welcome_rect, screen)
+                time.sleep(5)  # Adjust the duration as needed
+                eyes_detected.value = False  # Reset the variable after displaying the message
+                KortScannet.value = False
+                KortGodkendt.value = False
         else:
             # Display the first welcome message
             if current_message != welcome_message1:
@@ -47,7 +67,9 @@ def DisplayText(Message, Rect, screen):
 
 if __name__ == "__main__":
     eyes_detected = Value('b', False)  # Initial value
-    welcome_process = Process(target=welcome_message, args=(eyes_detected,))
+    KortGodkendt = Value('b', False)
+    KortScannet = Value('b', False)
+    welcome_process = Process(target=welcome_message, args=(eyes_detected,KortGodkendt,KortScannet))
 
     # Start the process
     welcome_process.start()

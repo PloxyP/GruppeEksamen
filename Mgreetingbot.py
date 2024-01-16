@@ -8,7 +8,7 @@ import time
 from mfrc522 import SimpleMFRC522
 import RPi.GPIO as GPIO
 import thingspeak
-import multiprocessing
+from multiprocessing import Process, Value
 from pydub import AudioSegment
 from pydub.playback import play
 
@@ -20,6 +20,10 @@ read_cards = set()
 channel_id = 2399393  
 write_key = 'RS1DFZK1ZEULO72E'
 total_reads = 0  # Initialize total reads counter
+
+#Delt variabel
+KortGodkendt = Value('b', False)
+KortScannet = Value('b', False)
 
 def play_sound(file_path):
     try:
@@ -136,7 +140,7 @@ def read_rfid(reader, channel):
 
         # Check if the ID is in the card_calendar_map and send its key to ThingSpeak
         if str(id) in card_calendar_map:
-            calendar_key = card_calendar_map[str(id)]
+            calendar_key = card_calendar_map[id]
             calendar_key_response = channel.update({'field3': calendar_key})
             print(f"Calendar key '{calendar_key}' sent to ThingSpeak for ID {id}")
         else:
@@ -150,7 +154,7 @@ def read_rfid(reader, channel):
     finally:
         GPIO.cleanup() 
 
-def rfid_function():
+def rfid_function(KortGodkendt, KortScannet):
     api_url = "https://api.teamup.com"
     api_key = "699e02c0555e1804ea722d893851875e8444e8bf17199c8d8e46bc393a60f960"
     card_calendar_map = {
@@ -171,14 +175,17 @@ def rfid_function():
                 calendar_key = card_calendar_map[card_id]
                 print(f"Fetching events for calendar key: {calendar_key}")
                 events = fetchEvents(api_url, headers, calendar_key)
+                KortScannet.value = True
                 if events:
                     welcome_sound()
-
+                    KortGodkendt.value = True
                     showCalendar(events)
                 else:
                     print("No events found or error in fetching events")
             else:
                 print("Card not recognized")
+                KortScannet.value = True
+                KortGodkendt.value = False
                 declined_sound()
 
             time.sleep(1)
@@ -187,4 +194,4 @@ def rfid_function():
             time.sleep(1)
             
 if __name__ == '__main__':
-    rfid_function()
+    rfid_function(KortGodkendt, KortScannet)
