@@ -57,13 +57,13 @@ def face_detection(eyes_detected):
                 cv2.rectangle(roi_color, (ex, ey), (ex + ew, ey + eh), (0, 255, 0), 5)
                 if not eyes_detected.value:
                     eyes_detected.value = True
-                    importlib.reload(GPIO)
 
         #cv2.imshow('frame', frame)
 
         #Turns on LED
         if looking_at_camera == True and led_on == False:
             welcome_led()
+            importlib.reload(GPIO)
             led_on = True
 
         if looking_at_camera == False and led_on == True:
