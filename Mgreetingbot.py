@@ -140,8 +140,9 @@ def read_rfid(reader, channel):
 
         # Check if the ID is in the card_calendar_map and send its key to ThingSpeak
         if str(id) in card_calendar_map:
+            calendar_key = card_calendar_map[str(id)]
             calendar_key_response = channel.update({'field3': id})
-            print(f"Card ID '{id}' sent to ThingSpeak")
+            print(f"Calendar key '{calendar_key}' sent to ThingSpeak for ID {id}")
         else:
             print(f"No calendar key found for ID {id}")
 
