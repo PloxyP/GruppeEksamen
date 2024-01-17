@@ -55,6 +55,7 @@ def welcome_message(eyes_detected,KortGodkendt,KortScannet,ExitGUI):
 
         if ExitGUI.value == True:
             screen = pygame.display.set_mode((1920, 1080), pygame.FULLSCREEN)
+            print("FullscreenOn!")
             DisplayText(welcome_message1, welcome_rect, screen)
             ExitGUI.value = False
 
