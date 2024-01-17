@@ -198,4 +198,4 @@ def rfid_function(KortGodkendt, KortScannet):
             time.sleep(1)
             
 if __name__ == '__main__':
-    rfid_function(KortGodkendt, KortScannet)
+    rfid_function(KortGodkendt, KortScannet,ExitGUI)
