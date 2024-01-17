@@ -4,7 +4,7 @@ import time
 from multiprocessing import Process, Value
 
 
-def welcome_message(eyes_detected,KortGodkendt,KortScannet):
+def welcome_message(eyes_detected):
     pygame.init()  # Initialize the pygame library
     # Screen Config
     #screen = pygame.display.set_mode((800, 480), pygame.FULLSCREEN)
@@ -68,7 +68,7 @@ if __name__ == "__main__":
     eyes_detected = Value('b', False)  # Initial value
     KortGodkendt = Value('b', False)
     KortScannet = Value('b', False)
-    welcome_process = Process(target=welcome_message, args=(eyes_detected,KortGodkendt,KortScannet))
+    welcome_process = Process(target=welcome_message, args=(eyes_detected))
 
     # Start the process
     welcome_process.start()
