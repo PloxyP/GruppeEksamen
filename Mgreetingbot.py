@@ -25,7 +25,6 @@ total_reads = 0  # Initialize total reads counter
 KortGodkendt = Value('b', False)
 KortScannet = Value('b', False)
 ExitGUI = Value('b', False)
-ExitGUICheck = False
 
 def play_sound(file_path):
     try:
@@ -75,12 +74,11 @@ def showCalendar(events):
     top_frame.pack(side='top', fill='x')
 
     def logOff():
-        global ExitGUICheck
         gui.destroy()
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(24, GPIO.OUT)
         GPIO.output(24, GPIO.LOW)
-        ExitGUICheck = True
+        ExitGUI.value = True
 
     Button(top_frame, text="Log Off", command=logOff, font="Consolas 12 bold", padx=10, pady=5).pack(side='right', padx=20, pady=20)
 
@@ -158,7 +156,6 @@ def read_rfid(reader, channel):
         GPIO.cleanup() 
 
 def rfid_function(KortGodkendt, KortScannet,ExitGUI):
-    global ExitGUICheck
     api_url = "https://api.teamup.com"
     api_key = "699e02c0555e1804ea722d893851875e8444e8bf17199c8d8e46bc393a60f960"
     card_calendar_map = {
@@ -169,11 +166,6 @@ def rfid_function(KortGodkendt, KortScannet,ExitGUI):
     headers = {"Teamup-Token": api_key}
     reader = SimpleMFRC522()
     channel = thingspeak.Channel(id=channel_id, api_key=write_key)
-
-    if ExitGUICheck == True:
-        print("NuErDenTrue")
-        ExitGUI.value = True
-        ExitGUICheck == False
 
     while True:
         try:
