@@ -39,7 +39,7 @@ def welcome_message(eyes_detected,KortGodkendt,KortScannet):
                 eyes_detected.value = False  # Reset the variable after displaying the message
                 KortScannet.value = False
                 KortGodkendt.value = False
-
+                
         elif KortScannet.value == True and KortGodkendt.value == False:
             if current_message != declined_message:
                 current_message = declined_message
@@ -57,12 +57,6 @@ def welcome_message(eyes_detected,KortGodkendt,KortScannet):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-            elif event.type == pygame.VIDEORESIZE:
-                screen = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
-            elif event.type == pygame.ACTIVEEVENT:
-                if event.gain == 0:
-                    screen = pygame.display.set_mode((1920, 1080), pygame.FULLSCREEN)
-
 
 
 def DisplayText(Message, Rect, screen):
