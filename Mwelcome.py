@@ -52,7 +52,6 @@ def welcome_message(eyes_detected,KortGodkendt,KortScannet,ExitGUI):
             if current_message != welcome_message1:
                 current_message = welcome_message1
                 DisplayText(welcome_message1, welcome_rect, screen)
-                print(ExitGUI.value)
 
         if ExitGUI.value == True:
             screen = pygame.display.set_mode((1920, 1080), pygame.FULLSCREEN)
