@@ -25,7 +25,6 @@ total_reads = 0  # Initialize total reads counter
 KortGodkendt = Value('b', False)
 KortScannet = Value('b', False)
 ExitGUI = Value('b', False)
-print(ExitGUI.value)
 
 def play_sound(file_path):
     try:
@@ -76,6 +75,7 @@ def showCalendar(events):
 
     def logOff():
         global ExitGUI
+        print(ExitGUI.value)
         gui.destroy()
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(24, GPIO.OUT)
