@@ -63,7 +63,7 @@ def fetchEvents(api_url, headers, calendar_key):
         print("Failed to fetch events")
         return []
     
-def showCalendar(events, ExitGUI):
+def showCalendar(events):
     gui = Tk()
     gui.config(background='grey')
     gui.title("Teamup Calendar")
@@ -73,14 +73,13 @@ def showCalendar(events, ExitGUI):
     top_frame = Frame(gui, bg='grey')
     top_frame.pack(side='top', fill='x')
 
-    def logOff(ExitGUI):
+    def logOff():
         gui.destroy()
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(24, GPIO.OUT)
         GPIO.output(24, GPIO.LOW)
-        ExitGUI.value = True
 
-    Button(top_frame, text="Log Off", command=lambda: logOff(ExitGUI), font="Consolas 12 bold", padx=10, pady=5).pack(side='right', padx=20, pady=20)
+    Button(top_frame, text="Log Off", command=logOff, font="Consolas 12 bold", padx=10, pady=5).pack(side='right', padx=20, pady=20)
 
     # Scrollable Canvas
     canvas = Canvas(gui, bg='grey')
@@ -180,7 +179,7 @@ def rfid_function(KortGodkendt, KortScannet,ExitGUI):
                 if events:
                     KortGodkendt.value = True
                     welcome_sound()
-                    showCalendar(events, ExitGUI)
+                    showCalendar(events)
                 else:
                     print("No events found or error in fetching events")
             else:
