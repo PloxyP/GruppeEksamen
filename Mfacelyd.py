@@ -84,7 +84,7 @@ if __name__ == "__main__":
     
     face_process = Process(target=face_detection, args=(eyes_detected,))
     welcome_process = Process(target=welcome_message, args=(eyes_detected,KortGodkendt,KortScannet,ExitGUI))
-    program3_process = Process(target=rfid_function, args=(KortGodkendt,KortScannet))  # Add this line
+    program3_process = Process(target=rfid_function, args=(KortGodkendt,KortScannet,ExitGUI))  # Add this line
 
     # Start all processes
     face_process.start()
