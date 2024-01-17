@@ -171,7 +171,7 @@ def rfid_function(KortGodkendt, KortScannet,ExitGUI):
     channel = thingspeak.Channel(id=channel_id, api_key=write_key)
 
     if ExitGUICheck == True:
-        print(NuErDenTrue)
+        print("NuErDenTrue")
         ExitGUI.value = True
         ExitGUICheck == False
 
