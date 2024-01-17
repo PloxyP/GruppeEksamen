@@ -83,7 +83,7 @@ if __name__ == "__main__":
     eye_cascade = cv2.CascadeClassifier('/home/gruppesjov/opencv/data/haarcascades/haarcascade_eye.xml')
     
     face_process = Process(target=face_detection, args=(eyes_detected,))
-    welcome_process = Process(target=welcome_message, args=(eyes_detected,KortGodkendt,KortScannet))
+    welcome_process = Process(target=welcome_message, args=(eyes_detected))
     program3_process = Process(target=rfid_function, args=(KortGodkendt,KortScannet))  # Add this line
 
     # Start all processes
