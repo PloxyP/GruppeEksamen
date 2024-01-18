@@ -74,10 +74,9 @@ def showCalendar(events, ExitGUI):
     top_frame.pack(side='top', fill='x')
 
     def logOff(ExitGUI):
-        gui.withdraw()
         ExitGUI.value = True
-        #time.sleep(2)
-        #gui.destroy()
+        time.sleep(2)
+        gui.destroy()
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(24, GPIO.OUT)
         GPIO.output(24, GPIO.LOW)
