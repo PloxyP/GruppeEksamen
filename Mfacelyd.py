@@ -37,13 +37,12 @@ def goodbye_led():
 
 #Main function (Køre fra starten i multiprocess):
 def face_detection(eyes_detected):
-    global face_detected, led_on
+    global face_detected, led_on                                #Henter global variabler
     
+    #Main loop:
     while True:
-        ret, frame = cap.read()
-
+        ret, frame = cap.read()                                 
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-
         faces = face_cascade.detectMultiScale(gray, 1.3, 5)
 
         if len(faces) == 0:
