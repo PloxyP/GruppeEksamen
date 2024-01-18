@@ -75,6 +75,7 @@ def showCalendar(events, ExitGUI):
 
     def logOff(ExitGUI):
         ExitGUI.value = True
+        time.sleep(2)
         gui.destroy()
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(24, GPIO.OUT)
