@@ -1,9 +1,9 @@
-import os
+#------------------------------IMPORTS----------------------------------------#
 import pygame
 import time
 from multiprocessing import Process, Value
 
-
+#-----------------------------FUNCTIONS---------------------------------------#
 def welcome_message(eyes_detected,KortGodkendt,KortScannet,ExitGUI):
     pygame.init()  # Initialize the pygame library
     # Screen Config
@@ -71,6 +71,7 @@ def DisplayText(Message, Rect, screen):
     screen.blit(Message, Rect)
     pygame.display.flip()
 
+#----------------------------MAIN-----------------------------------------#
 if __name__ == "__main__":
     eyes_detected = Value('b', False)  # Initial value
     KortGodkendt = Value('b', False)
