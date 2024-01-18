@@ -24,16 +24,16 @@ led_on = False                          #Pin on/off check
 led_pin = 24                            #GPIO pin (Ikke fysisk pin nummer)
 
 #----------------------------FUNCTIONS-----------------------------------------#
-#Function til at tænde LED:
+#GPIO setup function:
 def gpio_setup():
     GPIO.setmode(GPIO.BCM)              #Pin nummer sat til GPIO værdi.
     GPIO.setup(led_pin, GPIO.OUT)       #Pin mode sat til output
     GPIO.output(led_pin, GPIO.LOW)      #Start værdi sat som low(off)
 
+#LED functioner:
 def TurnLED_on():
     GPIO.output(led_pin, GPIO.HIGH)
 
-#Function til at slukke LED:
 def TurnLED_off():
     GPIO.output(led_pin, GPIO.LOW)
 
