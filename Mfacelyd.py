@@ -77,11 +77,11 @@ def face_detection(eyes_detected):
             TurnLED_off()
             led_on = False
         
-        if cv2.waitKey(1) == ord('q'):
-            break
+    #     if cv2.waitKey(1) == ord('q'):
+    #         break
 
-    cap.release()
-    cv2.destroyAllWindows()
+    # cap.release()
+    # cv2.destroyAllWindows()
 
 #----------------------------MAIN-----------------------------------------#
 #Main statement:
