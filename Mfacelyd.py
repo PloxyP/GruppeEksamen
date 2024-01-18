@@ -1,10 +1,12 @@
+#------------------------------IMPORTS----------------------------------------#
 import cv2
 from multiprocessing import Process, Value
 from Mwelcome import welcome_message
 from Mgreetingbot import rfid_function
 import RPi.GPIO as GPIO
 
-#Delte variabler til multiprocessing:
+#----------------------------GLOBAL SETUP-------------------------------------#
+#Multiprocess variabler:
 eyes_detected = Value('b', False)       #Variabel for om øjne er detekteret i Mfacelyd.py
 KortGodkendt = Value('b', False)        #Variabel for om kort er godkendt i Mgreetingbot.py
 KortScannet = Value('b', False)         #Variabel for om kort er scannet i Mgreetingbot.py
@@ -12,64 +14,67 @@ ExitGUI = Value('b', False)             #Variabel for om GUI bliver exittet i Mg
 
 #Open CV indstillinger:
 cap = cv2.VideoCapture(0)               #Index for valg af camera
-
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)  #Sat billede bredde
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480) #Sat billede højde
 cap.set(cv2.CAP_PROP_FPS, 30)           #Sat billeder per sekund
 
 #Globale variabler:
-face_detected = False               #Variabel for om ansigt er detekteret
+face_detected = False                   #Variabel for om ansigt er detekteret
 led_on = False                          #Pin on/off check
 led_pin = 24                            #GPIO pin (Ikke fysisk pin nummer)
 
-#GPIO startup:
-GPIO.setmode(GPIO.BCM)                  #Pin nummer sat til GPIO værdi.
-GPIO.setup(led_pin, GPIO.OUT)           #Pin mode sat til output
-GPIO.output(led_pin, GPIO.LOW)          #Start værdi sat som low(off)
-
+#----------------------------FUNCTIONS-----------------------------------------#
 #Function til at tænde LED:
-def welcome_led():
+def gpio_setup():
+    GPIO.setmode(GPIO.BCM)              #Pin nummer sat til GPIO værdi.
+    GPIO.setup(led_pin, GPIO.OUT)       #Pin mode sat til output
+    GPIO.output(led_pin, GPIO.LOW)      #Start værdi sat som low(off)
+
+def TurnLED_on():
     GPIO.output(led_pin, GPIO.HIGH)
 
 #Function til at slukke LED:
-def goodbye_led():
+def TurnLED_off():
     GPIO.output(led_pin, GPIO.LOW)
 
 #Main function (Køre fra starten i multiprocess):
 def face_detection(eyes_detected):
-    global face_detected, led_on                                #Henter global variabler
+    global face_detected, led_on                            #Henter global variabler
     
     #Main loop:
     while True:
-        ret, frame = cap.read()                                 
-        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        faces = face_cascade.detectMultiScale(gray, 1.3, 5)
-
+        ret, frame = cap.read()                             #Variabel med nuværende billede fra video enhed               
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)      #Konvertere frame fra BGR til grayscale
+        faces = face_cascade.detectMultiScale(gray, 1.3, 5) #Bruger face_cascade til at detektere ansigter i billedet (1.3 = scaling factor så 30% reduktion, 5 = neighbor rektangler)
+        
+        #If statement for om ansigt er detekteret i billedet
         if len(faces) == 0:
             face_detected = False
         else:
             face_detected = True
 
+        #For loop - face detection
         for (x, y, w, h) in faces:
-            cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 5)
-            roi_gray = gray[y:y+w, x:x+w]
-            roi_color = frame[y:y+h, x:x+w]
-            eyes = eye_cascade.detectMultiScale(roi_gray, 1.3, 8)
+            cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 5)    #Tegner firkanter på ansigter
+            roi_gray = gray[y:y+w, x:x+w]                                   #Grey scale region of interrest
+            roi_color = frame[y:y+h, x:x+w]                                 #Frame region of interrest
+            eyes = eye_cascade.detectMultiScale(roi_gray, 1.3, 8)           #Bruger eye_cascade til at detektere øjne i billedet
 
+            #For loop - øjen detektion
             for (ex, ey, ew, eh) in eyes:
                 cv2.rectangle(roi_color, (ex, ey), (ex + ew, ey + eh), (0, 255, 0), 5)
                 if not eyes_detected.value:
-                    eyes_detected.value = True
+                    eyes_detected.value = True                              #Multiprocess variabel ændring for øjen detektion
 
-        #cv2.imshow('frame', frame)
+        #cv2.imshow('frame', frame)                                         #Live visning vindue af video preview (frames)
 
         #Turns on LED
         if face_detected == True and led_on == False:
-            welcome_led()
+            TurnLED_on()
             led_on = True
 
         if face_detected == False and led_on == True:
-            goodbye_led()
+            TurnLED_off()
             led_on = False
         
         if cv2.waitKey(1) == ord('q'):
@@ -78,6 +83,7 @@ def face_detection(eyes_detected):
     cap.release()
     cv2.destroyAllWindows()
 
+#----------------------------MAIN-----------------------------------------#
 #Main statement:
 if __name__ == "__main__":
     
@@ -88,6 +94,9 @@ if __name__ == "__main__":
     face_process = Process(target=face_detection, args=(eyes_detected,))                                        #Laver et objekt af eyes_detected variablen og sender til kørende process function - face_detection i Mfacelyd.py og giver værdien til face_process variablen.
     welcome_process = Process(target=welcome_message, args=(eyes_detected,KortGodkendt,KortScannet,ExitGUI))    #Laver et objekt af eyes_detected, KortGodkendt, KortScannet og ExitGUI variablerne og sender til kørende process function - welcome_messsage i Mwelcome.py og giver værdien til welcome_process variablen.
     calender_process = Process(target=rfid_function, args=(KortGodkendt,KortScannet,ExitGUI))                   #Laver et objekt af KortGodkendt, KortScannet og ExitGUI variablerne og sender til kørende process function - rfid_function i Mgreetingbot.py og giver værdien til calender_process variablen.
+
+    #GPIO setup:
+    gpio_setup()
 
     #Starter alle processer:
     face_process.start()
