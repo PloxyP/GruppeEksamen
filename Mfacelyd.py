@@ -4,20 +4,20 @@ from Mwelcome import welcome_message
 from Mgreetingbot import rfid_function
 import RPi.GPIO as GPIO
 
-#Delte variabler til multiprocessing
+#Delte variabler til multiprocessing:
 eyes_detected = Value('b', False)       #Variabel for om øjne er detekteret i Mfacelyd.py
 KortGodkendt = Value('b', False)        #Variabel for om kort er godkendt i Mgreetingbot.py
 KortScannet = Value('b', False)         #Variabel for om kort er scannet i Mgreetingbot.py
 ExitGUI = Value('b', False)             #Variabel for om GUI bliver exittet i Mgreetingbot.py
 
-#Open CV functioner:
+#Open CV indstillinger:
 cap = cv2.VideoCapture(0)               #Index for valg af camera
 
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)  #Sat billede bredde
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480) #Sat billede højde
 cap.set(cv2.CAP_PROP_FPS, 30)           #Sat billeder per sekund
 
-#Globale variabler
+#Globale variabler:
 face_detected = False               #Variabel for om ansigt er detekteret
 led_on = False                          #Pin on/off check
 led_pin = 24                            #GPIO pin (Ikke fysisk pin nummer)
@@ -27,15 +27,15 @@ GPIO.setmode(GPIO.BCM)                  #Pin nummer sat til GPIO værdi.
 GPIO.setup(led_pin, GPIO.OUT)           #Pin mode sat til output
 GPIO.output(led_pin, GPIO.LOW)          #Start værdi sat som low(off)
 
-#Function til at tænde LED
+#Function til at tænde LED:
 def welcome_led():
     GPIO.output(led_pin, GPIO.HIGH)
 
-#Function til at slukke LED
+#Function til at slukke LED:
 def goodbye_led():
     GPIO.output(led_pin, GPIO.LOW)
 
-#Main function (Køre fra starten i multiprocess)
+#Main function (Køre fra starten i multiprocess):
 def face_detection(eyes_detected):
     global face_detected, led_on
     
@@ -81,22 +81,24 @@ def face_detection(eyes_detected):
 
 #Main statement:
 if __name__ == "__main__":
-    face_cascade = cv2.CascadeClassifier('/home/gruppesjov/opencv/data/haarcascades/haarcascade_frontalface_default.xml')
+    
+    #Henter face_cascade og eye_cascade til ansigts- og øjengenkendelse fra opencv til variabel
+    face_cascade = cv2.CascadeClassifier('/home/gruppesjov/opencv/data/haarcascades/haarcascade_frontalface_default.xml') 
     eye_cascade = cv2.CascadeClassifier('/home/gruppesjov/opencv/data/haarcascades/haarcascade_eye.xml')
     
-    face_process = Process(target=face_detection, args=(eyes_detected,))
-    welcome_process = Process(target=welcome_message, args=(eyes_detected,KortGodkendt,KortScannet,ExitGUI))
-    program3_process = Process(target=rfid_function, args=(KortGodkendt,KortScannet,ExitGUI))  # Add this line
+    face_process = Process(target=face_detection, args=(eyes_detected,))                                        #Laver et objekt af eyes_detected variablen og sender til kørende process function - face_detection i Mfacelyd.py og giver værdien til face_process variablen.
+    welcome_process = Process(target=welcome_message, args=(eyes_detected,KortGodkendt,KortScannet,ExitGUI))    #Laver et objekt af eyes_detected, KortGodkendt, KortScannet og ExitGUI variablerne og sender til kørende process function - welcome_messsage i Mwelcome.py og giver værdien til welcome_process variablen.
+    calender_process = Process(target=rfid_function, args=(KortGodkendt,KortScannet,ExitGUI))                   #Laver et objekt af KortGodkendt, KortScannet og ExitGUI variablerne og sender til kørende process function - rfid_function i Mgreetingbot.py og giver værdien til calender_process variablen.
 
-    # Start all processes
+    #Starter alle processer:
     face_process.start()
     welcome_process.start()
-    program3_process.start()  # Add this line
+    calender_process.start()
 
-    # Wait for all processes to finish before exiting
+    #Lukker alle processer:
     face_process.join()
     welcome_process.join()
-    program3_process.join()  # Add this line
+    calender_process.join()
 
-    # Cleanup GPIO
+    #Rengører GPIOs:
     GPIO.cleanup()
