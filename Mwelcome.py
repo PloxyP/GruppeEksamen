@@ -83,8 +83,9 @@ if __name__ == "__main__":
     KortGodkendt = Value('b', False)
     KortScannet = Value('b', False)
     ExitGUI = Value('b', False)
-    
-    welcome_process = Process(target=welcome_message, args=(eyes_detected,KortGodkendt,KortScannet,ExitGUI))
+
+    #Sender variabel i form a objekt til kørende process function:
+    welcome_process = Process(target=welcome_message, args=(eyes_detected,KortGodkendt,KortScannet,ExitGUI))    #Program: Mwelcome.py - Function: welcome_message - Objekt: eyes_detected, KortGodkendt, KortScannet, ExitGUI
 
     #Starter process:
     welcome_process.start()

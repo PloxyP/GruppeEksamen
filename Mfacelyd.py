@@ -87,11 +87,11 @@ def face_detection(eyes_detected):
 #Main statement:
 if __name__ == "__main__":
     
-    #Henter face_cascade og eye_cascade til ansigts- og øjengenkendelse fra opencv til variabel
+    #Henter face_cascade og eye_cascade til ansigts- og øjengenkendelse fra opencv til variabel:
     face_cascade = cv2.CascadeClassifier('/home/gruppesjov/opencv/data/haarcascades/haarcascade_frontalface_default.xml') 
     eye_cascade = cv2.CascadeClassifier('/home/gruppesjov/opencv/data/haarcascades/haarcascade_eye.xml')
     
-    #Sender variabel i form a objekt til kørende process function
+    #Sender variabel i form a objekt til kørende process function:
     face_process = Process(target=face_detection, args=(eyes_detected,))                                        #Program: Mfacelys.py - Function: face_detection - Objekt: eyes_detected                                        
     welcome_process = Process(target=welcome_message, args=(eyes_detected,KortGodkendt,KortScannet,ExitGUI))    #Program: Mwelcome.py - Function: welcome_message - Objekt: eyes_detected, KortGodkendt, KortScannet, ExitGUI
     calender_process = Process(target=rfid_function, args=(KortGodkendt,KortScannet,ExitGUI))                   #Program: Mgreetingbot.py - Function: rfid_function - Objekt: KortGodkendt, KortScannet, ExitGUI
