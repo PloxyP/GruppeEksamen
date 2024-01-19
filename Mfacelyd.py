@@ -91,9 +91,10 @@ if __name__ == "__main__":
     face_cascade = cv2.CascadeClassifier('/home/gruppesjov/opencv/data/haarcascades/haarcascade_frontalface_default.xml') 
     eye_cascade = cv2.CascadeClassifier('/home/gruppesjov/opencv/data/haarcascades/haarcascade_eye.xml')
     
-    face_process = Process(target=face_detection, args=(eyes_detected,))                                        #Laver et objekt af eyes_detected variablen og sender til kørende process function - face_detection i Mfacelyd.py og giver værdien til face_process variablen.
-    welcome_process = Process(target=welcome_message, args=(eyes_detected,KortGodkendt,KortScannet,ExitGUI))    #Laver et objekt af eyes_detected, KortGodkendt, KortScannet og ExitGUI variablerne og sender til kørende process function - welcome_messsage i Mwelcome.py og giver værdien til welcome_process variablen.
-    calender_process = Process(target=rfid_function, args=(KortGodkendt,KortScannet,ExitGUI))                   #Laver et objekt af KortGodkendt, KortScannet og ExitGUI variablerne og sender til kørende process function - rfid_function i Mgreetingbot.py og giver værdien til calender_process variablen.
+    #Sender variabel i form a objekt til kørende process function
+    face_process = Process(target=face_detection, args=(eyes_detected,))                                        #Program: Mfacelys.py - Function: face_detection - Objekt: eyes_detected                                        
+    welcome_process = Process(target=welcome_message, args=(eyes_detected,KortGodkendt,KortScannet,ExitGUI))    #Program: Mwelcome.py - Function: welcome_message - Objekt: eyes_detected, KortGodkendt, KortScannet, ExitGUI
+    calender_process = Process(target=rfid_function, args=(KortGodkendt,KortScannet,ExitGUI))                   #Program: Mgreetingbot.py - Function: rfid_function - Objekt: KortGodkendt, KortScannet, ExitGUI
 
     #GPIO setup:
     gpio_setup()

@@ -4,22 +4,25 @@ import time
 from multiprocessing import Process, Value
 
 #-----------------------------FUNCTIONS---------------------------------------#
+#Main function (Køre fra starten i multiprocess):
 def welcome_message(eyes_detected,KortGodkendt,KortScannet,ExitGUI):
-    pygame.init()  # Initialize the pygame library
-    # Screen Config
-    #screen = pygame.display.set_mode((800, 480), pygame.FULLSCREEN)
-    screen = pygame.display.set_mode((1920, 1080), pygame.FULLSCREEN)
-    pygame.display.set_caption('Welcome Message')
-    font = pygame.font.Font(None, 36)
+    pygame.init()                                                               #Pygame start
+    #screen = pygame.display.set_mode((800, 480), pygame.FULLSCREEN)            
+    screen = pygame.display.set_mode((1920, 1080), pygame.FULLSCREEN)           #Display resolution indstillinger
+    pygame.display.set_caption('Welcome Message')                               #Sæt caption
+    font = pygame.font.Font(None, 36)                                           #Sæt font
 
-    #Indenfor if
+    #Skærm beskeder instillinger:
     welcome_message2 = font.render('Scan your card', True, (255, 255, 255))
     welcome_message1 = font.render('Welcome!', True, (255, 255, 255))
     godkendt_message = font.render('Card Accepted!', True, (255, 255, 255))
     declined_message = font.render('Card Declined!', True, (255, 255, 255))
     welcome_rect = welcome_message2.get_rect(center=(400, 240))
-    current_message = None  # Track the current displayed message
+    
+    #Variabel til nuværende besked værdi
+    current_message = None
 
+    #Main loop:
     while True:
         if eyes_detected.value and KortScannet.value == False:
             # Display "Scan your card" message
@@ -72,15 +75,19 @@ def DisplayText(Message, Rect, screen):
     pygame.display.flip()
 
 #----------------------------MAIN-----------------------------------------#
+#Main statement:
 if __name__ == "__main__":
-    eyes_detected = Value('b', False)  # Initial value
+
+    #Multiprocess variabler:
+    eyes_detected = Value('b', False)
     KortGodkendt = Value('b', False)
     KortScannet = Value('b', False)
     ExitGUI = Value('b', False)
+    
     welcome_process = Process(target=welcome_message, args=(eyes_detected,KortGodkendt,KortScannet,ExitGUI))
 
-    # Start the process
+    #Starter process:
     welcome_process.start()
 
-    # Wait for the process to finish before exiting
+    #Lukker process:
     welcome_process.join()
