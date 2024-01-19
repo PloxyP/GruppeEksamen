@@ -8,7 +8,7 @@ from multiprocessing import Process, Value
 def welcome_message(eyes_detected,KortGodkendt,KortScannet,ExitGUI):
     pygame.init()                                                               #Pygame start
     #screen = pygame.display.set_mode((800, 480), pygame.FULLSCREEN)            
-    screen = pygame.display.set_mode((1920, 1080), pygame.FULLSCREEN)           #Display resolution indstillinger
+    screen = pygame.display.set_mode((1920, 1080), pygame.FULLSCREEN)           #Display indstillinger
     pygame.display.set_caption('Welcome Message')                               #Sæt caption
     font = pygame.font.Font(None, 36)                                           #Sæt font
 
@@ -24,55 +24,55 @@ def welcome_message(eyes_detected,KortGodkendt,KortScannet,ExitGUI):
 
     #Main loop:
     while True:
-        if eyes_detected.value and KortScannet.value == False:
-            # Display "Scan your card" message
+        
+        #If statement hvis Kort er ulæst og øjne er detekteret
+        if eyes_detected.value and KortScannet.value == False:                  
             if current_message != welcome_message2:
-                current_message = welcome_message2
-                DisplayText(welcome_message2, welcome_rect, screen)
-                time.sleep(5)  # Adjust the duration as needed
-                eyes_detected.value = False  # Reset the variable after displaying the message
+                current_message = welcome_message2                              #Sætter current message check til nuværende tekst
+                DisplayText(welcome_message2, welcome_rect, screen)             #Sætter skærmtekst med parametre
+                time.sleep(5)                                                   #Delay før ændring i tekst
+                eyes_detected.value = False                                     #Reset multiprocess øjne detekteret check til False
 
+        #Elif statement hvis kort er læst og godkendt
         elif KortScannet.value == True and KortGodkendt.value == True:
             if current_message != godkendt_message:
-                current_message = godkendt_message
-                DisplayText(godkendt_message, welcome_rect, screen)
-                time.sleep(5)  # Adjust the duration as needed
-                eyes_detected.value = False  # Reset the variable after displaying the message
-                KortScannet.value = False
-                KortGodkendt.value = False
-                
+                current_message = godkendt_message                              #Sætter current message check til nuværende tekst
+                DisplayText(godkendt_message, welcome_rect, screen)             #Sætter skærmtekst med parametre
+                time.sleep(5)                                                   #Delay før ændring i tekst
+                eyes_detected.value = False                                     #Reset multiprocess øjne detekteret check til False
+                KortScannet.value = False                                       #Reset multiprocess kortscan check til False                             
+                KortGodkendt.value = False                                      #Reset multiprocess kortgodkendt check til False  
+        
+        #Elif statement hvis kort er læst men ikke godkendt
         elif KortScannet.value == True and KortGodkendt.value == False:
             if current_message != declined_message:
-                current_message = declined_message
-                DisplayText(declined_message, welcome_rect, screen)
-                time.sleep(5)  # Adjust the duration as needed
-                eyes_detected.value = False  # Reset the variable after displaying the message
-                KortScannet.value = False
-                KortGodkendt.value = False
+                current_message = declined_message                              #Sætter current message check til nuværende tekst
+                DisplayText(declined_message, welcome_rect, screen)             #Sætter skærmtekst med parametre
+                time.sleep(5)                                                   #Delay før ændring i tekst
+                eyes_detected.value = False                                     #Reset multiprocess øjne detekteret check til False
+                KortScannet.value = False                                       #Reset multiprocess kortscan check til False
+        
         else:
-            # Display the first welcome message
             if current_message != welcome_message1:
-                current_message = welcome_message1
-                DisplayText(welcome_message1, welcome_rect, screen)
-                print(ExitGUI.value)
+                current_message = welcome_message1                              #Sætter current message check til nuværende tekst
+                DisplayText(welcome_message1, welcome_rect, screen)             #Sætter skærmtekst med parametre
 
+        #If statement om GUI er exittet i Mgreetingbot.py
         if ExitGUI.value == True:
-            screen = pygame.display.set_mode((1920, 1080), pygame.FULLSCREEN)
-            print("FullscreenOn!")
-            DisplayText(welcome_message1, welcome_rect, screen)
-            ExitGUI.value = False
+            screen = pygame.display.set_mode((1920, 1080), pygame.FULLSCREEN)   #Display indstillinger
+            DisplayText(welcome_message1, welcome_rect, screen)                 #Forny welcome besked
+            ExitGUI.value = False                                               #Resetter GUI exit check til False
 
+        # for event in pygame.event.get():
+        #     if event.type == pygame.QUIT:
+        #         pygame.quit()
 
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-
-
+#Display text instillinger
 def DisplayText(Message, Rect, screen):
-    background_color = (0, 0, 0)
-    screen.fill(background_color)
-    screen.blit(Message, Rect)
-    pygame.display.flip()
+    background_color = (0, 0, 0)                                                #Variabel med farve værdi
+    screen.fill(background_color)                                               #Sætter baggrunds farve
+    screen.blit(Message, Rect)                                                  #Skriver tekst på baggrunden
+    pygame.display.flip()                                                       #Updatere displayet
 
 #----------------------------MAIN-----------------------------------------#
 #Main statement:
