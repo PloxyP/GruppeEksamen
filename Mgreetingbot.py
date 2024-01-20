@@ -69,7 +69,11 @@ def showCalendar(events, ExitGUI):                      #GUI funktion der laver 
     gui = Tk()
     gui.config(background='grey')
     gui.title("Teamup Calendar")
-    gui.attributes("-fullscreen", True) 
+    gui.attributes("-fullscreen", True)                 #undersøg on dette er årsagen til ikke full 2nd gang
+
+
+##############Log Off altid on top #########################
+    
 
     # Frame for the Log Off button                      #sæt layout øverst og placering af Log Off knappen
     top_frame = Frame(gui, bg='grey')
@@ -83,8 +87,12 @@ def showCalendar(events, ExitGUI):                      #GUI funktion der laver 
         GPIO.setup(24, GPIO.OUT)
         GPIO.output(24, GPIO.LOW)
 
+
+#####################Log Off Layout #########################################
+        
     Button(top_frame, text="Log Off", command=lambda: logOff(ExitGUI), font="Consolas 12 bold", padx=10, pady=5).pack(side='right', padx=20, pady=20) #udsenende af Log Off
 
+##############################Scroll######################################
     #Scroll funktion på kalenderen
     canvas = Canvas(gui, bg='grey')
     scrollbar = Scrollbar(gui, orient="vertical", command=canvas.yview)
@@ -107,6 +115,8 @@ def showCalendar(events, ExitGUI):                      #GUI funktion der laver 
 
     canvas.bind("<Button-1>", start_scroll)
     canvas.bind("<B1-Motion>", perform_scroll)
+############################### Layout og opsætning af enkelte kalender inputs ############################
+    
 
     # Indsættelse af data i layout. description og locations ect fra teamup kalender
     for event in events:
@@ -123,9 +133,11 @@ def showCalendar(events, ExitGUI):                      #GUI funktion der laver 
         Label(event_frame, text=f"Location: {event_location}", font="Consolas 12", bg='lightgrey').pack(anchor='w', padx=10, pady=2)
         Label(event_frame, text=f"Description: {event_description}", font="Consolas 12", bg='lightgrey', wraplength=500).pack(anchor='w', padx=10, pady=2)
 
-    gui.mainloop()          #GUI layout loop
+    gui.mainloop()                                               #GUI layout loop
 
-#RFID Reader og Thingspeak datacollector
+
+
+################RFID Reader og Thingspeak datacollector######################################
 def read_rfid(reader, channel, card_calendar_map):      #Fuktion for RFID læseren og data der sendes til thingspeak.com
     global total_reads                                  #Gøre total_reads til global
     try:
@@ -143,7 +155,7 @@ def read_rfid(reader, channel, card_calendar_map):      #Fuktion for RFID læser
         print(f"Total reads count updated on ThingSpeak: {total_reads}")
 
         # Hvis kort ID er i vores system og ordbog, sendes det til field3 så vi kan få registeret brugerne
-        if str(id) in card_calendar_map:
+        if str(id) in card_calendar_map.key:
             calendar_key = card_calendar_map[str(id)]
             calendar_key_response = channel.update({'field3': id})
             print(f"Calendar key '{calendar_key}' sent to ThingSpeak for ID {id}")
@@ -155,10 +167,16 @@ def read_rfid(reader, channel, card_calendar_map):      #Fuktion for RFID læser
         print(f"Error: {e}")
 
         return str(id)
-    finally:
+    # tjek om vi kan ungår: 
+    #finally:
        # GPIO.cleanup()                             #Test for at undgår rengøring af GPIO
 
 def rfid_function(KortGodkendt, KortScannet,ExitGUI):       #RFID og åbning af kalender funktion
+
+
+    ###################skal sættes i toppe###############################
+    
+    
     api_url = "https://api.teamup.com"                      #adressen til kalenderen gennem API (fixed addresse)
     api_key = "699e02c0555e1804ea722d893851875e8444e8bf17199c8d8e46bc393a60f960"    #API nøgle til vores bestemt kalender database
     card_calendar_map = {                                   #Dictionary til hver kort der har hver deres kalender
@@ -169,7 +187,7 @@ def rfid_function(KortGodkendt, KortScannet,ExitGUI):       #RFID og åbning af 
     headers = {"Teamup-Token": api_key}                     #insætter token og api_key til vores get funktion
     reader = SimpleMFRC522()
     channel = thingspeak.Channel(id=channel_id, api_key=write_key)
-
+######################################### 
     while True:
         try:
             card_id = read_rfid(reader, channel, card_calendar_map)
