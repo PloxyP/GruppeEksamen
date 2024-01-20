@@ -1,3 +1,4 @@
+#------------------------------IMPORTS----------------------------------------#
 from tkinter import *
 import requests
 import json
@@ -12,8 +13,8 @@ from multiprocessing import Process, Value
 from pydub import AudioSegment
 from pydub.playback import play
 
+#----------------------------GLOBAL SETUP-------------------------------------#
 pygame.init()
-
 read_cards = set()
 
 # ThingSpeak channel details
@@ -26,6 +27,7 @@ KortGodkendt = Value('b', False)
 KortScannet = Value('b', False)
 ExitGUI = Value('b', False)
 
+#-----------------------------FUNCTIONS---------------------------------------#
 def play_sound(file_path):
     try:
         sound = AudioSegment.from_file(file_path, format="wav")
@@ -194,6 +196,7 @@ def rfid_function(KortGodkendt, KortScannet,ExitGUI):
         except Exception as e:
             print(f"An error occurred: {e}")
             time.sleep(1)
-            
+
+#----------------------------MAIN-----------------------------------------#            
 if __name__ == '__main__':
     rfid_function(KortGodkendt, KortScannet, ExitGUI)
