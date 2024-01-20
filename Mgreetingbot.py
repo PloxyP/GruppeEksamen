@@ -48,44 +48,44 @@ def declined_sound():
 
 #Calendar teamup API og Dictionary 
 
-def fetchEvents(api_url, headers, calendar_key):
-    start_date = datetime.now()
+def fetchEvents(api_url, headers, calendar_key):        #Henter kalenderdata fra teamup.com
+    start_date = datetime.now()                         #datetime til brug af, fra hvornår henter vi data fra nu og 7 dage frem
     end_date = start_date + timedelta(days=7)
 
-    params = {
+    params = {                                          #yderligere indeling i åååå-mm-dd på start og slut gennem datetime
         'startDate': start_date.strftime('%Y-%m-%d'),
         'endDate': end_date.strftime('%Y-%m-%d')
     }
 
-    request_url = f"{api_url}/{calendar_key}/events"
-    response = requests.get(request_url, headers=headers, params=params)
-    if response.status_code == 200:
+    request_url = f"{api_url}/{calendar_key}/events"    #Sammensætter det ønsket endpoint. api_url er fixed men calendar_key er ud fra card_reads
+    response = requests.get(request_url, headers=headers, params=params) #den endelig requst til teamup med endpoint, api key og datoer
+    if response.status_code == 200:                     #API check om alt går som det skal.
         return json.loads(response.text)['events']
     else:
         print("Failed to fetch events")
         return []
     
-def showCalendar(events, ExitGUI):
+def showCalendar(events, ExitGUI):                      #GUI funktion der laver viser et visuel layout
     gui = Tk()
     gui.config(background='grey')
     gui.title("Teamup Calendar")
     gui.attributes("-fullscreen", True) 
 
-    # Frame for the Log Off button
+    # Frame for the Log Off button                      #sæt layout øverst og placering af Log Off knappen
     top_frame = Frame(gui, bg='grey')
     top_frame.pack(side='top', fill='x')
 
-    def logOff(ExitGUI):
-        ExitGUI.value = True
-        time.sleep(2)
-        gui.destroy()
-        GPIO.setmode(GPIO.BCM)
+    def logOff(ExitGUI):                                #Når Log Off knappen bliver trykker lukker den kalenderen 
+        ExitGUI.value = True                            #Bool som ændre statement i multiprocessing
+        time.sleep(2)                                   #Tid til multiprocessing at reagerer
+        gui.destroy()                                   #luk kalender layout ned
+        GPIO.setmode(GPIO.BCM)                          #reset lyset op igen
         GPIO.setup(24, GPIO.OUT)
         GPIO.output(24, GPIO.LOW)
 
-    Button(top_frame, text="Log Off", command=lambda: logOff(ExitGUI), font="Consolas 12 bold", padx=10, pady=5).pack(side='right', padx=20, pady=20)
+    Button(top_frame, text="Log Off", command=lambda: logOff(ExitGUI), font="Consolas 12 bold", padx=10, pady=5).pack(side='right', padx=20, pady=20) #udsenende af Log Off
 
-    # Scrollable Canvas
+    #Scroll funktion på kalenderen
     canvas = Canvas(gui, bg='grey')
     scrollbar = Scrollbar(gui, orient="vertical", command=canvas.yview)
     scrollable_frame = Frame(canvas, bg='grey')
@@ -97,18 +97,18 @@ def showCalendar(events, ExitGUI):
     canvas.bind('<Configure>', lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
     canvas.create_window((0, 0), window=scrollable_frame, anchor='nw')
 
-    # Track the drag start point
+    # Funktion til scroll
     def start_scroll(event):
         canvas.scan_mark(event.x, event.y)
 
-    # Perform the scrolling
+    # Udførelse af scoll i forhold til hvor meget du scroll
     def perform_scroll(event):
         canvas.scan_dragto(event.x, event.y, gain=1)
 
     canvas.bind("<Button-1>", start_scroll)
     canvas.bind("<B1-Motion>", perform_scroll)
 
-    # Adding events to the scrollable_frame
+    # Indsættelse af data i layout. description og locations ect fra teamup kalender
     for event in events:
         start_time = datetime.fromisoformat(event['start_dt']).strftime("%A, %B %d, %Y %H:%M")
         end_time = datetime.fromisoformat(event['end_dt']).strftime("%H:%M") if 'end_dt' in event else 'Unknown'
@@ -123,14 +123,14 @@ def showCalendar(events, ExitGUI):
         Label(event_frame, text=f"Location: {event_location}", font="Consolas 12", bg='lightgrey').pack(anchor='w', padx=10, pady=2)
         Label(event_frame, text=f"Description: {event_description}", font="Consolas 12", bg='lightgrey', wraplength=500).pack(anchor='w', padx=10, pady=2)
 
-    gui.mainloop()
+    gui.mainloop()          #GUI layout loop
 
 #RFID Reader og Thingspeak datacollector
-def read_rfid(reader, channel):
-    global total_reads  # Declare total_reads as global
+def read_rfid(reader, channel):                         #Fuktion for RFID læseren og data der sendes til thingspeak.com
+    global total_reads                                  #Gøre total_reads til global
     try:
         print("Hold a card near the reader.")
-        id, text = reader.read()
+        id, text = reader.read()                        #læser RFID og printer kortnummer = ID
         print(id)
 
         # Send data to ThingSpeak for every read
