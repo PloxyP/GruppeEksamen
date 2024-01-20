@@ -126,23 +126,23 @@ def showCalendar(events, ExitGUI):                      #GUI funktion der laver 
     gui.mainloop()          #GUI layout loop
 
 #RFID Reader og Thingspeak datacollector
-def read_rfid(reader, channel):                         #Fuktion for RFID læseren og data der sendes til thingspeak.com
+def read_rfid(reader, channel, card_calendar_map):      #Fuktion for RFID læseren og data der sendes til thingspeak.com
     global total_reads                                  #Gøre total_reads til global
     try:
         print("Hold a card near the reader.")
-        id, text = reader.read()                        #læser RFID og printer kortnummer = ID
+        id = reader.read()                        #læser RFID og printer kortnummer = ID
         print(id)
 
-        # Send data to ThingSpeak for every read
-        response = channel.update({'field1': 1})
+        
+        response = channel.update({'field1': 1})        # Sender data til thingspeak.com field1 ved hver rfid læsning 
         print("Data sent to ThingSpeak")
 
         # Increment total reads count
-        total_reads += 1
+        total_reads += 1                                #tilføjer +1 til hver tal læst, så vi ser totalt læste tal og sender til field2
         total_users_response = channel.update({'field2': total_reads})
         print(f"Total reads count updated on ThingSpeak: {total_reads}")
 
-        # Check if the ID is in the card_calendar_map and send its key to ThingSpeak
+        # Hvis kort ID er i vores system og ordbog, sendes det til field3 så vi kan få registeret brugerne
         if str(id) in card_calendar_map:
             calendar_key = card_calendar_map[str(id)]
             calendar_key_response = channel.update({'field3': id})
@@ -156,26 +156,26 @@ def read_rfid(reader, channel):                         #Fuktion for RFID læser
 
         return str(id)
     finally:
-        GPIO.cleanup() 
+       # GPIO.cleanup()                             #Test for at undgår rengøring af GPIO
 
-def rfid_function(KortGodkendt, KortScannet,ExitGUI):
-    api_url = "https://api.teamup.com"
-    api_key = "699e02c0555e1804ea722d893851875e8444e8bf17199c8d8e46bc393a60f960"
-    card_calendar_map = {
+def rfid_function(KortGodkendt, KortScannet,ExitGUI):       #RFID og åbning af kalender funktion
+    api_url = "https://api.teamup.com"                      #adressen til kalenderen gennem API (fixed addresse)
+    api_key = "699e02c0555e1804ea722d893851875e8444e8bf17199c8d8e46bc393a60f960"    #API nøgle til vores bestemt kalender database
+    card_calendar_map = {                                   #Dictionary til hver kort der har hver deres kalender
         '2054232593': 'kskp2dg3mpgu24n3ww',
         '2206210585': 'ks2yz86rfe8sj5nvq1',
-        # Add more card IDs and their corresponding calendar keys
+        
     }
-    headers = {"Teamup-Token": api_key}
+    headers = {"Teamup-Token": api_key}                     #insætter token og api_key til vores get funktion
     reader = SimpleMFRC522()
     channel = thingspeak.Channel(id=channel_id, api_key=write_key)
 
     while True:
         try:
-            card_id = read_rfid(reader, channel)
+            card_id = read_rfid(reader, channel, card_calendar_map)
             print(f"Read card ID: {card_id}")
 
-            if card_id in card_calendar_map:
+            if card_id in card_calendar_map:                #hvir kort er i dictionary, så insætter den, den relevante endpoint og åbner unikke kalender
                 calendar_key = card_calendar_map[card_id]
                 print(f"Fetching events for calendar key: {calendar_key}")
                 events = fetchEvents(api_url, headers, calendar_key)
@@ -187,7 +187,7 @@ def rfid_function(KortGodkendt, KortScannet,ExitGUI):
                 else:
                     print("No events found or error in fetching events")
             else:
-                print("Card not recognized")
+                print("Card not recognized")                #hvis den ikke er kendt i dictionary viser den ikke genkendt og spiller fejl
                 KortScannet.value = True
                 KortGodkendt.value = False
                 declined_sound()
