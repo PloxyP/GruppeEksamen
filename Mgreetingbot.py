@@ -171,7 +171,7 @@ def read_rfid(reader, channel, card_calendar_map,):      #Fuktion for RFID læse
         return str(id)
     # tjek om vi kan ungår: 
     finally:
-        GPIO.cleanup()                             #Test for at undgår rengøring af GPIO
+        GPIO.cleanup()                            
 
 def rfid_function(KortGodkendt, KortScannet,ExitGUI):       #RFID og åbning af kalender funktion
 
@@ -179,7 +179,7 @@ def rfid_function(KortGodkendt, KortScannet,ExitGUI):       #RFID og åbning af 
     api_key = "699e02c0555e1804ea722d893851875e8444e8bf17199c8d8e46bc393a60f960"    #API nøgle til vores bestemt kalender database
     card_calendar_map = {                                   #Dictionary til hver kort der har hver deres kalender
             '2054232593': 'kskp2dg3mpgu24n3ww',
-            '2206210585': 'ks2yz86rfe8sj5nvq1',
+            '82227311396': 'ks2yz86rfe8sj5nvq1',
             
         }
     headers = {"Teamup-Token": api_key}                     #insætter token og api_key til vores get funktion
