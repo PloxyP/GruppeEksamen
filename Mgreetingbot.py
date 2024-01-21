@@ -22,6 +22,17 @@ channel_id = 2399393
 write_key = 'RS1DFZK1ZEULO72E'
 total_reads = 0  # Initialize total reads counter
 
+api_url = "https://api.teamup.com"                      #adressen til kalenderen gennem API (fixed addresse)
+api_key = "699e02c0555e1804ea722d893851875e8444e8bf17199c8d8e46bc393a60f960"    #API nøgle til vores bestemt kalender database
+card_calendar_map = {                                   #Dictionary til hver kort der har hver deres kalender
+        '2054232593': 'kskp2dg3mpgu24n3ww',
+        '2206210585': 'ks2yz86rfe8sj5nvq1',
+        
+    }
+headers = {"Teamup-Token": api_key}                     #insætter token og api_key til vores get funktion
+reader = SimpleMFRC522()
+channel = thingspeak.Channel(id=channel_id, api_key=write_key)
+
 #Delt variabel
 KortGodkendt = Value('b', False)
 KortScannet = Value('b', False)
@@ -144,21 +155,21 @@ def read_rfid(reader, channel, card_calendar_map):      #Fuktion for RFID læser
         print("Hold a card near the reader.")
         id = reader.read()                        #læser RFID og printer kortnummer = ID
         print(id)
-
+        total_reads += 1                                #tilføjer +1 til hver tal læst, så vi ser totalt læste tal og sender til field2
         
-        response = channel.update({'field1': 1})        # Sender data til thingspeak.com field1 ved hver rfid læsning 
+        channel.update({'field1': 1, 'field2': total_reads,  })        # Sender data til thingspeak.com field1 ved hver rfid læsning 
         print("Data sent to ThingSpeak")
 
-        # Increment total reads count
-        total_reads += 1                                #tilføjer +1 til hver tal læst, så vi ser totalt læste tal og sender til field2
-        total_users_response = channel.update({'field2': total_reads})
+             
+       
         print(f"Total reads count updated on ThingSpeak: {total_reads}")
 
         # Hvis kort ID er i vores system og ordbog, sendes det til field3 så vi kan få registeret brugerne
+        
         if str(id) in card_calendar_map.key:
-            calendar_key = card_calendar_map[str(id)]
-            calendar_key_response = channel.update({'field3': id})
-            print(f"Calendar key '{calendar_key}' sent to ThingSpeak for ID {id}")
+            
+            channel.update({'field3': id})
+            print(f"Calendar key sent to ThingSpeak)
         else:
             print(f"No calendar key found for ID {id}")
 
@@ -174,30 +185,17 @@ def read_rfid(reader, channel, card_calendar_map):      #Fuktion for RFID læser
 def rfid_function(KortGodkendt, KortScannet,ExitGUI):       #RFID og åbning af kalender funktion
 
 
-    ###################skal sættes i toppe###############################
-    
-    
-    api_url = "https://api.teamup.com"                      #adressen til kalenderen gennem API (fixed addresse)
-    api_key = "699e02c0555e1804ea722d893851875e8444e8bf17199c8d8e46bc393a60f960"    #API nøgle til vores bestemt kalender database
-    card_calendar_map = {                                   #Dictionary til hver kort der har hver deres kalender
-        '2054232593': 'kskp2dg3mpgu24n3ww',
-        '2206210585': 'ks2yz86rfe8sj5nvq1',
-        
-    }
-    headers = {"Teamup-Token": api_key}                     #insætter token og api_key til vores get funktion
-    reader = SimpleMFRC522()
-    channel = thingspeak.Channel(id=channel_id, api_key=write_key)
-######################################### 
-    while True:
+     while True:
         try:
-            card_id = read_rfid(reader, channel, card_calendar_map)
+            card_id = read_rfid(reader, channel, card_calendar_map, ExitGUI)
             print(f"Read card ID: {card_id}")
 
-            if card_id in card_calendar_map:                #hvir kort er i dictionary, så insætter den, den relevante endpoint og åbner unikke kalender
+            if card_id in card_calendar_map:                #hvis kort er i dictionary, så insætter den, den relevante endpoint og åbner unikke kalender
                 calendar_key = card_calendar_map[card_id]
                 print(f"Fetching events for calendar key: {calendar_key}")
                 events = fetchEvents(api_url, headers, calendar_key)
                 KortScannet.value = True
+
                 if events:
                     KortGodkendt.value = True
                     welcome_sound()
