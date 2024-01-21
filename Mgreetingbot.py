@@ -140,7 +140,7 @@ def showCalendar(events, ExitGUI):                      #GUI funktion der laver 
 
 
 ################RFID Reader og Thingspeak datacollector######################################
-def read_rfid(reader, channel, card_calendar_map):      #Fuktion for RFID læseren og data der sendes til thingspeak.com
+def read_rfid(reader, channel, card_calendar_map,):      #Fuktion for RFID læseren og data der sendes til thingspeak.com
     global total_reads                                  #Gøre total_reads til global
     try:
         print("Hold a card near the reader.")
@@ -188,7 +188,7 @@ def rfid_function(KortGodkendt, KortScannet,ExitGUI):       #RFID og åbning af 
 
     while True:
         try:
-            card_id = read_rfid(reader, channel, card_calendar_map, ExitGUI)
+            card_id = read_rfid(reader, channel, card_calendar_map)
             print(f"Read card ID: {card_id}")
 
             if card_id in card_calendar_map:                #hvis kort er i dictionary, så insætter den, den relevante endpoint og åbner unikke kalender
