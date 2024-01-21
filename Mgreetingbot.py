@@ -170,8 +170,8 @@ def read_rfid(reader, channel, card_calendar_map,):      #Fuktion for RFID læse
 
         return str(id)
     # tjek om vi kan ungår: 
-    #finally:
-       # GPIO.cleanup()                             #Test for at undgår rengøring af GPIO
+    finally:
+        GPIO.cleanup()                             #Test for at undgår rengøring af GPIO
 
 def rfid_function(KortGodkendt, KortScannet,ExitGUI):       #RFID og åbning af kalender funktion
 
