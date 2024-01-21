@@ -157,7 +157,7 @@ def read_rfid(reader, channel, card_calendar_map,):      #Fuktion for RFID læse
 
         # Hvis kort ID er i vores system og ordbog, sendes det til field3 så vi kan få registeret brugerne
         
-        if str(id) in card_calendar_map.key:
+        if str(id) in card_calendar_map.keys():
             
             channel.update({'field3': id})
             print(f"Calendar key sent to ThingSpeak")
