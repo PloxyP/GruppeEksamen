@@ -140,39 +140,41 @@ def showCalendar(events, ExitGUI):                      #GUI funktion der laver 
 
 
 ################RFID Reader og Thingspeak datacollector######################################
-def read_rfid(reader, channel, card_calendar_map):      #Fuktion for RFID læseren og data der sendes til thingspeak.com
-    global total_reads                                  #Gøre total_reads til global
+def read_rfid(reader, channel, card_calendar_map):
+    global total_reads
+
     try:
         print("Hold a card near the reader.")
-        id, text = reader.read()                        #læser RFID og printer kortnummer = ID
-        print(id)
-        total_reads += 1                                #tilføjer +1 til hver tal læst, så vi ser totalt læste tal og sender til field2
-        
-        channel.update({'field1': 1, 'field2': total_reads,  })        # Sender data til thingspeak.com field1 ved hver rfid læsning 
-        print("Data sent to ThingSpeak")
 
-             
-       
+        # Read the RFID card ID
+        card_id = reader.read()
+        print(card_id)
+
+        if str(card_id) in card_calendar_map:
+            # The ID is in the dictionary
+            channel.update({'field3': card_id})
+            print(f"RFID card ID '{card_id}' sent to ThingSpeak")
+        else:
+            # The ID is not in the dictionary
+            print(f"No calendar key found for ID {card_id}")
+
+        # Update the total reads count
+        total_reads += 1
         print(f"Total reads count updated on ThingSpeak: {total_reads}")
 
-        # Hvis kort ID er i vores system og ordbog, sendes det til field3 så vi kan få registeret brugerne
-        
-        if str(id) in card_calendar_map.keys():
-            
-            calendar_key = card_calendar_map[str(id)]
-            print(calendar_key)
-            channel.update({'field3': calendar_key})
-            print(f"Calendar key sent to ThingSpeak")
-        else:
-            print(f"No calendar key found for ID {id}")
+        # Send data to ThingSpeak
+        channel.update({'field1': 1, 'field2': total_reads})
+        print("Data sent to ThingSpeak")
 
-        return str(id)
+        return str(card_id)
+
     except Exception as e:
         print(f"Error: {e}")
 
-        return str(id)
-    # tjek om vi kan ungår: 
+        return str(card_id)
+
     finally:
+        # Clean up GPIO resources
         GPIO.cleanup()                            
 
 def rfid_function(KortGodkendt, KortScannet,ExitGUI):       #RFID og åbning af kalender funktion
