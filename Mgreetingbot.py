@@ -160,7 +160,7 @@ def read_rfid(reader, channel, card_calendar_map):      #Fuktion for RFID læser
         if str(id) in card_calendar_map.key:
             
             channel.update({'field3': id})
-            print(f"Calendar key sent to ThingSpeak)
+            print(f"Calendar key sent to ThingSpeak")
         else:
             print(f"No calendar key found for ID {id}")
 
