@@ -144,7 +144,7 @@ def read_rfid(reader, channel, card_calendar_map):      #Fuktion for RFID læser
     global total_reads                                  #Gøre total_reads til global
     try:
         print("Hold a card near the reader.")
-        id = reader.read()                        #læser RFID og printer kortnummer = ID
+        id, text = reader.read()                        #læser RFID og printer kortnummer = ID
         print(id)
         total_reads += 1                                #tilføjer +1 til hver tal læst, så vi ser totalt læste tal og sender til field2
         
