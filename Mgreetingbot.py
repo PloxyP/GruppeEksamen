@@ -22,16 +22,7 @@ channel_id = 2399393
 write_key = 'RS1DFZK1ZEULO72E'
 total_reads = 0  # Initialize total reads counter
 
-api_url = "https://api.teamup.com"                      #adressen til kalenderen gennem API (fixed addresse)
-api_key = "699e02c0555e1804ea722d893851875e8444e8bf17199c8d8e46bc393a60f960"    #API nøgle til vores bestemt kalender database
-card_calendar_map = {                                   #Dictionary til hver kort der har hver deres kalender
-        '2054232593': 'kskp2dg3mpgu24n3ww',
-        '2206210585': 'ks2yz86rfe8sj5nvq1',
-        
-    }
-headers = {"Teamup-Token": api_key}                     #insætter token og api_key til vores get funktion
-reader = SimpleMFRC522()
-channel = thingspeak.Channel(id=channel_id, api_key=write_key)
+
 
 #Delt variabel
 KortGodkendt = Value('b', False)
@@ -184,6 +175,16 @@ def read_rfid(reader, channel, card_calendar_map):      #Fuktion for RFID læser
 
 def rfid_function(KortGodkendt, KortScannet,ExitGUI):       #RFID og åbning af kalender funktion
 
+    api_url = "https://api.teamup.com"                      #adressen til kalenderen gennem API (fixed addresse)
+    api_key = "699e02c0555e1804ea722d893851875e8444e8bf17199c8d8e46bc393a60f960"    #API nøgle til vores bestemt kalender database
+    card_calendar_map = {                                   #Dictionary til hver kort der har hver deres kalender
+            '2054232593': 'kskp2dg3mpgu24n3ww',
+            '2206210585': 'ks2yz86rfe8sj5nvq1',
+            
+        }
+    headers = {"Teamup-Token": api_key}                     #insætter token og api_key til vores get funktion
+    reader = SimpleMFRC522()
+    channel = thingspeak.Channel(id=channel_id, api_key=write_key)
 
      while True:
         try:
