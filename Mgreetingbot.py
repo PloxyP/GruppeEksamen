@@ -38,11 +38,11 @@ def play_sound(file_path):
         print(f"Error playing sound: {e}")
 
 def welcome_sound():
-    print("TEST HEJ")
+   
     play_sound("check.wav")
 
 def declined_sound():
-    print("TEST FARVEL")
+    
     play_sound("declined.wav")
 
 #####################################
