@@ -186,7 +186,7 @@ def rfid_function(KortGodkendt, KortScannet,ExitGUI):       #RFID og åbning af 
     reader = SimpleMFRC522()
     channel = thingspeak.Channel(id=channel_id, api_key=write_key)
 
-     while True:
+    while True:
         try:
             card_id = read_rfid(reader, channel, card_calendar_map, ExitGUI)
             print(f"Read card ID: {card_id}")
