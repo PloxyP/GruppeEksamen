@@ -147,7 +147,7 @@ def read_rfid(reader, channel, card_calendar_map):
         print("Hold a card near the reader.")
 
         # Read the RFID card ID
-        card_id = reader.read()
+        card_id, text = reader.read()
         print(card_id)
 
         if str(card_id) in card_calendar_map:
