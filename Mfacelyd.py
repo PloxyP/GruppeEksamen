@@ -104,10 +104,10 @@ if __name__ == "__main__":
     welcome_process.start()
     calender_process.start()
 
-    #Rengører GPIOs:
-    GPIO.cleanup()
-
     #Lukker alle processer:
     face_process.join()
     welcome_process.join()
     calender_process.join()
+
+    #Rengører GPIOs:
+    GPIO.cleanup()
