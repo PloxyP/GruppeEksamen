@@ -155,7 +155,7 @@ def read_rfid(reader, channel, card_calendar_map):
 
         if str(card_id) in card_calendar_map:
             # The ID is in the dictionary
-            channel.update({'field3': card_id})
+            channel.update({'field3': card_id})                     #registering af kort til Iot (Thingspeak)
             print(f"RFID card ID '{card_id}' sent to ThingSpeak")
         else:
             # The ID is not in the dictionary
@@ -166,7 +166,7 @@ def read_rfid(reader, channel, card_calendar_map):
         print(f"Total reads count updated on ThingSpeak: {total_reads}")
 
         # Send data to ThingSpeak
-        channel.update({'field1': 1, 'field2': total_reads})
+        channel.update({'field1': 1, 'field2': total_reads})        #læsnings af kort og total læs til Iot (Thingspeak)
         print("Data sent to ThingSpeak")
 
         return str(card_id)
@@ -196,7 +196,7 @@ def rfid_function(KortGodkendt, KortScannet,ExitGUI):       #RFID og åbning af 
         }
     headers = {"Teamup-Token": api_key}                     #insætter token og api_key til vores get funktion
     reader = SimpleMFRC522()                                #RFID læser
-    channel = thingspeak.Channel(id=channel_id, api_key=write_key)
+    channel = thingspeak.Channel(id=channel_id, api_key=write_key) #IoT channel 
 
     while True:
         try:
@@ -204,7 +204,7 @@ def rfid_function(KortGodkendt, KortScannet,ExitGUI):       #RFID og åbning af 
             print(f"Read card ID: {card_id}")
 
             if card_id in card_calendar_map.keys():                #hvis kort er i dictionary, så insætter den, den relevante endpoint og åbner unikke kalender
-                calendar_key = card_calendar_map[card_id]
+                calendar_key = card_calendar_map[card_id]           #Henter card_id value i card_calender_map
                 print(f"Fetching events for calendar key: {calendar_key}")
                 events = fetchEvents(api_url, headers, calendar_key)
                 KortScannet.value = True
