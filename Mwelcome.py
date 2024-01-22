@@ -86,10 +86,10 @@ if __name__ == "__main__":
     ExitGUI = Value('b', False)
 
     #Sender variabel i form a objekt til kørende process function:
-    welcome_process = Process(target=welcome_message, args=(eyes_detected,KortGodkendt,KortScannet,ExitGUI))    #Program: Mwelcome.py - Function: welcome_message - Objekt: eyes_detected, KortGodkendt, KortScannet, ExitGUI
+    #welcome_process = Process(target=welcome_message, args=(eyes_detected,KortGodkendt,KortScannet,ExitGUI))    #Program: Mwelcome.py - Function: welcome_message - Objekt: eyes_detected, KortGodkendt, KortScannet, ExitGUI
 
     #Starter process:
-    welcome_process.start()
+    #welcome_process.start()
 
     #Lukker process:
-    welcome_process.join()
+    #welcome_process.join()

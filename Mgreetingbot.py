@@ -3,8 +3,8 @@ from tkinter import *
 import requests
 import json
 from datetime import datetime, timedelta
-import os
-import pygame
+# import os
+#import pygame
 import time
 from mfrc522 import SimpleMFRC522
 import RPi.GPIO as GPIO
@@ -14,7 +14,7 @@ from pydub import AudioSegment
 from pydub.playback import play
 
 #----------------------------GLOBAL SETUP-------------------------------------#
-pygame.init()
+#pygame.init()
 read_cards = set()
 
 # ThingSpeak channel details
@@ -160,6 +160,9 @@ def read_rfid(reader, channel, card_calendar_map):
         else:
             # The ID is not in the dictionary
             print(f"No calendar key found for ID {card_id}")
+            GPIO.setmode(GPIO.BCM)                          #reset lyset op igen
+            GPIO.setup(24, GPIO.OUT)
+            GPIO.output(24, GPIO.LOW)
 
         # Update the total reads count
         total_reads += 1
@@ -176,9 +179,9 @@ def read_rfid(reader, channel, card_calendar_map):
 
         return str(card_id)
 
-    finally:
+    #finally:
         # Clean up GPIO resources
-        GPIO.cleanup()                            
+        #GPIO.cleanup()                            
 
 #--------------------------------------Kortlæser og Kalender API, Studiekort database---------------------#
         
@@ -208,9 +211,9 @@ def rfid_function(KortGodkendt, KortScannet,ExitGUI):       #RFID og åbning af 
                 print(f"Fetching events for calendar key: {calendar_key}")
                 events = fetchEvents(api_url, headers, calendar_key)
                 KortScannet.value = True
+                KortGodkendt.value = True
 
                 if events:
-                    KortGodkendt.value = True
                     welcome_sound()
                     showCalendar(events, ExitGUI)
                 else:
@@ -221,10 +224,10 @@ def rfid_function(KortGodkendt, KortScannet,ExitGUI):       #RFID og åbning af 
                 KortGodkendt.value = False
                 declined_sound()
 
-            time.sleep(1)
+            #time.sleep(1)
         except Exception as e:
             print(f"An error occurred: {e}")
-            time.sleep(1)
+            #time.sleep(1)
 
 #----------------------------MAIN-----------------------------------------#            
 if __name__ == '__main__':
