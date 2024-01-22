@@ -179,9 +179,9 @@ def read_rfid(reader, channel, card_calendar_map):
 
         return str(card_id)
 
-    #finally:
+    finally:
         # Clean up GPIO resources
-        #GPIO.cleanup()                            
+        GPIO.cleanup()                          
 
 #--------------------------------------Kortlæser og Kalender API, Studiekort database---------------------#
         
