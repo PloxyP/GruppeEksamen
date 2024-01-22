@@ -30,6 +30,9 @@ KortScannet = Value('b', False)
 ExitGUI = Value('b', False)
 
 #-----------------------------FUNCTIONS---------------------------------------#
+
+
+#---------------------------Sound function-----------------------------------#
 def play_sound(file_path):
     try:
         sound = AudioSegment.from_file(file_path, format="wav")
@@ -48,7 +51,7 @@ def declined_sound():
 #####################################
     
 
-#Calendar teamup API og Dictionary 
+#--------------------------Calendar teamup API og timedat Dictionary function --------------------------#
 
 def fetchEvents(api_url, headers, calendar_key):        #Henter kalenderdata fra teamup.com
     start_date = datetime.now()                         #datetime til brug af, fra hvornår henter vi data fra nu og 7 dage frem
@@ -67,20 +70,20 @@ def fetchEvents(api_url, headers, calendar_key):        #Henter kalenderdata fra
         print("Failed to fetch events")
         return []
     
-def showCalendar(events, ExitGUI):                      #GUI funktion der laver viser et visuel layout
+def showCalendar(events, ExitGUI):                      #GUI funktion der laver visuel layout
     gui = Tk()
     gui.config(background='grey')
     gui.title("Teamup Calendar")
     gui.attributes("-fullscreen", True)                 #undersøg on dette er årsagen til ikke full 2nd gang
 
 
-##############Log Off altid on top #########################
+#-------------------------------------Log Off altid on top ---------------------------#
     
 
     # Frame for the Log Off button                      #sæt layout øverst og placering af Log Off knappen
     top_frame = Frame(gui, bg='grey')
     top_frame.pack(side='top', fill='x')
-
+#--------------------------------Log Off knap funktion-------------------------------------------------#
     def logOff(ExitGUI):                                #Når Log Off knappen bliver trykker lukker den kalenderen 
         ExitGUI.value = True                            #Bool som ændre statement i multiprocessing
         time.sleep(2)                                   #Tid til multiprocessing at reagerer
@@ -90,11 +93,11 @@ def showCalendar(events, ExitGUI):                      #GUI funktion der laver 
         GPIO.output(24, GPIO.LOW)
 
 
-#####################Log Off Layout #########################################
+#----------------------------------------Log Off Layout ----------------------------------------------------#
         
     Button(top_frame, text="Log Off", command=lambda: logOff(ExitGUI), font="Consolas 12 bold", padx=10, pady=5).pack(side='right', padx=20, pady=20) #udsenende af Log Off
 
-##############################Scroll######################################
+#------------------------------Scroll------------------------------------------------------------------#
     #Scroll funktion på kalenderen
     canvas = Canvas(gui, bg='grey')
     scrollbar = Scrollbar(gui, orient="vertical", command=canvas.yview)
@@ -117,7 +120,7 @@ def showCalendar(events, ExitGUI):                      #GUI funktion der laver 
 
     canvas.bind("<Button-1>", start_scroll)
     canvas.bind("<B1-Motion>", perform_scroll)
-############################### Layout og opsætning af enkelte kalender inputs ############################
+ #----------------------- Layout og opsætning af enkelte kalender inputs -----------------------------------#
     
 
     # Indsættelse af data i layout. description og locations ect fra teamup kalender
@@ -139,7 +142,7 @@ def showCalendar(events, ExitGUI):                      #GUI funktion der laver 
 
 
 
-################RFID Reader og Thingspeak datacollector######################################
+#------------------------RFID Reader og Thingspeak datacollector----------------------------------------------#
 def read_rfid(reader, channel, card_calendar_map):
     global total_reads
 
@@ -177,17 +180,22 @@ def read_rfid(reader, channel, card_calendar_map):
         # Clean up GPIO resources
         GPIO.cleanup()                            
 
+#--------------------------------------Kortlæser og Kalender API, Studiekort database---------------------#
+        
 def rfid_function(KortGodkendt, KortScannet,ExitGUI):       #RFID og åbning af kalender funktion
 
     api_url = "https://api.teamup.com"                      #adressen til kalenderen gennem API (fixed addresse)
     api_key = "699e02c0555e1804ea722d893851875e8444e8bf17199c8d8e46bc393a60f960"    #API nøgle til vores bestemt kalender database
+    
+    #-------------------------Student calandar database----------------------------------#
+    
     card_calendar_map = {                                   #Dictionary til hver kort der har hver deres kalender
             '2054232593': 'kskp2dg3mpgu24n3ww',
             '2206210585': 'ks2yz86rfe8sj5nvq1',
             
         }
     headers = {"Teamup-Token": api_key}                     #insætter token og api_key til vores get funktion
-    reader = SimpleMFRC522()
+    reader = SimpleMFRC522()                                #RFID læser
     channel = thingspeak.Channel(id=channel_id, api_key=write_key)
 
     while True:
