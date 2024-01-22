@@ -59,7 +59,8 @@ def welcome_message(eyes_detected,KortGodkendt,KortScannet,ExitGUI):
 
         #If statement om GUI er exittet i Mgreetingbot.py
         if ExitGUI.value == True:
-            screen = pygame.display.set_mode((1920, 1080), pygame.FULLSCREEN)   #Display indstillinger
+            #screen = pygame.display.set_mode((1920, 1080), pygame.FULLSCREEN)   #Display indstillinger
+            screen = pygame.display.set_mode((800, 480), pygame.FULLSCREEN)   #Display indstillinger
             DisplayText(welcome_message1, welcome_rect, screen)                 #Forny welcome besked
             ExitGUI.value = False                                               #Resetter GUI exit check til False
 
