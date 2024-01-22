@@ -3,6 +3,13 @@ import pygame
 import time
 from multiprocessing import Process, Value
 
+#----------------------------GLOBAL SETUP-------------------------------------#
+#Multiprocess variabler:
+eyes_detected = Value('b', False)
+KortGodkendt = Value('b', False)
+KortScannet = Value('b', False)
+ExitGUI = Value('b', False)
+
 #-----------------------------FUNCTIONS---------------------------------------#
 #Main function (Køre fra starten i multiprocess):
 def welcome_message(eyes_detected,KortGodkendt,KortScannet,ExitGUI):
@@ -74,22 +81,3 @@ def DisplayText(Message, Rect, screen):
     screen.fill(background_color)                                               #Sætter baggrunds farve
     screen.blit(Message, Rect)                                                  #Skriver tekst på baggrunden
     pygame.display.flip()                                                       #Updatere displayet
-
-#----------------------------MAIN-----------------------------------------#
-#Main statement:
-if __name__ == "__main__":
-
-    #Multiprocess variabler:
-    eyes_detected = Value('b', False)
-    KortGodkendt = Value('b', False)
-    KortScannet = Value('b', False)
-    ExitGUI = Value('b', False)
-
-    #Sender variabel i form a objekt til kørende process function:
-    #welcome_process = Process(target=welcome_message, args=(eyes_detected,KortGodkendt,KortScannet,ExitGUI))    #Program: Mwelcome.py - Function: welcome_message - Objekt: eyes_detected, KortGodkendt, KortScannet, ExitGUI
-
-    #Starter process:
-    #welcome_process.start()
-
-    #Lukker process:
-    #welcome_process.join()

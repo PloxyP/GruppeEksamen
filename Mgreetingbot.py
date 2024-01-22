@@ -3,8 +3,6 @@ from tkinter import *
 import requests
 import json
 from datetime import datetime, timedelta
-# import os
-#import pygame
 import time
 from mfrc522 import SimpleMFRC522
 import RPi.GPIO as GPIO
@@ -14,7 +12,6 @@ from pydub import AudioSegment
 from pydub.playback import play
 
 #----------------------------GLOBAL SETUP-------------------------------------#
-#pygame.init()
 read_cards = set()
 
 # ThingSpeak channel details
@@ -224,10 +221,8 @@ def rfid_function(KortGodkendt, KortScannet,ExitGUI):       #RFID og åbning af 
                 KortGodkendt.value = False
                 declined_sound()
 
-            #time.sleep(1)
         except Exception as e:
             print(f"An error occurred: {e}")
-            #time.sleep(1)
 
 #----------------------------MAIN-----------------------------------------#            
 if __name__ == '__main__':
