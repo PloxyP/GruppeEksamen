@@ -85,6 +85,7 @@ def showCalendar(events, ExitGUI):                      #GUI funktion der laver 
         ExitGUI.value = True                            #Bool som ændre statement i multiprocessing
         time.sleep(2)                                   #Tid til multiprocessing at reagerer
         gui.destroy()                                   #luk kalender layout ned
+        GPIO.cleanup() 
         GPIO.setmode(GPIO.BCM)                          #reset lyset op igen
         GPIO.setup(24, GPIO.OUT)
         GPIO.output(24, GPIO.LOW)
@@ -157,6 +158,7 @@ def read_rfid(reader, channel, card_calendar_map):
         else:
             # The ID is not in the dictionary
             print(f"No calendar key found for ID {card_id}")
+            GPIO.cleanup() 
             GPIO.setmode(GPIO.BCM)                          #reset lyset op igen
             GPIO.setup(24, GPIO.OUT)
             GPIO.output(24, GPIO.LOW)
@@ -176,9 +178,9 @@ def read_rfid(reader, channel, card_calendar_map):
 
         return str(card_id)
 
-    finally:
+    #finally:
         # Clean up GPIO resources
-        GPIO.cleanup()                          
+        #GPIO.cleanup()                          
 
 #--------------------------------------Kortlæser og Kalender API, Studiekort database---------------------#
         
