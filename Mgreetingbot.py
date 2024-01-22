@@ -204,7 +204,7 @@ def rfid_function(KortGodkendt, KortScannet,ExitGUI):       #RFID og åbning af 
             print(f"Read card ID: {card_id}")
 
             if card_id in card_calendar_map.keys():                #hvis kort er i dictionary, så insætter den, den relevante endpoint og åbner unikke kalender
-                calendar_key = card_calendar_map[card_id]           #Henter card_id value i card_calender_map
+                calendar_key = card_calendar_map[card_id]           #Henter value fra dictionary card_calendar_map 
                 print(f"Fetching events for calendar key: {calendar_key}")
                 events = fetchEvents(api_url, headers, calendar_key)
                 KortScannet.value = True
