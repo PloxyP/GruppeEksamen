@@ -7,8 +7,8 @@ from multiprocessing import Process, Value
 #Main function (Køre fra starten i multiprocess):
 def welcome_message(eyes_detected,KortGodkendt,KortScannet,ExitGUI):
     pygame.init()                                                               #Pygame start
-    #screen = pygame.display.set_mode((800, 480), pygame.FULLSCREEN)            
-    screen = pygame.display.set_mode((1920, 1080), pygame.FULLSCREEN)           #Display indstillinger
+    screen = pygame.display.set_mode((800, 480), pygame.FULLSCREEN)            
+    #screen = pygame.display.set_mode((1920, 1080), pygame.FULLSCREEN)           #Display indstillinger
     pygame.display.set_caption('Welcome Message')                               #Sæt caption
     font = pygame.font.Font(None, 36)                                           #Sæt font
 
