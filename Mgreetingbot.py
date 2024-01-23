@@ -59,7 +59,7 @@ def fetchEvents(api_url, headers, calendar_key):        #Henter kalenderdata fra
         'endDate': end_date.strftime('%Y-%m-%d')
     }
 
-    request_url = f"{api_url}/{calendar_key}/events"    #Sammensætter det ønsket endpoint. api_url er fixed men calendar_key er ud fra card_reads
+    request_url = f"{api_url}/{calendar_key}/events"    #Sammensætter det ønsket endpoint, og de enkelte events. api_url er fixed men calendar_key er ud fra card_reads
     response = requests.get(request_url, headers=headers, params=params) #den endelig requst til teamup med endpoint, api key og datoer
     if response.status_code == 200:                     #API check om alt går som det skal.
         return json.loads(response.text)['events']
@@ -86,7 +86,7 @@ def showCalendar(events, ExitGUI):                      #GUI funktion der laver 
         time.sleep(2)                                   #Tid til multiprocessing at reagerer
         gui.destroy()                                   #luk kalender layout ned
         GPIO.cleanup() 
-        GPIO.setmode(GPIO.BCM)                          #reset lyset op igen
+        GPIO.setmode(GPIO.BCM)                          #reset lysets pins op igen
         GPIO.setup(24, GPIO.OUT)
         GPIO.output(24, GPIO.LOW)
 
@@ -121,7 +121,7 @@ def showCalendar(events, ExitGUI):                      #GUI funktion der laver 
  #----------------------- Layout og opsætning af enkelte kalender inputs -----------------------------------#
     
 
-    # Indsættelse af data i layout. description og locations ect fra teamup kalender
+    # Indsættelse af data/events i layout. description og locations ect fra teamup kalender
     for event in events:
         start_time = datetime.fromisoformat(event['start_dt']).strftime("%A, %B %d, %Y %H:%M")
         end_time = datetime.fromisoformat(event['end_dt']).strftime("%H:%M") if 'end_dt' in event else 'Unknown'
@@ -131,7 +131,7 @@ def showCalendar(events, ExitGUI):                      #GUI funktion der laver 
 
         event_frame = Frame(scrollable_frame, bg='lightgrey', borderwidth=2, relief="groove")
         event_frame.pack(padx=20, pady=10, fill='x')
-
+            #----layout af event----#
         Label(event_frame, text=f"{start_time} - {end_time} | {event_title}", font="Consolas 15 bold", bg='lightgrey').pack(anchor='w', padx=10, pady=5)
         Label(event_frame, text=f"Location: {event_location}", font="Consolas 12", bg='lightgrey').pack(anchor='w', padx=10, pady=2)
         Label(event_frame, text=f"Description: {event_description}", font="Consolas 12", bg='lightgrey', wraplength=500).pack(anchor='w', padx=10, pady=2)
@@ -140,7 +140,7 @@ def showCalendar(events, ExitGUI):                      #GUI funktion der laver 
 
 
 
-#------------------------RFID Reader og Thingspeak datacollector----------------------------------------------#
+#------------------------RFID Reader og Thingspeak/IoT datacollector----------------------------------------------#
 def read_rfid(reader, channel, card_calendar_map):
     global total_reads
 
@@ -151,7 +151,7 @@ def read_rfid(reader, channel, card_calendar_map):
         card_id, text = reader.read()
         print(card_id)
 
-        if str(card_id) in card_calendar_map:
+        if str(card_id) in card_calendar_map:                       #tjek om kort er i card dictionary
             # The ID is in the dictionary
             channel.update({'field3': card_id})                     #registering af kort til Iot (Thingspeak)
             print(f"RFID card ID '{card_id}' sent to ThingSpeak")
@@ -168,7 +168,7 @@ def read_rfid(reader, channel, card_calendar_map):
         print(f"Total reads count updated on ThingSpeak: {total_reads}")
 
         # Send data to ThingSpeak
-        channel.update({'field1': 1, 'field2': total_reads})        #læsnings af kort og total læs til Iot (Thingspeak)
+        channel.update({'field1': 1, 'field2': total_reads})        #læsnings af kort og total læs til IoT (Thingspeak)
         print("Data sent to ThingSpeak")
 
         return str(card_id)
@@ -212,7 +212,7 @@ def rfid_function(KortGodkendt, KortScannet,ExitGUI):       #RFID og åbning af 
                 KortScannet.value = True
                 KortGodkendt.value = True
 
-                if events:
+                if events:                  
                     welcome_sound()
                     showCalendar(events, ExitGUI)
                 else:
