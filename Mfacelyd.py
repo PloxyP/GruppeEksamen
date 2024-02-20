@@ -60,7 +60,7 @@ def face_detection(eyes_detected):
             roi_color = frame[y:y+h, x:x+w]                                 #Frame region of interrest
             eyes = eye_cascade.detectMultiScale(roi_gray, 1.3, 8)           #Bruger eye_cascade til at detektere øjne i billedet
 
-            #For loop - øjen detektion
+            #For loop - øjen detektion 
             for (ex, ey, ew, eh) in eyes:
                 cv2.rectangle(roi_color, (ex, ey), (ex + ew, ey + eh), (0, 255, 0), 5)
                 if not eyes_detected.value:
